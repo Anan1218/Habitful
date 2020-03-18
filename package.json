@@ -5,9 +5,13 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "browserdist": "browserify ./App.js | terser --compress --mangle > ./bundle.js"
   },
   "dependencies": {
+    "@nlpjs/core": "^4.1.4",
+    "@nlpjs/lang-en-min": "^4.1.4",
+    "@nlpjs/nlp": "^4.2.1",
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/bottom-tabs": "^5.2.1",
     "@react-navigation/native": "^5.1.0",
