@@ -3,40 +3,34 @@ import { StyleSheet, Text, View, Button } from "react-native";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 // import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import TrainScreen from "./src/TrainScreen";
+import HomeScreen from "./src/HomeScreen";
 
-function HomeScreen({ navigation }) {
+const Tab = createBottomTabNavigator();
+function JournalScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
+    <View>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          margin: 50
+        }}
+      >
+        <Text>Previous journals go here</Text>
+      </View>
     </View>
   );
 }
-
-
-const Tab = createBottomTabNavigator();
-
 export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator initialRouteName="Home">
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Details" component={TrainScreen} />
+        <Tab.Screen name="Train" component={TrainScreen} />
+        <Tab.Screen name="Journals" component={JournalScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
