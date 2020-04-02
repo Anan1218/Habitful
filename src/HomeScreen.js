@@ -12,12 +12,12 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={Grid.root}>
         <View style={Grid.col}>
-          <View style={Grid.row}>
+          <View style={Grid.row} >
             <Text>Write about your day so far!</Text>
           </View>
-          <View style={Grid.row}>
+          {/* <View style={[Grid.row]} > */}
             <JournalEntry />
-          </View>
+          {/* </View> */}
         </View>
       </View>
     );

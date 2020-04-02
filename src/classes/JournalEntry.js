@@ -4,16 +4,17 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 
+
 export default class JournalEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: "" };
+    this.state = { text: "", title: "" };
   }
   render() {
     return (
       <View style={Grid.root}>
         <View style={Grid.col}>
-          <View style={Grid.row}>
+          <View style={[Grid.row, Grid.justifyStart]}>
             <Button
               onlyIcon
               icon="check"
@@ -21,48 +22,15 @@ export default class JournalEntry extends React.Component {
               iconSize={20}
               color="success"
               iconColor="#fff"
-              style={{ width: 30, height: 30 }}
+              style={{ width: 30, height: 30, margin: 10 }}
+              onPress={e => console.log(this.state.title)}
             >
               warning
             </Button>
-            <Button
-              onlyIcon
-              icon="check"
-              iconFamily="antdesign"
-              iconSize={20}
-              color="success"
-              iconColor="#fff"
-              style={{ width: 30, height: 30 }}
-            >
-              warning
-            </Button>
-            <Button
-              onlyIcon
-              icon="check"
-              iconFamily="antdesign"
-              iconSize={20}
-              color="success"
-              iconColor="#fff"
-              style={{ width: 30, height: 30 }}
-            >
-              warning
-            </Button>
-            <Button
-              onlyIcon
-              icon="check"
-              iconFamily="antdesign"
-              iconSize={20}
-              color="success"
-              iconColor="#fff"
-              style={{ width: 30, height: 30 }}
-            >
-              warning
-            </Button>
+            <Input placeholder="Title" onChangeText={title => this.setState({ title })} rounded />
           </View>
-          <View style={Grid.row}>
-            <Input placeholder="Title" rounded style={{ flexGrow: 1 }} />
-          </View>
-          <View style={Grid.row}>
+         
+          <View style={[Grid.row, Grid.justifyStart]}>
             <TextInput
               placeholder="Write about your day..."
               onChangeText={text => this.setState({ text })}
@@ -77,5 +45,5 @@ export default class JournalEntry extends React.Component {
   }
 }
 let styles = StyleSheet.create({
-  textInput: { height: 100, borderColor: "gray", textAlignVertical: "top" }
+  textInput: { height: 100, borderColor: "gray", textAlignVertical: "top", margin: 20 }
 });

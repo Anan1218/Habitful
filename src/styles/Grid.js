@@ -1,32 +1,28 @@
-import {StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 const Grid = StyleSheet.create({
-  
+  justifyStart: { justifyContent: "flex-start" },
+  justifyEnd: { justifyContent: "flex-end" },
+  justifyCenter: {justifyContent: "center"},
   row: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     
-    
 
-    
     alignContent: "flex-start",
-
-    backgroundColor: "green",
+    
+    
   },
   col: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-start",
+    // justifyContent: "flex-start",
     alignItems: "stretch",
-    
-   
 
     alignContent: "flex-start",
 
-    backgroundColor: "red",
-    
   },
   root: {
     backgroundColor: "#fff",
