@@ -14,6 +14,7 @@ const Grid = StyleSheet.create({
     alignContent: "flex-start",
     
     
+    
   },
   col: {
     display: "flex",
@@ -27,7 +28,6 @@ const Grid = StyleSheet.create({
   root: {
     backgroundColor: "#fff",
     height: "100%",
-    // alignItems: "center",
     paddingTop: 30
   }
 });

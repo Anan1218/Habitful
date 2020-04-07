@@ -5,7 +5,7 @@ import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 
 
-export default class JournalEntry extends React.Component {
+export default class LongTermPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { text: "", title: "" };
