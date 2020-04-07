@@ -4,7 +4,7 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 // import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import TrainScreen from "./src/screens/TrainScreen";
+import LongTermScreen from "./src/screens/LongTermScreen";
 import HomeScreen from "./src/screens/HomeScreen";
 
 const Tab = createBottomTabNavigator();
@@ -28,7 +28,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator initialRouteName="Home">
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Journals" component={JournalScreen} />
+        <Tab.Screen name="Goals" component={LongTermScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

@@ -7,14 +7,11 @@ const Grid = StyleSheet.create({
   row: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     
 
     alignContent: "flex-start",
-    
-    
-    
   },
   col: {
     display: "flex",

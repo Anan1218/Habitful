@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import "react-native-gesture-handler";
-import LongTermPage from "./LongTermPage";
+import LongTermPage from "./LongTermScreen";
 import Grid from "../styles/Grid";
 
 export default class HomeScreen extends React.Component {
@@ -14,7 +14,7 @@ export default class HomeScreen extends React.Component {
         <View style={Grid.col}>
           
           
-            <LongTermPage />
+            <Text>Home Screen</Text>
           
         </View>
       </View>
