@@ -13,8 +13,10 @@ export default class LongTermScreen extends React.Component {
   render() {
     return (
       <View style={Grid.root}>
+      
         <View style={Grid.col}>
-          <LongTermGoal title={"Maintain a healthy lifestyle"} habits={2} TDs={0}/>
+          <Text style={styles.headerText} h4>Goals</Text>
+          <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0}/>
           <LongTermGoal title={"Startup"} habits={0} TDs={5}/>
           <LongTermGoal title={"Read and become knowledgable"} habits={2} TDs={1}/>
         </View>
@@ -23,5 +25,7 @@ export default class LongTermScreen extends React.Component {
   }
 }
 let styles = StyleSheet.create({
-  textInput: { height: 100, borderColor: "gray", textAlignVertical: "top", margin: 20 }
+  headerText: {
+    margin: 10
+  }
 });

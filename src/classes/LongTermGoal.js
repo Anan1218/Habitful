@@ -10,8 +10,8 @@ export default class LongTermGoal extends React.Component {
   }
   render() {
     return (
-      <View>
-        <View style={Grid.col}>
+      <Block card={true} style={styles.card}>
+        <View style={[Grid.col, styles.LongTermGoal]}>
           <View style={Grid.row}>
             <View style={Grid.col}>
               <Button
@@ -28,7 +28,7 @@ export default class LongTermGoal extends React.Component {
             </View>
             <View style={Grid.col}>
               <View style={[Grid.row, styles.headingText]}>
-                <Text p>{this.props.title}</Text>
+                <Text color={"white"} p>{this.props.title}</Text>
               </View>
               <View style={Grid.row}>
                 <View style={[Grid.row, styles.infoText]}><Text muted>{this.props.habits} running habits</Text></View>
@@ -39,11 +39,18 @@ export default class LongTermGoal extends React.Component {
             </View>
           </View>
         </View>
-      </View>
+      </Block>
     );
   }
 }
 const styles = StyleSheet.create({
+    card: {
+      margin: 7,
+      backgroundColor: "darkslategrey"
+    },
+    LongTermGoal:{
+      margin: 10
+    },
     headingText: {
         paddingLeft: 19
     },
