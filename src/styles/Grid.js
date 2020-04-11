@@ -5,12 +5,13 @@ const Grid = StyleSheet.create({
   justifyEnd: { justifyContent: "flex-end" },
   justifyCenter: {justifyContent: "center"},
   alignCenter: {alignItems: "center"},
+  alignStretch: {alignItems: "stretch"},
   row: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    
+    // backgroundColor: "red",
 
     alignContent: "flex-start",
   },

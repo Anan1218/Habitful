@@ -31,11 +31,7 @@ export default class LongTermGoal extends React.Component {
     ];
     return (
       <Block card={true} style={styles.card}>
-        <TouchableHighlight
-          onPress={() => {
-            this.setState({ modalVisible: true });
-          }}
-        >
+        
           <View style={[Grid.col, styles.LongTermGoal]}>
             <View style={Grid.row}>
               <View style={Grid.col}>
@@ -78,30 +74,8 @@ export default class LongTermGoal extends React.Component {
             >
               <Text>Show Modal</Text>
             </Button> */}
-        </TouchableHighlight>
-        <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-            }}
-          >
-            <View style={[Grid.row, Grid.justifyCenter, { flex: 1 }]}>
-              <View style={[Grid.col, Grid.justifyCenter]}>
-                <Text>Hello World!</Text>
-
-                <Button
-                  size="small"
-                  onPress={() => {
-                    this.setState({ modalVisible: false });
-                  }}
-                >
-                  <Text>Hide Modal</Text>
-                </Button>
-              </View>
-            </View>
-          </Modal>
+        
+        
       </Block>
     );
   }
