@@ -16,7 +16,16 @@ import LongTermGoal from "../classes/LongTermGoal";
 export default class LongTermScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: "", title: "", modalVisible: false };
+    this.state = {
+      text: "",
+      title: "",
+      modalVisible: false,
+      goalList: {
+        "Maintain a healthy life": <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} />,
+        "Startup": <LongTermGoal title={"Startup"} habits={0} TDs={5} />
+      },
+      newGoalTitle: ""
+    };
   }
   render() {
     return (
@@ -25,13 +34,8 @@ export default class LongTermScreen extends React.Component {
           <Text style={styles.headerText} h4>
             Goals
           </Text>
-          <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} />
-          <LongTermGoal title={"Startup"} habits={0} TDs={5} />
-          <LongTermGoal
-            title={"Read and become knowledgable"}
-            habits={2}
-            TDs={1}
-          />
+
+          {Object.values(this.state.goalList)}
           <View style={[Grid.row, Grid.justifyCenter]}>
             <Button
               onlyIcon
@@ -77,16 +81,31 @@ export default class LongTermScreen extends React.Component {
                   <View
                     style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}
                   >
-                    <Input placeholder="e.g. Maintain a healthy lifestyle" />
+                    <Input
+                      placeholder="e.g. Maintain a healthy lifestyle"
+                      onChangeText={text =>
+                        this.setState({ newGoalTitle: text })
+                      }
+                    />
                   </View>
                   <View style={[Grid.row, Grid.justifyCenter]}>
                     <Button
                       size="small"
                       onPress={() => {
+                        this.setState({
+                          goalList: {
+                            ...this.state.goalList,
+                            [this.state.newGoalTitle]: <LongTermGoal
+                              title={this.state.newGoalTitle}
+                              habits={0}
+                              TDs={0}
+                            />
+                          }
+                        });
                         this.setState({ modalVisible: false });
                       }}
                     >
-                      <Text>Hide Modal</Text>
+                      <Text>Add goal</Text>
                     </Button>
                   </View>
                 </View>

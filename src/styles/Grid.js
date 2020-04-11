@@ -6,6 +6,7 @@ const Grid = StyleSheet.create({
   justifyCenter: {justifyContent: "center"},
   alignCenter: {alignItems: "center"},
   alignStretch: {alignItems: "stretch"},
+  alignEnd: {alignItems: "flex-end"},
   row: {
     display: "flex",
     flexDirection: "row",

@@ -4,79 +4,100 @@ import {
   View,
   Alert,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableWithoutFeedback
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 
-import { Icon, Block, Text, Button } from "galio-framework";
+import { Icon, Block, Text, Button, Input } from "galio-framework";
 export default class LongTermGoal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { modalVisible: false };
+    this.state = { modalVisible: false, title: this.props.title, newGoalTitle: this.props.title };
   }
   render() {
-    const data = [
-      {
-        title: "First Chapter",
-        content: "Lorem ipsum dolor sit amet",
-        icon: {
-          name: "keyboard-arrow-up",
-          family: "material",
-          size: 16
-        }
-      },
-      { title: "2nd Chapter", content: "Lorem ipsum dolor sit amet" },
-      { title: "3rd Chapter", content: "Lorem ipsum dolor sit amet" }
-    ];
     return (
-      <Block card={true} style={styles.card}>
-        
-          <View style={[Grid.col, styles.LongTermGoal]}>
+      // <Block card={true} style={styles.card}>
+
+      <View style={[Grid.col, styles.LongTermGoal]}>
+        <View style={Grid.row}>
+          <View style={Grid.col}>
+            <View style={[Grid.row, styles.headingText]}>
+              <Text p>{this.state.title}</Text>
+            </View>
             <View style={Grid.row}>
-              <View style={Grid.col}>
-                <Button
-                  onlyIcon
-                  icon="tags"
-                  iconFamily="antdesign"
-                  iconSize={30}
-                  color="warning"
-                  iconColor="#fff"
-                  style={{ width: 40, height: 40 }}
-                >
-                  warning
-                </Button>
+              <View style={[Grid.row, styles.infoText]}>
+                <Text muted>{this.props.habits} running habits</Text>
               </View>
-              <View style={Grid.col}>
-                <View style={[Grid.row, styles.headingText]}>
-                  <Text color={"white"} p>
-                    {this.props.title}
-                  </Text>
-                </View>
-                <View style={Grid.row}>
-                  <View style={[Grid.row, styles.infoText]}>
-                    <Text muted>{this.props.habits} running habits</Text>
-                  </View>
-                  <View style={[Grid.row, styles.infoText]}>
-                    <Text muted>{this.props.TDs} To-Dos completed</Text>
-                  </View>
-                </View>
+              <View style={[Grid.row, styles.infoText]}>
+                <Text muted>{this.props.TDs} To-Dos completed</Text>
               </View>
             </View>
           </View>
-          
 
-          {/* <Button
-              size="small"
+          <View style={[Grid.col]}>
+            <Button
+              onlyIcon
+              icon="edit"
+              iconFamily="antdesign"
+              iconSize={20}
+              color="warning"
+              iconColor="#fff"
+              style={{ width: 35, height: 35 }}
               onPress={() => {
                 this.setState({ modalVisible: true });
               }}
-            >
-              <Text>Show Modal</Text>
-            </Button> */}
-        
-        
-      </Block>
+            ></Button>
+          </View>
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            this.setState({ modalVisible: false });
+          }}
+        >
+          <TouchableWithoutFeedback
+            onPress={() => {
+              this.setState({ modalVisible: false });
+            }}
+          >
+            <View style={[Grid.row, Grid.justifyCenter, { flex: 1 }]}>
+              <View
+                style={[
+                  Grid.col,
+                  Grid.justifyCenter,
+                  styles.modalView,
+                  Grid.alignStretch
+                ]}
+              >
+                <View style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}>
+                  <Input
+                    placeholder="e.g. Maintain a healthy lifestyle"
+                    onChangeText={text => this.setState({ newGoalTitle: text })}
+                    value={this.state.newGoalTitle}
+                  />
+                </View>
+                <View style={[Grid.row, Grid.justifyCenter]}>
+                  <Button
+                    size="small"
+                    onPress={() => {
+                      this.setState({title: this.state.newGoalTitle})
+                      this.setState({ modalVisible: false });
+                    }}
+                  >
+                    <Text>Change title</Text>
+                  </Button>
+                </View>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
+
+      // </Block>
     );
   }
 }
@@ -89,9 +110,11 @@ const styles = StyleSheet.create({
     margin: 10
   },
   headingText: {
-    paddingLeft: 19
+    paddingRight: 19,
+    paddingLeft: 14
   },
   infoText: {
-    paddingLeft: 19
+    paddingRight: 19,
+    paddingLeft: 14
   }
 });
