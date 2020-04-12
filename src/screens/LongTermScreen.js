@@ -21,8 +21,8 @@ export default class LongTermScreen extends React.Component {
       title: "",
       modalVisible: false,
       goalList: {
-        "Maintain a healthy life": <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} />,
-        "Startup": <LongTermGoal title={"Startup"} habits={0} TDs={5} />
+        // "Maintain a healthy life": <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} key={"Maintain a healthy life"}/>,
+        // "Startup": <LongTermGoal title={"Startup"} key={"Startup"} habits={0} TDs={5} />
       },
       newGoalTitle: ""
     };
@@ -52,9 +52,7 @@ export default class LongTermScreen extends React.Component {
               warning
             </Button>
           </View>
-          {/* <View style={Grid.row}>
-          <Input placeholder="e.g. Maintain a healthy lifestyle" />
-          </View> */}
+          
 
           <Modal
             animationType="slide"
@@ -99,6 +97,7 @@ export default class LongTermScreen extends React.Component {
                               title={this.state.newGoalTitle}
                               habits={0}
                               TDs={0}
+                              key={this.state.newGoalTitle}
                             />
                           }
                         });
