@@ -6,7 +6,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "browserdist": "browserify ./App.js | terser --compress --mangle > ./bundle.js"
+    "browserdist": "browserify ./App.js | terser --compress --mangle > ./bundle.js",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns":[]
   },
   "dependencies": {
     "@nlpjs/core": "^4.1.4",
@@ -33,6 +38,8 @@
     "@babel/core": "^7.0.0",
     "babel-preset-expo": "^8.0.0",
     "browserify": "^16.5.0",
+    "jest-expo": "^37.0.0",
+    "react-test-renderer": "^16.13.1",
     "terser": "^4.6.7"
   },
   "private": true
