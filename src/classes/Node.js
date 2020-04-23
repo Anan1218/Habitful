@@ -10,13 +10,38 @@ import {
 import { Input, Block, Text, Button } from "galio-framework";
 
 export class Node extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            active: false,
+        };
+    }
+
     render() {
         return (
-            <View>
+            <Button
+                shadowless
+                style={this.state.active ? styles.btn : styles.btnActive}
+                onPress={() => this.setState({ active: !this.state.active })}
+            >
                 <Text>T</Text>
-            </View>
+            </Button>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    btn: {
+        width: 40,
+        height: 40,
+        backgroundColor: "red",
+    },
+
+    btnActive: {
+        width: 40,
+        height: 40,
+        backgroundColor: "grey",
+    },
+});
 
 export default Node;

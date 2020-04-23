@@ -17,8 +17,6 @@ export class Habit extends Component {
         days: [],
     };
 
-    createGrid() {}
-
     componentDidMount() {
         for (let i = 0; i < 10; i++) {
             this.state.days.push([]);
@@ -45,7 +43,7 @@ export class Habit extends Component {
 
 const styles = StyleSheet.create({
     node: {
-        backgroundColor: "blue",
+        backgroundColor: "grey",
         width: "10%",
         height: 40,
         borderWidth: 0.2,
