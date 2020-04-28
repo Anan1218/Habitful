@@ -12,10 +12,12 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
+import { addGoal, getGoals } from "../dbFunctions/GoalFunctions.js";
 
 export default class LongTermScreen extends React.Component {
   constructor(props) {
     super(props);
+    
     this.state = {
       text: "",
       title: "",
@@ -26,7 +28,20 @@ export default class LongTermScreen extends React.Component {
       },
       newGoalTitle: ""
     };
+
   }
+  saveNewGoal = (title) => {
+    addGoal(title);
+    console.log("goal added: "+title);
+  }
+  displayGoals = (goals) => {
+    console.log("goal db!!");
+    console.log(goals);
+  }
+  componentDidMount =  async () => {
+    let goals = await getGoals(this.displayGoals);
+  }
+
   render() {
     return (
       <View style={Grid.root}>
@@ -101,6 +116,7 @@ export default class LongTermScreen extends React.Component {
                             />
                           }
                         });
+                        this.saveNewGoal(this.state.newGoalTitle)
                         this.setState({ modalVisible: false });
                       }}
                     >
