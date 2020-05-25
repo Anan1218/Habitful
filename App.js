@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LongTermScreen from "./src/screens/LongTermScreen";
 import HomeScreen from "./src/screens/HomeScreen";
+import StatsScreen from "./src/screens/StatsScreen";
 
 const Tab = createBottomTabNavigator();
 function JournalScreen() {
@@ -29,6 +30,7 @@ export default function App() {
       <Tab.Navigator initialRouteName="Home">
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Goals" component={LongTermScreen} />
+        <Tab.Screen name="Statistics" component={StatsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
