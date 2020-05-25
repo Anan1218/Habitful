@@ -8,12 +8,13 @@ import {
     TouchableHighlight,
     TouchableWithoutFeedback,
 } from "react-native";
+import Grid from "../styles/Grid";
 
 import Node from "./Node";
 
 export class Habit extends Component {
     state = {
-        name: "",
+        name: this.props.name,
         days: [],
     };
 
@@ -29,7 +30,9 @@ export class Habit extends Component {
 
         return (
             <View>
-                <Text>Wash the Dishes</Text>
+                <View style={[Grid.row, styles.headingText]}>
+                    <Text p>{this.state.name}</Text>
+                </View>
                 <View style={styles.container}>
                     {days.map((e) => {
                         return (

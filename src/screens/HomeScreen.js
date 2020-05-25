@@ -38,7 +38,7 @@ export default class HomeScreen extends React.Component {
                         Habits
                     </Text>
 
-                    <Habit />
+                    <Habit name="Sample Habit" />
                     {Object.values(this.state.habits)}
 
                     <View style={[Grid.row, Grid.justifyCenter]}>
