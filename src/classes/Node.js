@@ -14,6 +14,7 @@ export class Node extends Component {
         super(props);
         this.state = {
             active: false,
+            date: "",
         };
     }
 
