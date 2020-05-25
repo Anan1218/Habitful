@@ -12,7 +12,7 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
-import { addGoal, getGoals } from "../dbFunctions/GoalFunctions.js";
+import { addGoal, getGoals, getFormattedGoals, cf } from "../dbFunctions/GoalFunctions.js";
 
 export default class LongTermScreen extends React.Component {
   constructor(props) {
@@ -22,24 +22,35 @@ export default class LongTermScreen extends React.Component {
       text: "",
       title: "",
       modalVisible: false,
-      goalList: {
+      // goalList: {
         // "Maintain a healthy life": <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} key={"Maintain a healthy life"}/>,
         // "Startup": <LongTermGoal title={"Startup"} key={"Startup"} habits={0} TDs={5} />
-      },
-      newGoalTitle: ""
+      // },
+      newGoalTitle: "",
+      goalList: {}
     };
 
   }
   saveNewGoal = (title) => {
     addGoal(title);
-    console.log("goal added: "+title);
+    // let goals = getFormattedGoals();
+    // console.log(goals);
+    // console.log("goal added: "+title);
   }
   displayGoals = (goals) => {
-    console.log("goal db!!");
-    console.log(goals);
+    
+    let formattedGoals = {};
+    for(const goal of goals) {
+      formattedGoals[goal.title] = <LongTermGoal title={goal.title} key={goal.title} habits={goal.habitCount} TDs={goal.toDoCount} />;
+    }
+    // this.state.goalList = formattedGoals;
+    this.setState({goalList: formattedGoals});
   }
   componentDidMount =  async () => {
-    let goals = await getGoals(this.displayGoals);
+    console.log("--start2--");
+    getGoals(this.displayGoals);
+    // console.log(goals);
+    
   }
 
   render() {

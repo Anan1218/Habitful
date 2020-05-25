@@ -1,4 +1,6 @@
 import db from "./db.js";
+import React from "react";
+import LongTermGoal from "../classes/LongTermGoal";
 
 export const addGoal = title => {
   const newGoal = {
@@ -16,13 +18,21 @@ export const addGoal = title => {
   });
 };
 
+
 export const getGoals = (callbackFunction) => {
+  console.log("getGoals called1");
   db.find({ type: "goal" }, function(err, docs) {
     if (err) {
       console.error(err);
     }
-    console.log(docs);
+    // console.log(docs);
     console.log("getGoals called");
-    callbackFunction(docs)
+    
+    return callbackFunction(docs)
   });
+
+  
+ 
+  
 };
+
