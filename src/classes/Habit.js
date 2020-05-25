@@ -28,14 +28,17 @@ export class Habit extends Component {
         console.log(days);
 
         return (
-            <View style={styles.container}>
-                {days.map((e) => {
-                    return (
-                        <View style={styles.node}>
-                            <Node></Node>
-                        </View>
-                    );
-                })}
+            <View>
+                <Text>Wash the Dishes</Text>
+                <View style={styles.container}>
+                    {days.map((e) => {
+                        return (
+                            <View style={styles.node}>
+                                <Node></Node>
+                            </View>
+                        );
+                    })}
+                </View>
             </View>
         );
     }
