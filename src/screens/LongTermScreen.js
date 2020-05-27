@@ -55,7 +55,6 @@ export default class LongTermScreen extends React.Component {
     
   }
   componentDidMount =  async () => {
-    console.log("--start2--");
     getGoals(this.displayGoals);
   }
 

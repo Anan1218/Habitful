@@ -12,12 +12,19 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import { Calendar } from "react-native-calendars";
+import { getLastDateOpened, setLastDateOpened, addLastDateOpenedDoc, getDates, addDate, addDatesDoc} from "../dbFunctions/StatsFunctions";
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+
+  componentDidMount =  () => {
+    addDatesDoc();
+    addLastDateOpenedDoc();
+  }
+
   render() {
     return (
       <View style={Grid.root}>
@@ -51,15 +58,15 @@ export default class StatsScreen extends React.Component {
             firstDay={1}
             markedDates={{
               "2020-04-20": { color: "#4ee44e" },
-              "2020-04-21": { color: "#4ee44e", endingDay: true },
-              "2020-04-19": { color: "#4ee44e", startingDay: true },
+              "2020-04-21": { color: "#4ee44e" },
+              "2020-04-19": { color: "#4ee44e" },
 
-              "2020-04-17": { color: "#4e99e4", startingDay: true },
-              "2020-04-18": { color: "#4e99e4", endingDay: true },
+              "2020-04-17": { color: "#4e99e4" },
+              "2020-04-18": { color: "#4e99e4" },
 
-              "2020-04-14": { color: "#e44e4e", startingDay: true },
+              "2020-04-14": { color: "#e44e4e" },
               "2020-04-15": { color: "#e44e4e" },
-              "2020-04-16": { color: "#e44e4e", endingDay: true }
+              "2020-04-16": { color: "#e44e4e" }
             }}
             // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
             markingType={"period"}
