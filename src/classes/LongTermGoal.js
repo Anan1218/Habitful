@@ -11,11 +11,17 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 
 import { Icon, Block, Text, Button, Input } from "galio-framework";
+import { removeGoal, updateGoal } from "../dbFunctions/GoalFunctions";
 export default class LongTermGoal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { modalVisible: false, title: this.props.title, newGoalTitle: this.props.title };
+    this.state = {
+      modalVisible: false,
+      title: this.props.title,
+      newGoalTitle: this.props.title
+    };
   }
+
   render() {
     return (
       // <Block card={true} style={styles.card}>
@@ -74,6 +80,18 @@ export default class LongTermGoal extends React.Component {
                 ]}
               >
                 <View style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}>
+                  <Button
+                    onlyIcon
+                    icon="delete"
+                    iconFamily="antdesign"
+                    iconSize={20}
+                    color="red"
+                    iconColor="#fff"
+                    style={{ width: 35, height: 35 }}
+                    onPress={() => {
+                      this.props.deleteGoal(this.state.title);
+                    }}
+                  ></Button>
                   <Input
                     placeholder="e.g. Maintain a healthy lifestyle"
                     onChangeText={text => this.setState({ newGoalTitle: text })}
@@ -84,7 +102,8 @@ export default class LongTermGoal extends React.Component {
                   <Button
                     size="small"
                     onPress={() => {
-                      this.setState({title: this.state.newGoalTitle})
+                      updateGoal(this.state.title, this.state.newGoalTitle);
+                      this.setState({ title: this.state.newGoalTitle });
                       this.setState({ modalVisible: false });
                     }}
                   >

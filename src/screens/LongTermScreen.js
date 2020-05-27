@@ -12,7 +12,7 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
-import { addGoal, getGoals, getFormattedGoals, cf } from "../dbFunctions/GoalFunctions.js";
+import { addGoal, getGoals, removeGoal, deleteAllGoals } from "../dbFunctions/GoalFunctions.js";
 
 export default class LongTermScreen extends React.Component {
   constructor(props) {
@@ -33,24 +33,30 @@ export default class LongTermScreen extends React.Component {
   }
   saveNewGoal = (title) => {
     addGoal(title);
-    // let goals = getFormattedGoals();
-    // console.log(goals);
-    // console.log("goal added: "+title);
   }
+
+  deleteGoal = (title) => {
+    removeGoal(title);
+    let newGoalList = this.state.goalList;
+    delete newGoalList[title];
+    this.setState({goalList: newGoalList});
+  }
+  
   displayGoals = (goals) => {
-    
+    console.log(goals);
     let formattedGoals = {};
-    for(const goal of goals) {
-      formattedGoals[goal.title] = <LongTermGoal title={goal.title} key={goal.title} habits={goal.habitCount} TDs={goal.toDoCount} />;
-    }
-    // this.state.goalList = formattedGoals;
-    this.setState({goalList: formattedGoals});
+    if (goals != {}) {
+      for(const goal of goals) {
+        formattedGoals[goal.title] = <LongTermGoal deleteGoal = {this.deleteGoal} title={goal.title} key={goal.title} habits={goal.habitCount} TDs={goal.toDoCount} />;
+      }
+      this.setState({goalList: formattedGoals});
+    } 
+    // console.log(this.state.goalList)
+    
   }
   componentDidMount =  async () => {
     console.log("--start2--");
     getGoals(this.displayGoals);
-    // console.log(goals);
-    
   }
 
   render() {
@@ -120,6 +126,7 @@ export default class LongTermScreen extends React.Component {
                           goalList: {
                             ...this.state.goalList,
                             [this.state.newGoalTitle]: <LongTermGoal
+                              deleteGoal = {this.deleteGoal}
                               title={this.state.newGoalTitle}
                               habits={0}
                               TDs={0}

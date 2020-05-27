@@ -18,21 +18,35 @@ export const addGoal = title => {
   });
 };
 
-
-export const getGoals = (callbackFunction) => {
-  console.log("getGoals called1");
+export const getGoals = callbackFunction => {
   db.find({ type: "goal" }, function(err, docs) {
     if (err) {
       console.error(err);
     }
-    // console.log(docs);
-    console.log("getGoals called");
-    
-    return callbackFunction(docs)
+    return callbackFunction(docs);
   });
-
-  
- 
-  
 };
 
+export const removeGoal = title => {
+  db.remove({ title: title }, {}, function(err, numRemoved) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
+export const updateGoal = (oldTitle, newTitle) => {
+  db.update({ title: oldTitle }, {$set: {title: newTitle}}, {}, function(err, numReplaced) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
+export const deleteAllGoals = () => {
+  db.remove({ type: "goal" }, { multi: true }, function(err, numRemoved) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
