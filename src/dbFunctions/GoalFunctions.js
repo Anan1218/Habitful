@@ -1,6 +1,6 @@
 import db from "./db.js";
 import React from "react";
-import LongTermGoal from "../classes/LongTermGoal";
+
 
 export const addGoal = title => {
   const newGoal = {
@@ -27,8 +27,8 @@ export const getGoals = callbackFunction => {
   });
 };
 
-export const removeGoal = title => {
-  db.remove({ title: title }, {}, function(err, numRemoved) {
+export const removeGoal = id => {
+  db.remove({ _id: id, type :"goal" }, {}, function(err, numRemoved) {
     if (err) {
       console.error(err);
     }

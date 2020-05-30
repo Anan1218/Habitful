@@ -13,19 +13,14 @@ import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
 import { addGoal, getGoals, removeGoal, deleteAllGoals } from "../dbFunctions/GoalFunctions.js";
+import { addHabit, getHabits, removeHabit, deletAllHabits } from "../dbFunctions/HabitFunctions.js";
 
 export default class LongTermScreen extends React.Component {
   constructor(props) {
     super(props);
     
     this.state = {
-      text: "",
-      title: "",
       modalVisible: false,
-      // goalList: {
-        // "Maintain a healthy life": <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} key={"Maintain a healthy life"}/>,
-        // "Startup": <LongTermGoal title={"Startup"} key={"Startup"} habits={0} TDs={5} />
-      // },
       newGoalTitle: "",
       goalList: {}
     };
@@ -35,10 +30,10 @@ export default class LongTermScreen extends React.Component {
     addGoal(title);
   }
 
-  deleteGoal = (title) => {
-    removeGoal(title);
+  deleteGoal = (id) => {
+    removeGoal(id);
     let newGoalList = this.state.goalList;
-    delete newGoalList[title];
+    delete newGoalList[id];
     this.setState({goalList: newGoalList});
   }
   
@@ -47,15 +42,25 @@ export default class LongTermScreen extends React.Component {
     let formattedGoals = {};
     if (goals != {}) {
       for(const goal of goals) {
-        formattedGoals[goal.title] = <LongTermGoal deleteGoal = {this.deleteGoal} title={goal.title} key={goal.title} habits={goal.habitCount} TDs={goal.toDoCount} />;
+        formattedGoals[goal._id] = <LongTermGoal id = {goal._id} deleteGoal = {this.deleteGoal} title={goal.title} key={goal.title} habits={goal.habitCount} TDs={goal.toDoCount} />;
       }
       this.setState({goalList: formattedGoals});
     } 
     // console.log(this.state.goalList)
     
   }
+
+  displayHabits = (habits) => {
+    console.log(habits);
+  }
   componentDidMount =  async () => {
     getGoals(this.displayGoals);
+    // addHabit("Habit1", "description1", "goal1");
+    // addHabit("Habit2", "description2", "goal2");
+    // addHabit("Habit3", "description3", "goal3");
+    removeHabit("uSS7HSqfcOzZxGw4")
+    getHabits(this.displayHabits);
+
   }
 
   render() {

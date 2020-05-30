@@ -89,7 +89,7 @@ export default class LongTermGoal extends React.Component {
                     iconColor="#fff"
                     style={{ width: 35, height: 35 }}
                     onPress={() => {
-                      this.props.deleteGoal(this.state.title);
+                      this.props.deleteGoal(this.props.id);
                     }}
                   ></Button>
                   <Input
