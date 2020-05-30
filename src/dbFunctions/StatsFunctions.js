@@ -74,3 +74,11 @@ export const addDatesDoc = () => {
     }
   );
 };
+
+export const destroyEverything = () => {
+  db.remove({}, { multi: true }, function(err, numRemoved) {
+    if (err) {
+      console.error(err);
+    }
+  });
+}

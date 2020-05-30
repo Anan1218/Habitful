@@ -1,7 +1,6 @@
 import db from "./db.js";
 import React from "react";
 
-
 export const addGoal = title => {
   const newGoal = {
     type: "goal",
@@ -28,19 +27,31 @@ export const getGoals = callbackFunction => {
 };
 
 export const removeGoal = id => {
-  db.remove({ _id: id, type :"goal" }, {}, function(err, numRemoved) {
+  db.remove({ _id: id, type: "goal" }, {}, function(err, numRemoved) {
     if (err) {
       console.error(err);
     }
   });
 };
 
-export const updateGoal = (oldTitle, newTitle) => {
-  db.update({ title: oldTitle }, {$set: {title: newTitle}}, {}, function(err, numReplaced) {
-    if (err) {
-      console.error(err);
+export const updateGoal = (
+  id,
+  newTitle,
+  habits,
+  habitCount,
+  toDos,
+  toDoCount
+) => {
+  db.update(
+    { _id: id, type: "goal" },
+    { $set: { title: newTitle, habits: habits, habitCount: habitCount , toDos: toDos, toDoCount: toDoCount} },
+    {},
+    function(err, numReplaced) {
+      if (err) {
+        console.error(err);
+      }
     }
-  });
+  );
 };
 
 export const deleteAllGoals = () => {

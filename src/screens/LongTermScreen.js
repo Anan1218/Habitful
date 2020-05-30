@@ -12,8 +12,9 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
-import { addGoal, getGoals, removeGoal, deleteAllGoals } from "../dbFunctions/GoalFunctions.js";
+import { addGoal, getGoals, removeGoal, deleteAllGoals, updateGoal } from "../dbFunctions/GoalFunctions.js";
 import { addHabit, getHabits, removeHabit, deletAllHabits } from "../dbFunctions/HabitFunctions.js";
+import { addDatesDoc, addLastDateOpenedDoc, destroyEverything, getLastDateOpened, addDate } from "../dbFunctions/StatsFunctions";
 
 export default class LongTermScreen extends React.Component {
   constructor(props) {
@@ -54,13 +55,39 @@ export default class LongTermScreen extends React.Component {
     console.log(habits);
   }
   componentDidMount =  async () => {
+    destroyEverything();    
+    this.startupCheck();
     getGoals(this.displayGoals);
-    // addHabit("Habit1", "description1", "goal1");
-    // addHabit("Habit2", "description2", "goal2");
-    // addHabit("Habit3", "description3", "goal3");
-    removeHabit("uSS7HSqfcOzZxGw4")
-    getHabits(this.displayHabits);
+  }
 
+  setup = (lastDateOpenedDoc) => {
+    console.log("setup");
+    console.log(lastDateOpenedDoc);
+    if (lastDateOpenedDoc.length > 0) {
+      console.log("Everything exists - not first start");
+      let lastDate = lastDateOpenedDoc.lastDateOpened;
+      // TODO updates to habits etc
+    } else {
+      console.log("Nothing exists, first start");
+      destroyEverything();
+      addLastDateOpenedDoc();
+      addDatesDoc();
+      addDate("perfect", new Date(2020, 4, 30));
+      addDate("perfect", new Date(2020, 4, 31));
+      addDate("perfect", new Date(2020, 5, 1));
+
+      addDate("partial", new Date(2020, 5, 2));
+      addDate("partial", new Date(2020, 5, 3));
+      addDate("partial", new Date(2020, 5, 4));
+
+      addDate("skipped", new Date(2020, 5, 5));
+      addDate("skipped", new Date(2020, 5, 6));
+      addDate("skipped", new Date(2020, 5, 7));
+    }
+  }
+  startupCheck = () => {
+    console.log("startup check");
+    let lastDate = getLastDateOpened(this.setup);
   }
 
   render() {
