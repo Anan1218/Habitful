@@ -7,7 +7,8 @@ export const addHabit = (title, description, goalID) => {
     title: title,
     description: description,
     completedDays: [],
-    skippedDays: []
+    skippedDays: [],
+    completed: false
   };
   db.insert(newHabit, function(err, newDocs) {
     if (err) {
@@ -33,10 +34,15 @@ export const removeHabit = id => {
   });
 };
 
-export const updateHabit = (oldTitle, newTitle, newDescription, newGoalID) => {
+// TODO add 'completed' field (true or false)
+export const updateHabit = (id, newFields, newDates) => {
+  console.log("in  updateHabit");
+  console.log(id);
+  console.log(newFields);
+  console.log(newDates);
   db.update(
-    { title: oldTitle },
-    { $set: { title: newTitle, description: newDescription, goal: newGoalID } },
+    { _id: id, type: "habit" },
+    { $set: newFields, $addToSet: newDates },
     {},
     function(err, numReplaced) {
       if (err) {
