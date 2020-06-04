@@ -12,34 +12,82 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
-import { addGoal, getGoals } from "../dbFunctions/GoalFunctions.js";
+import { addGoal, getGoals, removeGoal, deleteAllGoals, updateGoal } from "../dbFunctions/GoalFunctions.js";
+import { addHabit, getHabits, removeHabit, deletAllHabits } from "../dbFunctions/HabitFunctions.js";
+import { addDatesDoc, addLastDateOpenedDoc, destroyEverything, getLastDateOpened, addDate } from "../dbFunctions/StatsFunctions";
 
 export default class LongTermScreen extends React.Component {
   constructor(props) {
     super(props);
     
     this.state = {
-      text: "",
-      title: "",
       modalVisible: false,
-      goalList: {
-        // "Maintain a healthy life": <LongTermGoal title={"Maintain a healthy life"} habits={2} TDs={0} key={"Maintain a healthy life"}/>,
-        // "Startup": <LongTermGoal title={"Startup"} key={"Startup"} habits={0} TDs={5} />
-      },
-      newGoalTitle: ""
+      newGoalTitle: "",
+      goalList: {}
     };
 
   }
   saveNewGoal = (title) => {
     addGoal(title);
-    console.log("goal added: "+title);
   }
+
+  deleteGoal = (id) => {
+    removeGoal(id);
+    let newGoalList = this.state.goalList;
+    delete newGoalList[id];
+    this.setState({goalList: newGoalList});
+  }
+  
   displayGoals = (goals) => {
-    console.log("goal db!!");
     console.log(goals);
+    let formattedGoals = {};
+    if (goals != {}) {
+      for(const goal of goals) {
+        formattedGoals[goal._id] = <LongTermGoal id = {goal._id} deleteGoal = {this.deleteGoal} title={goal.title} key={goal.title} habits={goal.habitCount} TDs={goal.toDoCount} />;
+      }
+      this.setState({goalList: formattedGoals});
+    } 
+    // console.log(this.state.goalList)
+    
+  }
+
+  displayHabits = (habits) => {
+    console.log(habits);
   }
   componentDidMount =  async () => {
-    let goals = await getGoals(this.displayGoals);
+    destroyEverything();    
+    this.startupCheck();
+    getGoals(this.displayGoals);
+  }
+
+  setup = (lastDateOpenedDoc) => {
+    console.log("setup");
+    console.log(lastDateOpenedDoc);
+    if (lastDateOpenedDoc.length > 0) {
+      console.log("Everything exists - not first start");
+      let lastDate = lastDateOpenedDoc.lastDateOpened;
+      // TODO updates to habits etc
+    } else {
+      console.log("Nothing exists, first start");
+      destroyEverything();
+      addLastDateOpenedDoc();
+      addDatesDoc();
+      addDate("perfect", new Date(2020, 4, 30));
+      addDate("perfect", new Date(2020, 4, 31));
+      addDate("perfect", new Date(2020, 5, 1));
+
+      addDate("partial", new Date(2020, 5, 2));
+      addDate("partial", new Date(2020, 5, 3));
+      addDate("partial", new Date(2020, 5, 4));
+
+      addDate("skipped", new Date(2020, 5, 5));
+      addDate("skipped", new Date(2020, 5, 6));
+      addDate("skipped", new Date(2020, 5, 7));
+    }
+  }
+  startupCheck = () => {
+    console.log("startup check");
+    let lastDate = getLastDateOpened(this.setup);
   }
 
   render() {
@@ -109,6 +157,7 @@ export default class LongTermScreen extends React.Component {
                           goalList: {
                             ...this.state.goalList,
                             [this.state.newGoalTitle]: <LongTermGoal
+                              deleteGoal = {this.deleteGoal}
                               title={this.state.newGoalTitle}
                               habits={0}
                               TDs={0}
