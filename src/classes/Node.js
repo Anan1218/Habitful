@@ -10,13 +10,10 @@ import {
 import { Input, Block, Text, Button } from "galio-framework";
 
 export class Node extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            active: false,
-            date: "",
-        };
-    }
+    state = {
+        active: false,
+        date: this.props.date,
+    };
 
     render() {
         return (
@@ -25,7 +22,7 @@ export class Node extends Component {
                 style={this.state.active ? styles.btn : styles.btnActive}
                 onPress={() => this.setState({ active: !this.state.active })}
             >
-                <Text>T</Text>
+                <Text>{this.state.date}</Text>
             </Button>
         );
     }

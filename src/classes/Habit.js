@@ -15,33 +15,38 @@ import Node from "./Node";
 export class Habit extends Component {
     state = {
         name: this.props.name,
-        days: [],
+        nodes: [],
     };
 
     componentDidMount() {
-        for (let i = 0; i < 10; i++) {
-            this.state.days.push([]);
+        if (this.state.nodes.length == 0) {
+            var today = new Date();
+            today.setDate(today.getDate() - 9);
+
+            for (let i = 0; i < 10; i++) {
+                this.state.nodes.push([today.getDate() + i]);
+            }
+            this.setState(this.state.nodes);
         }
-        this.setState(this.state.days);
     }
     render() {
-        const { days } = this.state;
-        console.log(days);
+        const { nodes } = this.state;
+        var temp = nodes.slice(nodes.length - 10);
+
+        var lastTen = nodes.slice(nodes.length - 10).map((e, i) => {
+            return (
+                <View style={styles.node}>
+                    <Node date={this.state.nodes[i]}></Node>
+                </View>
+            );
+        });
 
         return (
             <View>
                 <View style={[Grid.row, styles.headingText]}>
                     <Text p>{this.state.name}</Text>
                 </View>
-                <View style={styles.container}>
-                    {days.map((e) => {
-                        return (
-                            <View style={styles.node}>
-                                <Node></Node>
-                            </View>
-                        );
-                    })}
-                </View>
+                <View style={styles.container}>{lastTen}</View>
             </View>
         );
     }
