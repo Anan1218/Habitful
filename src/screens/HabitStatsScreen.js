@@ -44,7 +44,7 @@ export default class HabitStatsScreen extends React.Component {
   render() {
     return (
       <View style={Grid.root}>
-        {/* <Text>Hello</Text> */}
+        <Text>{this.props.route.params.habitID}</Text>
         <Button
           onPress={() => {
             this.props.navigation.navigate('Habits', {screen: 'HabitManagerScreen'});

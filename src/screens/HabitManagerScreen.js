@@ -34,7 +34,7 @@ import {
   addDate
 } from "../dbFunctions/StatsFunctions";
 
-import HabitManager  from "../classes/HabitManager";
+import HabitManager from "../classes/HabitManager";
 
 export default class HabitManagerScreen extends React.Component {
   constructor(props) {
@@ -49,18 +49,19 @@ export default class HabitManagerScreen extends React.Component {
   }
   saveNewHabit = (title, description) => {
     addHabit(title, description);
-  }
-  deleteHabit = (habitID) => {
+  };
+  deleteHabit = habitID => {
     removeHabit(habitID);
     let newHabitList = this.state.habitList;
     delete newHabitList[habitID];
     this.setState({ habitList: newHabitList });
-  }
-  navigate = (habitID) => {
-    
-    this.props.navigation.navigate('HabitStatsScreen');
-  }
-  displayHabits = (habits) => {
+  };
+  navigate = habitID => {
+    this.props.navigation.navigate("HabitStatsScreen", {
+      habitID: habitID
+    });
+  };
+  displayHabits = habits => {
     console.log(habits);
     let formattedHabits = {};
     if (habits != {}) {
@@ -74,13 +75,12 @@ export default class HabitManagerScreen extends React.Component {
             key={habit.title}
             description={habit.description}
             navigate={this.navigate}
-            
           />
         );
       }
       this.setState({ habitList: formattedHabits });
     }
-  }
+  };
   setup = lastDateOpenedDoc => {
     console.log("setup");
     console.log(this.state.habitList);
@@ -93,17 +93,25 @@ export default class HabitManagerScreen extends React.Component {
       currentDate.setHours(0, 0, 0, 0, 0);
       const daysPast =
         (currentDate.getTime() - lastDate.getTime()) / numMillisecondsInDay;
-      
+
       if (daysPast === 1) {
         for (let habitKey of Object.keys(this.state.habits)) {
           if (this.state.habitList[habitKey]["props"]["completed"]) {
-            updateHabit(this.state.habitList[habitKey]["props"]["id"], {}, { completedDays: currentDate });
+            updateHabit(
+              this.state.habitList[habitKey]["props"]["id"],
+              {},
+              { completedDays: currentDate }
+            );
           } else {
-            updateHabit(this.state.habitList[habitKey]["props"]["id"], {}, { skippedDays: currentDate });
+            updateHabit(
+              this.state.habitList[habitKey]["props"]["id"],
+              {},
+              { skippedDays: currentDate }
+            );
           }
         }
         getHabits(this.displayHabits);
-        
+
         // TODO add update to stats?
       }
     } else {
@@ -131,9 +139,8 @@ export default class HabitManagerScreen extends React.Component {
 
   componentDidMount = () => {
     this.startupCheck();
-    getHabits(this.displayHabits)
-  }
-  
+    getHabits(this.displayHabits);
+  };
 
   render() {
     return (
@@ -203,7 +210,10 @@ export default class HabitManagerScreen extends React.Component {
                     <Button
                       size="small"
                       onPress={() => {
-                        this.saveNewHabit(this.state.newHabitTitle, this.state.newHabitDescription);
+                        this.saveNewHabit(
+                          this.state.newHabitTitle,
+                          this.state.newHabitDescription
+                        );
                         getHabits(this.displayHabits);
                         this.setState({ modalVisible: false });
                       }}

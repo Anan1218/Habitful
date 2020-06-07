@@ -20,7 +20,10 @@ import {
   addDate,
   addDatesDoc
 } from "../dbFunctions/StatsFunctions";
-
+import formatDateString from "../dateFunctions/formatDateString";
+import calculateLongestStreak from "../dateFunctions/calculateLongestStreak";
+import createMarkedDates from "../dateFunctions/createMarkedDates";
+1
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
@@ -34,93 +37,16 @@ export default class StatsScreen extends React.Component {
     };
   }
 
-  formatDateString = date => {
-    let dateString = "";
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    dateString += year + "-";
-    if (month < 10) {
-      dateString += "0";
-    }
-    dateString += month + "-";
-    if (day < 10) {
-      dateString += "0";
-    }
-    dateString += day;
-    return dateString;
-  };
-
-  calculateLongestStreak = perfectDays => {
-    if (perfectDays.length == 0) {
-      return 0;
-    }
-    let longestStreak = 1;
-    let currentStreak = 1;
-    let prevTime = 0;
-
-    const numMillisecondsInDay = 24*60*60*1000;
-    perfectDays = perfectDays.sort((day1, day2) => {
-      return day1.getTime() > day2.getTime();
-    })
-    for (let date of perfectDays) {
-      console.log(this.formatDateString(date));
-      // console.log(date.getTime());
-      // console.log(date.getTime() - prevTime);
-      
-      if (date.getTime() - prevTime === numMillisecondsInDay) {
-        console.log("here");
-        currentStreak++;
-      } else {
-        
-        currentStreak = 1;
-      }
-
-      if (currentStreak > longestStreak) {
-        console.log("change");
-        console.log(longestStreak);
-        longestStreak = currentStreak;
-      }
-      
-      console.log(currentStreak);
-      prevTime = date.getTime();
-    }
-    
-    
-    return longestStreak;
-  }
 
   displayDates = datesDocs => {
-    
     let newMarkedDates = this.state.markedDates;
     let formattedDateString;
 
-    let streak = this.calculateLongestStreak(datesDocs[0]["perfectDays"]);
-    this.setState({streak: streak});
-
-    for (let date of datesDocs[0]["perfectDays"]) {
-      formattedDateString = this.formatDateString(date);
-      newMarkedDates = {
-        ...newMarkedDates,
-        [formattedDateString]: { color: "#4ee44e" }
-      };
-    }
-
-    for (let date of datesDocs[0]["partialDays"]) {
-      formattedDateString = this.formatDateString(date);
-      newMarkedDates = {
-        ...newMarkedDates,
-        [formattedDateString]: { color: "#4e99e4" }
-      };
-    }
-
-    for (let date of datesDocs[0]["skippedDays"]) {
-      formattedDateString = this.formatDateString(date);
-      newMarkedDates = {
-        ...newMarkedDates,
-        [formattedDateString]: { color: "#e44e4e" }
-      };
-    }
+    let streak = calculateLongestStreak(datesDocs[0]["perfectDays"]);
+    this.setState({ streak: streak });
+    newMarkedDates = createMarkedDates("perfectDays", datesDocs, newMarkedDates, "#4ee44e");
+    newMarkedDates = createMarkedDates("partialDays", datesDocs, newMarkedDates, "#4e99e4");
+    newMarkedDates = createMarkedDates("skippedDays", datesDocs, newMarkedDates, "#e44e4e");
 
     this.setState({ markedDates: newMarkedDates });
     this.setState({
@@ -131,11 +57,6 @@ export default class StatsScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    // addDate("perfect", new Date(2020, 5, 24));
-    // addDate("perfect", new Date(2020, 5, 25));
-    // addDate("perfect", new Date(2020, 5, 26));
-
-    // addDate("perfect", new Date(2020, 4, 22));
     getDates(this.displayDates);
   };
 
@@ -146,11 +67,7 @@ export default class StatsScreen extends React.Component {
           <Text style={styles.headerText} h4>
             Statistics
           </Text>
-          <Button
-          onPress={() => {
-            this.props.navigation.navigate('Habits', {screen: 'HabitStatsScreen'});
-          }}
-        ></Button>
+         
           <View style={[Grid.col, Grid.alignCenter]}>
             <Text style={[styles.headerText, styles.lStreak]} h5>
               {"Longest Streak:" + this.state.streak}
