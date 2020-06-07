@@ -1,9 +1,8 @@
 import db from "./db.js";
 
-export const addHabit = (title, description, goalID) => {
+export const addHabit = (title, description) => {
   const newHabit = {
     type: "habit",
-    goal: goalID,
     title: title,
     description: description,
     completedDays: [],

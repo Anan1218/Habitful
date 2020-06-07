@@ -33,118 +33,53 @@ import {
   getLastDateOpened,
   addDate
 } from "../dbFunctions/StatsFunctions";
-import { Habit } from "../classes/Habit";
-export default class LongTermScreen extends React.Component {
+
+import HabitManager  from "../classes/HabitManager";
+
+export default class HabitManagerScreen extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       modalVisible: false,
-      newGoalTitle: "",
-      goalList: {},
-      habits: {}
+      newHabitTitle: "",
+      newHabitDescription: "default description",
+      habitList: {}
     };
   }
-  saveNewGoal = title => {
-    addGoal(title);
-  };
-
-  deleteGoal = id => {
-    removeGoal(id);
-    let newGoalList = this.state.goalList;
-    delete newGoalList[id];
-    this.setState({ goalList: newGoalList });
-  };
-
-  displayGoals = goals => {
-    let formattedGoals = {};
-    if (goals != {}) {
-      for (const goal of goals) {
-        formattedGoals[goal._id] = (
-          <LongTermGoal
-            id={goal._id}
-            deleteGoal={this.deleteGoal}
-            title={goal.title}
-            key={goal.title}
-            habits={goal.habitCount}
-            TDs={goal.toDoCount}
-          />
-        );
-      }
-      this.setState({ goalList: formattedGoals });
-    }
-    // console.log(this.state.goalList)
-  };
-
-  displayHabits = habits => {
+  saveNewHabit = (title, description) => {
+    addHabit(title, description);
+  }
+  deleteHabit = (habitID) => {
+    removeHabit(habitID);
+    let newHabitList = this.state.habitList;
+    delete newHabitList[habitID];
+    this.setState({ habitList: newHabitList });
+  }
+  displayHabits = (habits) => {
+    console.log(habits);
     let formattedHabits = {};
     if (habits != {}) {
       for (const habit of habits) {
-        formattedGoals[habit._id] = (
-          <LongTermGoal
+        formattedHabits[habit._id] = (
+          <HabitManager
             id={habit._id}
-            deleteGoal={this.deleteHabit}
+            deleteHabit={this.deleteHabit}
+            editHabit={this.editHabit}
             title={habit.title}
-            key={habit._id}
+            key={habit.title}
+            description={habit.description}
+            navigation={this.props.navigation}
             
           />
         );
       }
-      this.setState({ goalList: formattedGoals });
+      this.setState({ habitList: formattedHabits });
     }
-  };
-  componentDidMount = async () => {
-    deleteAllHabits();
-    let newHabitList = {};
-    const testHabits = [
-      {
-        goalID: 123,
-        title: "habit1",
-        description: "habit1"
-      },
-      {
-        goalID: 123,
-        title: "habit2",
-        description: "habit2"
-      },
-      {
-        goalID: 123,
-        title: "habit3",
-        description: "habit3"
-      }
-    ];
-    for (let habit of testHabits) {
-      addHabit(habit.title, habit.description, habit.goalID);
-    }
-    getGoals(this.displayGoals);
-    getHabits(this.displayHabits);
-    this.startupCheck();
-  };
-
-  displayHabits = habits => {
-    // console.log(habits);
-    let newHabitList = {};
-    for (let habit of habits) {
-      newHabitList[habit["title"]] = (
-        <Habit
-          name={habit["title"]}
-          completed={habit["completed"]}
-          description={habit["description"]}
-          goalID={habit["goal"]}
-          id={habit["_id"]}
-        />
-      );
-      
-    }
-    this.setState({habits: newHabitList});
-    // console.log(this.state.habits);
-    // console.log(this.state.habits);
-
   }
-
   setup = lastDateOpenedDoc => {
     console.log("setup");
-    console.log(this.state.habits);
+    console.log(this.state.habitList);
     if (lastDateOpenedDoc.length > 0) {
       let lastDate = lastDateOpenedDoc[0]["lastDateOpened"];
       lastDate = new Date(2020, 4, 31);
@@ -157,15 +92,15 @@ export default class LongTermScreen extends React.Component {
       
       if (daysPast === 1) {
         for (let habitKey of Object.keys(this.state.habits)) {
-          if (this.state.habits[habitKey]["props"]["completed"]) {
-            updateHabit(this.state.habits[habitKey]["props"]["id"], {}, { completedDays: currentDate });
+          if (this.state.habitList[habitKey]["props"]["completed"]) {
+            updateHabit(this.state.habitList[habitKey]["props"]["id"], {}, { completedDays: currentDate });
           } else {
-            updateHabit(this.state.habits[habitKey]["props"]["id"], {title: "not completed"}, { skippedDays: currentDate });
+            updateHabit(this.state.habitList[habitKey]["props"]["id"], {}, { skippedDays: currentDate });
           }
         }
         getHabits(this.displayHabits);
         
-        // TODO add update to stats
+        // TODO add update to stats?
       }
     } else {
       console.log("Nothing exists, first start");
@@ -190,15 +125,21 @@ export default class LongTermScreen extends React.Component {
     getLastDateOpened(this.setup);
   };
 
+  componentDidMount = () => {
+    this.startupCheck();
+    getHabits(this.displayHabits)
+  }
+  
+
   render() {
     return (
       <View style={Grid.root}>
         <View style={Grid.col}>
           <Text style={styles.headerText} h4>
-            Goals
+            Habits
           </Text>
 
-          {Object.values(this.state.goalList)}
+          {Object.values(this.state.habitList)}
           <View style={[Grid.row, Grid.justifyCenter]}>
             <Button
               onlyIcon
@@ -242,9 +183,15 @@ export default class LongTermScreen extends React.Component {
                     style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}
                   >
                     <Input
-                      placeholder="e.g. Maintain a healthy lifestyle"
+                      placeholder="e.g. Run"
                       onChangeText={text =>
-                        this.setState({ newGoalTitle: text })
+                        this.setState({ newHabitTitle: text })
+                      }
+                    />
+                    <Input
+                      placeholder="e.g. Jog for 30 minutes around block"
+                      onChangeText={text =>
+                        this.setState({ newHabitDescription: text })
                       }
                     />
                   </View>
@@ -252,8 +199,8 @@ export default class LongTermScreen extends React.Component {
                     <Button
                       size="small"
                       onPress={() => {
-                        this.saveNewGoal(this.state.newGoalTitle);
-                        getGoals(this.displayGoals);
+                        this.saveNewHabit(this.state.newHabitTitle, this.state.newHabitDescription);
+                        getHabits(this.displayHabits);
                         this.setState({ modalVisible: false });
                       }}
                     >
