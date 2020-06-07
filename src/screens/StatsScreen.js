@@ -146,6 +146,11 @@ export default class StatsScreen extends React.Component {
           <Text style={styles.headerText} h4>
             Statistics
           </Text>
+          <Button
+          onPress={() => {
+            this.props.navigation.navigate('Habits', {screen: 'HabitStatsScreen'});
+          }}
+        ></Button>
           <View style={[Grid.col, Grid.alignCenter]}>
             <Text style={[styles.headerText, styles.lStreak]} h5>
               {"Longest Streak:" + this.state.streak}

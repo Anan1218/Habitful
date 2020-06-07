@@ -16,6 +16,7 @@ import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 import LongTermGoal from "../classes/LongTermGoal";
 
+import Week from "../classes/Week";
 import Habit from "../classes/Habit";
 import Node from "../classes/Node";
 
@@ -35,11 +36,13 @@ export default class HomeScreen extends React.Component {
             <View style={Grid.root}>
                 <View style={Grid.col}>
                     <Text style={styles.headerText} h4>
-                        Habits
+                        Today
                     </Text>
 
-                    <Habit name="Sample Habit" />
+                    <Week />
                     {Object.values(this.state.habits)}
+
+                    <Habit></Habit>
 
                     <View style={[Grid.row, Grid.justifyCenter]}>
                         <Button
@@ -142,6 +145,7 @@ export default class HomeScreen extends React.Component {
 let styles = StyleSheet.create({
     headerText: {
         margin: 10,
+        textAlign: "center",
     },
     modalView: {
         margin: 20,

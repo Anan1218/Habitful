@@ -56,6 +56,10 @@ export default class HabitManagerScreen extends React.Component {
     delete newHabitList[habitID];
     this.setState({ habitList: newHabitList });
   }
+  navigate = (habitID) => {
+    
+    this.props.navigation.navigate('HabitStatsScreen');
+  }
   displayHabits = (habits) => {
     console.log(habits);
     let formattedHabits = {};
@@ -69,7 +73,7 @@ export default class HabitManagerScreen extends React.Component {
             title={habit.title}
             key={habit.title}
             description={habit.description}
-            navigation={this.props.navigation}
+            navigate={this.navigate}
             
           />
         );
