@@ -20,6 +20,23 @@ import Week from "../classes/Week";
 import Habit from "../classes/Habit";
 import Node from "../classes/Node";
 
+import {
+    addDatesDoc,
+    addLastDateOpenedDoc,
+    destroyEverything,
+    getLastDateOpened,
+    addDate,
+} from "../dbFunctions/StatsFunctions";
+
+import {
+    addHabit,
+    getHabits,
+    removeHabit,
+    deleteAllHabits,
+    updateHabit,
+} from "../dbFunctions/HabitFunctions.js";
+import { HabitComponents, changeHabits } from "../state/Habits";
+
 export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -29,6 +46,91 @@ export default class HomeScreen extends React.Component {
             modalVisible: false,
             habits: {},
         };
+    }
+    displayHabits = (habits) => {
+        console.log(habits);
+        let formattedHabits = {};
+        if (habits != {}) {
+            // for (let habit of habits) {
+            //     formattedHabits[habit._id] = (
+            //         <Habit title={habit.title}/>
+            //     );
+            // }
+            // this.setState({ habits: formattedHabits });
+            changeHabits(habits);
+            console.log(HabitComponents);
+            this.setState({habits: HabitComponents});
+        }
+
+        
+    }
+
+    setup = (lastDateOpenedDoc) => {
+        console.log("setup");
+        console.log(this.state.habits);
+        if (lastDateOpenedDoc.length > 0) {
+            let lastDate = lastDateOpenedDoc[0]["lastDateOpened"];
+            lastDate = new Date(2020, 4, 31);
+            // TODO move to home screen
+            const numMillisecondsInDay = 24 * 60 * 60 * 1000;
+            let currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0, 0);
+            const daysPast =
+                (currentDate.getTime() - lastDate.getTime()) /
+                numMillisecondsInDay;
+
+            if (daysPast === 1) {
+                for (let habitKey of Object.keys(this.state.habits)) {
+                    if (this.state.habits[habitKey]["props"]["completed"]) {
+                        updateHabit(
+                            this.state.habits[habitKey]["props"]["id"],
+                            {},
+                            { completedDays: currentDate }
+                        );
+                    } else {
+                        updateHabit(
+                            this.state.habits[habitKey]["props"]["id"],
+                            {  },
+                            { skippedDays: currentDate }
+                        );
+                    }
+                }
+                
+
+                // TODO add update to stats
+            }
+        } else {
+            console.log("Nothing exists, first start");
+            destroyEverything();
+            addLastDateOpenedDoc();
+            addDatesDoc();
+            addDate("perfect", new Date(2020, 4, 30));
+            addDate("perfect", new Date(2020, 4, 31));
+            addDate("perfect", new Date(2020, 5, 1));
+
+            addDate("partial", new Date(2020, 5, 2));
+            addDate("partial", new Date(2020, 5, 3));
+            addDate("partial", new Date(2020, 5, 4));
+
+            addDate("skipped", new Date(2020, 5, 5));
+            addDate("skipped", new Date(2020, 5, 6));
+            addDate("skipped", new Date(2020, 5, 7));
+        }
+    };
+    startupCheck = () => {
+        console.log("startup check");
+        getLastDateOpened(this.setup);
+    };
+
+    componentDidMount = () => {
+        this.startupCheck();
+        getHabits(this.displayHabits);
+        const update = this.props.navigation.addListener('focus', () => {
+            this.forceUpdate()
+          });
+    }
+    useEffect = () => {
+        console.log("useeffect")
     }
 
     render() {
@@ -40,9 +142,9 @@ export default class HomeScreen extends React.Component {
                     </Text>
 
                     <Week />
-                    {Object.values(this.state.habits)}
+                    {Object.values(HabitComponents)}
 
-                    <Habit></Habit>
+                    {/* <Habit></Habit> */}
 
                     <View style={[Grid.row, Grid.justifyCenter]}>
                         <Button

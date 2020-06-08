@@ -31,7 +31,7 @@ export class Habit extends Component {
                         this.setState({ active: !this.state.active })
                     }
                 >
-                    <Text>Habit</Text>
+                    <Text>{this.props.title}</Text>
                 </Swipeable>
             </View>
         );

@@ -35,7 +35,7 @@ import {
 } from "../dbFunctions/StatsFunctions";
 
 import HabitManager from "../classes/HabitManager";
-
+import { changeHabits, HabitManagers } from "../state/Habits";
 export default class HabitManagerScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -52,9 +52,11 @@ export default class HabitManagerScreen extends React.Component {
   };
   deleteHabit = habitID => {
     removeHabit(habitID);
-    let newHabitList = this.state.habitList;
-    delete newHabitList[habitID];
-    this.setState({ habitList: newHabitList });
+    getHabits(this.displayHabits);
+    // let newHabitList = this.state.habitList;
+    // delete newHabitList[habitID];
+    // this.setState({ habitList: newHabitList });
+    
   };
   navigate = habitID => {
     this.props.navigation.navigate("HabitStatsScreen", {
@@ -64,21 +66,24 @@ export default class HabitManagerScreen extends React.Component {
   displayHabits = habits => {
     console.log(habits);
     let formattedHabits = {};
+    
     if (habits != {}) {
-      for (const habit of habits) {
-        formattedHabits[habit._id] = (
-          <HabitManager
-            id={habit._id}
-            deleteHabit={this.deleteHabit}
-            editHabit={this.editHabit}
-            title={habit.title}
-            key={habit.title}
-            description={habit.description}
-            navigate={this.navigate}
-          />
-        );
-      }
-      this.setState({ habitList: formattedHabits });
+      // for (const habit of habits) {
+      //   formattedHabits[habit._id] = (
+      //     <HabitManager
+      //       id={habit._id}
+      //       deleteHabit={this.deleteHabit}
+      //       editHabit={this.editHabit}
+      //       title={habit.title}
+      //       key={habit.title}
+      //       description={habit.description}
+      //       navigate={this.navigate}
+      //     />
+      //   );
+      // }
+      
+      changeHabits(habits, this.deleteHabit, this.editHabit, this.navigate);
+      this.setState({ habitList: HabitManagers });
     }
   };
   setup = lastDateOpenedDoc => {

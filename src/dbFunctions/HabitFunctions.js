@@ -25,6 +25,15 @@ export const getHabits = callbackFunction => {
   });
 };
 
+export const getHabit = (habitID, callbackFunction) => {
+  db.find({ type: "habit", _id: habitID }, function(err, docs) {
+    if (err) {
+      console.error(err);
+    }
+    return callbackFunction(docs);
+  });
+};
+
 export const removeHabit = id => {
   db.remove({ _id: id, type: "habit" }, {}, function(err, numRemoved) {
     if (err) {
