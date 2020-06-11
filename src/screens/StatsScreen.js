@@ -23,7 +23,6 @@ import {
 import formatDateString from "../dateFunctions/formatDateString";
 import calculateLongestStreak from "../dateFunctions/calculateLongestStreak";
 import createMarkedDates from "../dateFunctions/createMarkedDates";
-1
 
 export default class StatsScreen extends React.Component {
   constructor(props) {
@@ -37,16 +36,42 @@ export default class StatsScreen extends React.Component {
     };
   }
 
-
   displayDates = datesDocs => {
+    // console.log(datesDocs);
+    if (datesDocs == []) {
+      return;
+    }
     let newMarkedDates = this.state.markedDates;
     let formattedDateString;
+    if (datesDocs[0]["perfectDays"].length > 0) {
+      let streak = calculateLongestStreak(datesDocs[0]["perfectDays"]);
+      this.setState({ streak: streak });
+    }
+    if (datesDocs[0]["perfectDays"].length > 0) {
+      newMarkedDates = createMarkedDates(
+        "perfectDays",
+        datesDocs,
+        newMarkedDates,
+        "#4ee44e"
+      );
+    }
+    if (datesDocs[0]["partialDays"].length > 0) {
+      newMarkedDates = createMarkedDates(
+        "partialDays",
+        datesDocs,
+        newMarkedDates,
+        "#4e99e4"
+      );
+    }
 
-    let streak = calculateLongestStreak(datesDocs[0]["perfectDays"]);
-    this.setState({ streak: streak });
-    newMarkedDates = createMarkedDates("perfectDays", datesDocs, newMarkedDates, "#4ee44e");
-    newMarkedDates = createMarkedDates("partialDays", datesDocs, newMarkedDates, "#4e99e4");
-    newMarkedDates = createMarkedDates("skippedDays", datesDocs, newMarkedDates, "#e44e4e");
+    if (datesDocs[0]["skippedDays"].length > 0) {
+      newMarkedDates = createMarkedDates(
+        "skippedDays",
+        datesDocs,
+        newMarkedDates,
+        "#e44e4e"
+      );
+    }
 
     this.setState({ markedDates: newMarkedDates });
     this.setState({
@@ -67,7 +92,7 @@ export default class StatsScreen extends React.Component {
           <Text style={styles.headerText} h4>
             Statistics
           </Text>
-         
+
           <View style={[Grid.col, Grid.alignCenter]}>
             <Text style={[styles.headerText, styles.lStreak]} h5>
               {"Longest Streak:" + this.state.streak}

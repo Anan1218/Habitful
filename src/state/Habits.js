@@ -20,9 +20,10 @@ const changeHabits = (habits, deleteHabit, editHabit, navigate) => {
         key={habit.title}
         description={habit.description}
         navigate={navigate}
+        completed={habit.completed}
       />
     );
-    formattedHabitComponents[habit._id] = <Habit title={habit.title} />
+    formattedHabitComponents[habit._id] = <Habit id = {habit._id} title={habit.title} description={habit.description} completed={habit.completed}/>
   }
   HabitManagers = formattedHabits;
   HabitComponents = formattedHabitComponents;

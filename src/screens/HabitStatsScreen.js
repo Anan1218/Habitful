@@ -24,44 +24,60 @@ import {
 
 import { Calendar } from "react-native-calendars";
 
+import formatDateString from "../dateFunctions/formatDateString";
+import calculateLongestStreak from "../dateFunctions/calculateLongestStreak";
+import createMarkedDates from "../dateFunctions/createMarkedDates";
 
 export default class HabitStatsScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {markedDates: {}};
+    this.state = { markedDates: {} };
   }
-  displayDates = (habitDoc) => {
+  displayDates = habitDoc => {
     console.log(habitDoc);
-  }
+    let newMarkedDates = {};
+    let streak = calculateLongestStreak(habitDoc[0]["completedDays"]);
+    this.setState({ streak: streak });
+    console.log(streak);
+
+    newMarkedDates = createMarkedDates("completedDays", habitDoc, newMarkedDates, "#4ee44e");
+    newMarkedDates = createMarkedDates("skippedDays", habitDoc, newMarkedDates, "#e44e4e");
+    this.setState({ markedDates: newMarkedDates });
+    this.setState({
+      perfectCount: habitDoc[0]["completedDays"].length,
+      skippedCount: habitDoc[0]["skippedDays"].length
+    });
+  };
   componentDidMount = () => {
     console.log(this.props.route.params.habitID);
     getHabit(this.props.route.params.habitID, this.displayDates);
-  }
+  };
 
   render() {
     return (
       <View style={Grid.root}>
         <Button
           onPress={() => {
-            this.props.navigation.navigate('Habits', {screen: 'HabitManagerScreen'});
+            this.props.navigation.navigate("Habits", {
+              screen: "HabitManagerScreen"
+            });
           }}
         ></Button>
         <Calendar
-            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-            monthFormat={"MMMM yyyy"}
-            // Do not show days of other months in month page. Default = false
-            hideExtraDays={true}
-            // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-            // day from another month that is visible in calendar page. Default = false
-            disableMonthChange={true}
-            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-            firstDay={1}
-            markedDates={this.state.markedDates}
-            // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-            markingType={"period"}
-          />
-        
+          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+          monthFormat={"MMMM yyyy"}
+          // Do not show days of other months in month page. Default = false
+          hideExtraDays={true}
+          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+          // day from another month that is visible in calendar page. Default = false
+          disableMonthChange={true}
+          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+          firstDay={1}
+          markedDates={this.state.markedDates}
+          // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+          markingType={"period"}
+        />
       </View>
     );
   }

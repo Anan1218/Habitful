@@ -47,14 +47,14 @@ export const addDate = (status, date) => {
   let updateDoc = {};
   switch (status) {
     case "partial":
-        updateDoc = {$addToSet: {partialDays: date}};
-        break;
+      updateDoc = { $addToSet: { partialDays: date } };
+      break;
     case "skipped":
-        updateDoc = {$addToSet: {skippedDays: date}};
-        break;
+      updateDoc = { $addToSet: { skippedDays: date } };
+      break;
     case "perfect":
-        updateDoc = {$addToSet: {perfectDays: date}};
-        break;
+      updateDoc = { $addToSet: { perfectDays: date } };
+      break;
   }
 
   db.update({ type: "dates" }, updateDoc, function(err, numUpdated) {
@@ -64,6 +64,41 @@ export const addDate = (status, date) => {
   });
 };
 
+export const addPartialDay = dates => {
+  db.update(
+    { type: "dates" },
+    { $addToSet: { partialDays: { $each: dates } } },
+    function(err, numUpdated) {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+};
+
+export const addSkippedDay = dates => {
+  db.update(
+    { type: "dates" },
+    { $addToSet: { skippedDays: { $each: dates } } },
+    function(err, numUpdated) {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+};
+
+export const addPerfectDay = dates => {
+  db.update(
+    { type: "dates" },
+    { $addToSet: { perfectDays: { $each: dates } } },
+    function(err, numUpdated) {
+      if (err) {
+        console.error(err);
+      }
+    }
+  );
+};
 export const addDatesDoc = () => {
   db.insert(
     { perfectDays: [], partialDays: [], skippedDays: [], type: "dates" },
@@ -81,4 +116,4 @@ export const destroyEverything = () => {
       console.error(err);
     }
   });
-}
+};

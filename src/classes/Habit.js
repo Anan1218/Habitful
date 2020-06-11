@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import Grid from "../styles/Grid";
 import Swipeable from "react-native-swipeable";
+import { updateHabit } from "../dbFunctions/HabitFunctions";
+
 
 export class Habit extends Component {
     state = {
@@ -18,7 +20,9 @@ export class Habit extends Component {
         active: false,
     };
 
-    componentDidMount() {}
+    componentDidMount() {
+        this.setState({active: this.props.completed})
+    }
 
     render() {
         return (
@@ -27,8 +31,10 @@ export class Habit extends Component {
                     style={this.state.active ? styles.active : styles.inactive}
                     leftContent={leftContent}
                     rigthButtons={rigthButtons}
-                    onLeftActionRelease={() =>
-                        this.setState({ active: !this.state.active })
+                    onLeftActionRelease={() => {
+                        this.setState({ active: !this.state.active });
+                        updateHabit(this.props.id, {completed: ! this.state.active}, {});
+                        }
                     }
                 >
                     <Text>{this.props.title}</Text>

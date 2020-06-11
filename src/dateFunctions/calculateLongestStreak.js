@@ -1,6 +1,10 @@
 
 
+
 export default calculateLongestStreak = perfectDays => {
+  // console.log("in calclongeststreak")
+  // console.log(perfectDays);
+  // console.log(perfectDays[0]);
     if (perfectDays.length == 0) {
       return 0;
     }
