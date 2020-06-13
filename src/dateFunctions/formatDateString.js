@@ -1,4 +1,5 @@
-export default formatDateString = date => {
+
+const formatDateString = date => {
   let dateString = "";
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
@@ -14,3 +15,5 @@ export default formatDateString = date => {
   dateString += day;
   return dateString;
 };
+
+export default formatDateString;

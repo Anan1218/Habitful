@@ -1,6 +1,7 @@
 import Datastore from 'react-native-local-mongodb';
 
-export default db = new Datastore({ filename: 'asyncStorageKey', autoload: true });
+const db = new Datastore({ filename: 'asyncStorageKey', autoload: true });
+export default db;
 
 // Format of all data
 

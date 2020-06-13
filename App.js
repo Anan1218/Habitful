@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import LongTermScreen from "./src/screens/LongTermScreen";
+
 import HomeScreen from "./src/screens/HomeScreen";
 import StatsScreen from "./src/screens/StatsScreen";
 import HabitManagerStackScreen  from "./src/navigators/HabitManagerStackScreen";

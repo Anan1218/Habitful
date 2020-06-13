@@ -24,7 +24,9 @@ export const setLastDateOpened = date => {
 };
 
 export const addLastDateOpenedDoc = () => {
-  db.insert({ lastDateOpened: new Date(), type: "lastDateOpened" }, function(
+  let currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0, 0);
+  db.insert({ lastDateOpened: currentDate, type: "lastDateOpened" }, function(
     err,
     newDocs
   ) {

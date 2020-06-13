@@ -1,5 +1,5 @@
 // ... screen imports
-import { LongTermScreen, StatsScreen, HomeScreen } from "../screens";
+import { StatsScreen, HomeScreen } from "../screens";
 
 import { Platform } from "react-native";
 import {

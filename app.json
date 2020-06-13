@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Habit Tracker",
-    "slug": "habit-tracker",
+    "name": "Habit Tracker 1.0.2",
+    "slug": "habit-tracker-two",
     "privacy": "public",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -25,10 +25,17 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anamark.appname",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.2"
     },
     "android": {
       "package": "com.anamark.appname"
+    },
+    "web": {
+      "build": {
+        "babel": {
+          "include": ["galio-framework"]
+        }
+      }
     }
   }
 }

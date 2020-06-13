@@ -10,11 +10,11 @@ import {
   TouchableWithoutFeedback
 } from "react-native";
 import "react-native-gesture-handler";
-import LongTermPage from "./LongTermScreen";
+
 import Grid from "../styles/Grid";
 
 import { Input, Block, Text, Button } from "galio-framework";
-import LongTermGoal from "../classes/LongTermGoal";
+
 
 import Week from "../classes/Week";
 import Habit from "../classes/Habit";
@@ -97,10 +97,12 @@ export default class HomeScreen extends React.Component {
 
         const daysPast =
           (currentDate.getTime() - lastDate.getTime()) / numMillisecondsInDay;
-        if (daysPast == 0) {
+        console.log("daysPast="+daysPast);
+        if (daysPast === 0) {
             getHabits(this.showHabits);
             return;
         }
+        console.log("not supposed to get here on new open");
         let skippedDates = [];
 
         for (let i = daysPast; i > 0; i--) {
@@ -207,7 +209,7 @@ export default class HomeScreen extends React.Component {
       <View style={Grid.root}>
         <View style={Grid.col}>
           <Text style={styles.headerText} h4>
-            Today
+            Today 6/13/20 12:00
           </Text>
 
           <Week />

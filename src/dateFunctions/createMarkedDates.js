@@ -1,6 +1,6 @@
 import formatDateString from "./formatDateString";
 
-export default createMarkedDates = (
+const createMarkedDates = (
   arrayName,
   datesDocs,
   newMarkedDates,
@@ -17,3 +17,5 @@ export default createMarkedDates = (
 
   return newMarkedDates;
 };
+
+export default createMarkedDates;

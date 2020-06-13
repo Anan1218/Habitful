@@ -11,7 +11,7 @@ import {
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
-import LongTermGoal from "../classes/LongTermGoal";
+
 import {
   addGoal,
   getGoals,
