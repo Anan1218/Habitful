@@ -12,7 +12,6 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 
-
 import {
   addHabit,
   getHabits,
@@ -32,7 +31,12 @@ export default class HabitStatsScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { markedDates: {} };
+    this.state = {
+      markedDates: {},
+      streak: 0,
+      completedCount: 0,
+      skippedCount: 0
+    };
   }
   displayDates = habitDoc => {
     console.log(habitDoc);
@@ -41,8 +45,18 @@ export default class HabitStatsScreen extends React.Component {
     this.setState({ streak: streak });
     console.log(streak);
 
-    newMarkedDates = createMarkedDates("completedDays", habitDoc, newMarkedDates, "#4ee44e");
-    newMarkedDates = createMarkedDates("skippedDays", habitDoc, newMarkedDates, "#e44e4e");
+    newMarkedDates = createMarkedDates(
+      "completedDays",
+      habitDoc,
+      newMarkedDates,
+      "#4ee44e"
+    );
+    newMarkedDates = createMarkedDates(
+      "skippedDays",
+      habitDoc,
+      newMarkedDates,
+      "#e44e4e"
+    );
     this.setState({ markedDates: newMarkedDates });
     this.setState({
       perfectCount: habitDoc[0]["completedDays"].length,
@@ -57,29 +71,63 @@ export default class HabitStatsScreen extends React.Component {
   render() {
     return (
       <View style={Grid.root}>
-        <Button
-          onPress={() => {
-            this.props.navigation.navigate("Habits", {
-              screen: "HabitManagerScreen"
-            });
-          }}
-        ></Button>
-        <Calendar
-          // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-          monthFormat={"MMMM yyyy"}
-          // Do not show days of other months in month page. Default = false
-          hideExtraDays={true}
-          // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-          // day from another month that is visible in calendar page. Default = false
-          disableMonthChange={true}
-          // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-          firstDay={1}
-          markedDates={this.state.markedDates}
-          // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-          markingType={"period"}
-        />
+        <View style={Grid.col}>
+          <Button
+            onlyIcon
+            icon="left"
+            iconFamily="antdesign"
+            iconSize={30}
+            color="warning"
+            iconColor="#fff"
+            style={{ width: 40, height: 40 }}
+            onPress={() => {
+              this.props.navigation.navigate("Habits", {
+                screen: "HabitManagerScreen"
+              });
+            }}
+          ></Button>
+          <View style={[Grid.col, Grid.alignCenter]}>
+            <Text style={[styles.headerText, styles.lStreak]} h5>
+              {"Longest Streak:" + this.state.streak}
+            </Text>
+            <Text style={[styles.headerText, styles.completed]} h5>
+              {"Perfect Days: " + this.state.completedCount}
+            </Text>
+
+            <Text style={[styles.headerText, styles.skipped]} h5>
+              {"Skipped Days: " + this.state.skippedCount}
+            </Text>
+          </View>
+          <Calendar
+            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+            monthFormat={"MMMM yyyy"}
+            // Do not show days of other months in month page. Default = false
+            hideExtraDays={true}
+            // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+            // day from another month that is visible in calendar page. Default = false
+            disableMonthChange={true}
+            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+            firstDay={1}
+            markedDates={this.state.markedDates}
+            // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+            markingType={"period"}
+          />
+        </View>
       </View>
     );
   }
 }
-let styles = StyleSheet.create({});
+let styles = StyleSheet.create({
+  headerText: {
+    margin: 10
+  },
+  lStreak: {
+    color: "#4e4ee4"
+  },
+  completed: {
+    color: "#4ee44e"
+  },
+  skipped: {
+    color: "#e44e4e"
+  }
+});

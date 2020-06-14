@@ -51,7 +51,9 @@ export default class HomeScreen extends React.Component {
       title: "",
       modalVisible: false,
       habits: HabitComponents,
-      displayedHabits: {}
+      displayedHabits: {},
+      newHabitTitle: "A new habit",
+      newHabitDescription: "default description",
     };
   }
   setHabits = (habits, withCheck) => {
@@ -75,6 +77,10 @@ export default class HomeScreen extends React.Component {
       this.setState({displayedHabits: HabitComponents});
       this.setState({habits: HabitComponents});
   }
+
+  saveNewHabit = (title, description) => {
+    addHabit(title, description);
+  };
 
   
 
@@ -209,7 +215,7 @@ export default class HomeScreen extends React.Component {
       <View style={Grid.root}>
         <View style={Grid.col}>
           <Text style={styles.headerText} h4>
-            Today 6/13/20 12:00
+            Today 6/14/20 10:39
           </Text>
 
           <Week />
@@ -260,10 +266,18 @@ export default class HomeScreen extends React.Component {
                     style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}
                   >
                     <Input
-                      placeholder="e.g. Maintain a healthy lifestyle"
+                      placeholder="e.g. Run"
                       onChangeText={text =>
                         this.setState({
                           newHabitTitle: text
+                        })
+                      }
+                    />
+                    <Input
+                      placeholder="e.g. Jog for 30 minutes around bloc"
+                      onChangeText={text =>
+                        this.setState({
+                          newHabitDescription: text
                         })
                       }
                     />
@@ -272,18 +286,12 @@ export default class HomeScreen extends React.Component {
                     <Button
                       size="small"
                       onPress={() => {
-                        // TODO change this
-                        this.setState({
-                          habits: {
-                            ...this.state.habits,
-                            [this.state.newHabitTitle]: (
-                              <Habit name={this.state.newHabitTitle} />
-                            )
-                          }
-                        });
-                        this.setState({
-                          modalVisible: false
-                        });
+                        this.saveNewHabit(
+                          this.state.newHabitTitle,
+                          this.state.newHabitDescription
+                        );
+                        getHabits(this.showHabits);
+                        this.setState({ modalVisible: false });
                       }}
                     >
                       <Text>Add Habit</Text>
