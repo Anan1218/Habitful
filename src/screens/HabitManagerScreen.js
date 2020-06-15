@@ -42,7 +42,7 @@ export default class HabitManagerScreen extends React.Component {
 
         this.state = {
             modalVisible: false,
-            newHabitTitle: "",
+            newHabitTitle: "A new habit",
             newHabitDescription: "default description",
             habitList: {},
         };
@@ -90,65 +90,14 @@ export default class HabitManagerScreen extends React.Component {
             this.setState({ habitList: HabitManagers });
         }
     };
-    // setup = lastDateOpenedDoc => {
-    //   console.log("setup");
-    //   console.log(this.state.habitList);
-    //   if (lastDateOpenedDoc.length > 0) {
-    //     let lastDate = lastDateOpenedDoc[0]["lastDateOpened"];
-    //     lastDate = new Date(2020, 4, 31);
-    //     // TODO move to home screen
-    //     const numMillisecondsInDay = 24 * 60 * 60 * 1000;
-    //     let currentDate = new Date();
-    //     currentDate.setHours(0, 0, 0, 0, 0);
-    //     const daysPast =
-    //       (currentDate.getTime() - lastDate.getTime()) / numMillisecondsInDay;
-
-    //     if (daysPast === 1) {
-    //       for (let habitKey of Object.keys(this.state.habits)) {
-    //         if (this.state.habitList[habitKey]["props"]["completed"]) {
-    //           updateHabit(
-    //             this.state.habitList[habitKey]["props"]["id"],
-    //             {},
-    //             { completedDays: currentDate }
-    //           );
-    //         } else {
-    //           updateHabit(
-    //             this.state.habitList[habitKey]["props"]["id"],
-    //             {},
-    //             { skippedDays: currentDate }
-    //           );
-    //         }
-    //       }
-    //       getHabits(this.displayHabits);
-
-    //       // TODO add update to stats?
-    //     }
-    //   } else {
-    //     console.log("Nothing exists, first start");
-    //     destroyEverything();
-    //     addLastDateOpenedDoc();
-    //     addDatesDoc();
-    //     addDate("perfect", new Date(2020, 4, 30));
-    //     addDate("perfect", new Date(2020, 4, 31));
-    //     addDate("perfect", new Date(2020, 5, 1));
-
-    //     addDate("partial", new Date(2020, 5, 2));
-    //     addDate("partial", new Date(2020, 5, 3));
-    //     addDate("partial", new Date(2020, 5, 4));
-
-    //     addDate("skipped", new Date(2020, 5, 5));
-    //     addDate("skipped", new Date(2020, 5, 6));
-    //     addDate("skipped", new Date(2020, 5, 7));
-    //   }
-    // };
-    // startupCheck = () => {
-    //   console.log("startup check");
-    //   getLastDateOpened(this.setup);
-    // };
 
     componentDidMount = () => {
         // this.startupCheck();
         getHabits(this.displayHabits);
+        const update = this.props.navigation.addListener("focus", () => {
+            this.setState({ habitList: HabitManagers });
+            this.forceUpdate();
+        });
     };
 
     render() {
