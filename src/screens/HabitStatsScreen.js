@@ -35,7 +35,8 @@ export default class HabitStatsScreen extends React.Component {
       markedDates: {},
       streak: 0,
       completedCount: 0,
-      skippedCount: 0
+      skippedCount: 0,
+      completionPercent: 0
     };
   }
   displayDates = habitDoc => {
@@ -59,13 +60,27 @@ export default class HabitStatsScreen extends React.Component {
     );
     this.setState({ markedDates: newMarkedDates });
     this.setState({
-      perfectCount: habitDoc[0]["completedDays"].length,
+      completedCount: habitDoc[0]["completedDays"].length,
       skippedCount: habitDoc[0]["skippedDays"].length
     });
+
+    if (this.state.completedCount > 0 || this.state.skippedCount > 0) {
+      this.setState({
+        completionPercent: (
+          (100 * this.state.completedCount) /
+          (this.state.skippedCount + this.state.completedCount)
+        ).toFixed(0)
+      });
+    }
   };
   componentDidMount = () => {
     console.log(this.props.route.params.habitID);
     getHabit(this.props.route.params.habitID, this.displayDates);
+    console.log("stats screen is mounting");
+    const update = this.props.navigation.addListener("focus", () => {
+      getHabit(this.props.route.params.habitID, this.displayDates);
+      this.forceUpdate();
+    });
   };
 
   render() {
@@ -97,8 +112,30 @@ export default class HabitStatsScreen extends React.Component {
             <Text style={[styles.headerText, styles.skipped]} h5>
               {"Skipped Days: " + this.state.skippedCount}
             </Text>
+            <Text style={[styles.headerText, styles.skipped]} h5>
+              {"Completion Percentage: " + this.state.completionPercent + "%"}
+            </Text>
           </View>
           <Calendar
+            onDayLongPress={day => {
+              console.log("selected day", day);
+
+              let isCompleted = false;
+              let formattedDay = day.dateString;
+              console.log(this.state.markedDates[formattedDay])
+              if (this.state.markedDates[formattedDay] !== undefined && this.state.markedDates[formattedDay]["color"] === "#4ee44e") {
+                isCompleted = true;
+                console.log("isCompleted");
+              }
+
+              this.props.navigation.navigate("PastHabitScreen", {
+                day: day,
+                habitID: this.props.route.params.habitID,
+                completed: isCompleted,
+                title: this.props.route.params.title,
+                description: this.props.route.params.description
+              });
+            }}
             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
             monthFormat={"MMMM yyyy"}
             // Do not show days of other months in month page. Default = false

@@ -38,7 +38,7 @@ export default class HabitManager extends React.Component {
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
           onPress={() => {
-            this.props.navigate(this.props.id);
+            this.props.navigate(this.props.id, this.props.title, this.props.description);
           }}
         style={[styles.touchableHighlight]}
         >

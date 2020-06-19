@@ -58,9 +58,11 @@ export default class HabitManagerScreen extends React.Component {
     // this.setState({ habitList: newHabitList });
     
   };
-  navigate = habitID => {
+  navigate = (habitID, title, description) => {
     this.props.navigation.navigate("HabitStatsScreen", {
-      habitID: habitID
+      habitID: habitID,
+      title: title,
+      description: description
     });
   };
   displayHabits = habits => {

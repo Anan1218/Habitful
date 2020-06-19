@@ -29,7 +29,8 @@ import {
   addPartialDay,
   addPerfectDay,
   addSkippedDay,
-  setLastDateOpened
+  setLastDateOpened,
+  removeSkippedDay
 } from "../dbFunctions/StatsFunctions";
 
 import {
@@ -39,7 +40,9 @@ import {
   deleteAllHabits,
   updateHabit,
   addSkipped,
-  addCompleted
+  addCompleted,
+  removeCompleted,
+  removeSkipped
 } from "../dbFunctions/HabitFunctions.js";
 import { HabitComponents, changeHabits } from "../state/Habits";
 
@@ -112,7 +115,7 @@ export default class HomeScreen extends React.Component {
         let skippedDates = [];
 
         for (let i = daysPast; i > 0; i--) {
-          // TODO check if wraps around
+
           skippedDates.push(
             new Date(
               currentDate.getFullYear(),
@@ -121,7 +124,6 @@ export default class HomeScreen extends React.Component {
             )
           );
         }
-        //   console.log(skippedDates);
         let completedDate;
         let completedArray = [];
         for (let habitKey of Object.keys(this.state.habits)) {
@@ -150,7 +152,6 @@ export default class HomeScreen extends React.Component {
             );
           }
         }
-        // console.log(completedArray);
         if (completedArray.includes(false) & !completedArray.includes(true)) {
           addSkippedDay(skippedDates);
         } else if (
@@ -160,15 +161,12 @@ export default class HomeScreen extends React.Component {
           addPerfectDay(completedDate);
           addSkippedDay(skippedDates);
         } else if (completedArray.length > 0) {
-        //   console.log(skippedDates);
           completedDate = skippedDates.splice(0, 1);
-        //   console.log(completedDate);
-        //   console.log(skippedDates);
           addPartialDay(completedDate);
           addSkippedDay(skippedDates);
         }
 
-        // TODO add update to stats
+        
       }
 
       currentDate = new Date();
@@ -180,17 +178,6 @@ export default class HomeScreen extends React.Component {
       destroyEverything();
       addLastDateOpenedDoc();
       addDatesDoc();
-      //   addDate("perfect", new Date(2020, 4, 30));
-      //   addDate("perfect", new Date(2020, 4, 31));
-      //   addDate("perfect", new Date(2020, 5, 1));
-
-      //   addDate("partial", new Date(2020, 5, 2));
-      //   addDate("partial", new Date(2020, 5, 3));
-      //   addDate("partial", new Date(2020, 5, 4));
-
-      //   addDate("skipped", new Date(2020, 5, 5));
-      //   addDate("skipped", new Date(2020, 5, 6));
-      //   addDate("skipped", new Date(2020, 5, 7));
     }
   };
   startupCheck = () => {
@@ -200,7 +187,6 @@ export default class HomeScreen extends React.Component {
   componentDidMount = () => {
     // destroyEverything();
     getHabits(this.setHabits, true);
-    
     
 
     const update = this.props.navigation.addListener("focus", () => {
@@ -215,7 +201,7 @@ export default class HomeScreen extends React.Component {
       <View style={Grid.root}>
         <View style={Grid.col}>
           <Text style={styles.headerText} h4>
-            Today 6/14/20 10:39
+            Today 6/16/20 1:47
           </Text>
 
           <Week />

@@ -93,3 +93,41 @@ export const deleteAllHabits = () => {
     }
   });
 };
+
+export const removeSkipped = (id, date) => {
+  console.log("in removeSkipped");
+  db.find({type: 'habit', _id: id}, function(err, docs) {
+    if (err) {
+      console.error(err);
+    }
+    let newDates = [];
+    for(let skippedDate of docs[0]["skippedDays"]) {
+      if (skippedDate.getTime() != date.getTime()) {
+        newDates.push(skippedDate);
+      }
+    }
+    db.update({type: 'habit', _id: id}, {$set:  {skippedDays: newDates}}, function(err, numReplaced) {
+      if (err) {
+        console.error(err);
+      }
+    })
+  })
+}
+export const removeCompleted = (id, date) => {
+  db.find({type: 'habit', _id: id}, function(err, docs) {
+    if (err) {
+      console.error(err);
+    }
+    let newDates = [];
+    for(let completedDate of docs[0]["completedDays"]) {
+      if (completedDate.getTime() !== date.getTime()) {
+        newDates.push(completedDate);
+      }
+    }
+    db.update({type: 'habit', _id: id}, {$set: {completedDays: newDates}}, function(err, numReplaced) {
+      if (err) {
+        console.error(err);
+      }
+    })
+  })
+}

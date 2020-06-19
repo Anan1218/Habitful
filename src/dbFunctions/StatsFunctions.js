@@ -119,3 +119,60 @@ export const destroyEverything = () => {
     }
   });
 };
+
+export const removeSkippedDay = (date) => {
+  db.find({type: 'dates'}, function(err, docs) {
+    if (err) {
+      console.error(err);
+    }
+    let newDates = [];
+    for(let skippedDate of docs[0]["skippedDays"]) {
+      if (skippedDate.getTime() != date.getTime()) {
+        newDates.push(skippedDate);
+      }
+    }
+    db.update({type: 'dates'}, {$set:  {skippedDays: newDates}}, function(err, numReplaced) {
+      if (err) {
+        console.error(err);
+      }
+    })
+  })
+}
+
+export const removePartialDay = (date) => {
+  db.find({type: 'dates'}, function(err, docs) {
+    if (err) {
+      console.error(err);
+    }
+    let newDates = [];
+    for(let partialDate of docs[0]["partialDays"]) {
+      if (partialDate.getTime() != date.getTime()) {
+        newDates.push(partialDate);
+      }
+    }
+    db.update({type: 'dates'}, {$set:  {partialDays: newDates}}, function(err, numReplaced) {
+      if (err) {
+        console.error(err);
+      }
+    })
+  })
+}
+
+export const removePerfectDay = (date) => {
+  db.find({type: 'dates'}, function(err, docs) {
+    if (err) {
+      console.error(err);
+    }
+    let newDates = [];
+    for(let perfectDate of docs[0]["perfectDays"]) {
+      if (perfectDate.getTime() != date.getTime()) {
+        newDates.push(perfectDate);
+      }
+    }
+    db.update({type: 'dates'}, {$set:  {perfectDays: newDates}}, function(err, numReplaced) {
+      if (err) {
+        console.error(err);
+      }
+    })
+  })
+}
