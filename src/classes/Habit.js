@@ -13,7 +13,6 @@ import Grid from "../styles/Grid";
 import Swipeable from "react-native-swipeable";
 import { updateHabit } from "../dbFunctions/HabitFunctions";
 
-
 export class Habit extends Component {
     state = {
         name: "",
@@ -21,7 +20,7 @@ export class Habit extends Component {
     };
 
     componentDidMount() {
-        this.setState({active: this.props.completed})
+        this.setState({ active: this.props.completed });
     }
 
     render() {
@@ -30,14 +29,18 @@ export class Habit extends Component {
                 <Swipeable
                     style={this.state.active ? styles.active : styles.inactive}
                     leftContent={leftContent}
-                    rigthButtons={rigthButtons}
+                    leftActionActivationDistance={100}
                     onLeftActionRelease={() => {
                         this.setState({ active: !this.state.active });
-                        updateHabit(this.props.id, {completed: ! this.state.active}, {});
-                        }
-                    }
+                        updateHabit(
+                            this.props.id,
+                            { completed: !this.state.active },
+                            {}
+                        );
+                    }}
                 >
                     <Text>{this.props.title}</Text>
+                    <Text>{this.props.description}</Text>
                 </Swipeable>
             </View>
         );
@@ -46,24 +49,29 @@ export class Habit extends Component {
 
 const styles = StyleSheet.create({
     active: {
-        backgroundColor: "red",
+        width: "95%",
+        backgroundColor: "orange",
         height: 50,
         margin: "2.5%",
+        borderRadius: 5,
+        opacity: 1,
     },
 
     inactive: {
-        backgroundColor: "grey",
+        width: "95%",
+        backgroundColor: "rgba(52,52,52, 0.3)",
         height: 50,
         margin: "2.5%",
+        borderRadius: 5,
     },
 });
 
-const leftContent = <Text>Pull to activate</Text>;
-
-const rigthButtons = [
-    <TouchableHighlight>
-        <Text>Button 1</Text>
-    </TouchableHighlight>,
-];
+const leftContent = [<Text>Content</Text>];
 
 export default Habit;
+
+let buttonStyle = StyleSheet.create({
+    buttonStyles: {
+        backgroundColor: "black",
+    },
+});

@@ -32,13 +32,19 @@ const styles = StyleSheet.create({
     btn: {
         width: 40,
         height: 40,
-        backgroundColor: "red",
+        backgroundColor: "orange",
+        borderRadius: 50,
+        borderColor: "orange",
+        borderWidth: 2,
     },
 
     btnActive: {
         width: 40,
         height: 40,
-        backgroundColor: "grey",
+        backgroundColor: "white",
+        borderRadius: 50,
+        borderColor: "orange",
+        borderWidth: 2,
     },
 });
 

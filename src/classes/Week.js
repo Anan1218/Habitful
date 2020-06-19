@@ -54,16 +54,15 @@ export class Week extends Component {
 
 const styles = StyleSheet.create({
     node: {
-        backgroundColor: "grey",
         width: "10%",
         height: 40,
-        borderWidth: 0.2,
         margin: "2.12%",
     },
 
     container: {
         flexDirection: "row",
         flexWrap: "wrap",
+        paddingBottom: 10,
     },
 });
 
