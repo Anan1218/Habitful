@@ -1,24 +1,25 @@
 import React from "react";
 import {
-    StyleSheet,
-    View,
-    TextInput,
-    Alert,
-    Modal,
-    TouchableHighlight,
-    TouchableWithoutFeedback,
+  StyleSheet,
+  View,
+  TextInput,
+  Alert,
+  Modal,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+  StatusBar
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 
 import {
-    addHabit,
-    getHabits,
-    removeHabit,
-    deleteAllHabits,
-    updateHabit,
-    getHabit,
+  addHabit,
+  getHabits,
+  removeHabit,
+  deleteAllHabits,
+  updateHabit,
+  getHabit
 } from "../dbFunctions/HabitFunctions.js";
 
 import { Calendar } from "react-native-calendars";
@@ -27,16 +28,19 @@ import formatDateString from "../dateFunctions/formatDateString";
 import calculateLongestStreak from "../dateFunctions/calculateLongestStreak";
 import createMarkedDates from "../dateFunctions/createMarkedDates";
 
+import Tooltip from "react-native-walkthrough-tooltip";
+
 export default class HabitStatsScreen extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
     this.state = {
       markedDates: {},
       streak: 0,
       completedCount: 0,
       skippedCount: 0,
-      completionPercent: 0
+      completionPercent: 0,
+      toolTip1: true
     };
   }
   displayDates = habitDoc => {
@@ -63,6 +67,8 @@ export default class HabitStatsScreen extends React.Component {
       completedCount: habitDoc[0]["completedDays"].length,
       skippedCount: habitDoc[0]["skippedDays"].length
     });
+    console.log(habitDoc[0]["completedDays"]);
+    console.log(habitDoc[0]["skippedDays"]);
 
     if (this.state.completedCount > 0 || this.state.skippedCount > 0) {
       this.setState({
@@ -74,40 +80,38 @@ export default class HabitStatsScreen extends React.Component {
     }
   };
   componentDidMount = () => {
-    console.log(this.props.route.params.habitID);
     getHabit(this.props.route.params.habitID, this.displayDates);
-    console.log("stats screen is mounting");
     const update = this.props.navigation.addListener("focus", () => {
       getHabit(this.props.route.params.habitID, this.displayDates);
       this.forceUpdate();
     });
   };
 
-    render() {
-        return (
-            <View style={Grid.root}>
-                <View style={Grid.col}>
-                    <Button
-                        onlyIcon
-                        icon="left"
-                        iconFamily="antdesign"
-                        iconSize={30}
-                        color="warning"
-                        iconColor="#fff"
-                        style={{ width: 40, height: 40 }}
-                        onPress={() => {
-                            this.props.navigation.navigate("Habits", {
-                                screen: "HabitManagerScreen",
-                            });
-                        }}
-                    ></Button>
-                    <View style={[Grid.col, Grid.alignCenter]}>
-                        <Text style={[styles.headerText, styles.lStreak]} h5>
-                            {"Longest Streak:" + this.state.streak}
-                        </Text>
-                        <Text style={[styles.headerText, styles.completed]} h5>
-                            {"Perfect Days: " + this.state.completedCount}
-                        </Text>
+  render() {
+    return (
+      <View style={Grid.root}>
+        <View style={Grid.col}>
+          <Button
+            onlyIcon
+            icon="left"
+            iconFamily="antdesign"
+            iconSize={30}
+            color="warning"
+            iconColor="#fff"
+            style={{ width: 40, height: 40 }}
+            onPress={() => {
+              this.props.navigation.navigate("Habits", {
+                screen: "HabitManagerScreen"
+              });
+            }}
+          ></Button>
+          <View style={[Grid.col, Grid.alignCenter]}>
+            <Text style={[styles.headerText, styles.lStreak]} h5>
+              {"Longest Streak:" + this.state.streak}
+            </Text>
+            <Text style={[styles.headerText, styles.completed]} h5>
+              {"Completed Days: " + this.state.completedCount}
+            </Text>
 
             <Text style={[styles.headerText, styles.skipped]} h5>
               {"Skipped Days: " + this.state.skippedCount}
@@ -116,14 +120,28 @@ export default class HabitStatsScreen extends React.Component {
               {"Completion Percentage: " + this.state.completionPercent + "%"}
             </Text>
           </View>
+          <Tooltip
+            isVisible={this.state.toolTip1}
+            content={<Text>Hold a day to update the habit on that day</Text>}
+            placement="top"
+            onClose={() => this.setState({ toolTip1: false })}
+            // The function the library uses to measure the height of the component
+            // is slightly off on Android. Without this top adjustment, the copy of the 
+            // element is rendered slightly above where it should be
+            topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
+           showChildInTooltip={false}
+          >
           <Calendar
             onDayLongPress={day => {
               console.log("selected day", day);
 
               let isCompleted = false;
               let formattedDay = day.dateString;
-              console.log(this.state.markedDates[formattedDay])
-              if (this.state.markedDates[formattedDay] !== undefined && this.state.markedDates[formattedDay]["color"] === "#4ee44e") {
+              console.log(this.state.markedDates[formattedDay]);
+              if (
+                this.state.markedDates[formattedDay] !== undefined &&
+                this.state.markedDates[formattedDay]["color"] === "#4ee44e"
+              ) {
                 isCompleted = true;
                 console.log("isCompleted");
               }
@@ -149,22 +167,24 @@ export default class HabitStatsScreen extends React.Component {
             // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
             markingType={"period"}
           />
+          </Tooltip>
         </View>
+       
       </View>
     );
   }
 }
 let styles = StyleSheet.create({
-    headerText: {
-        margin: 10,
-    },
-    lStreak: {
-        color: "#4e4ee4",
-    },
-    completed: {
-        color: "#4ee44e",
-    },
-    skipped: {
-        color: "#e44e4e",
-    },
+  headerText: {
+    margin: 10
+  },
+  lStreak: {
+    color: "#4e4ee4"
+  },
+  completed: {
+    color: "#4ee44e"
+  },
+  skipped: {
+    color: "#e44e4e"
+  }
 });
