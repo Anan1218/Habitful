@@ -6,7 +6,7 @@ let Habits = {};
 let HabitManagers = {};
 let HabitComponents = {};
 
-const changeHabits = (habits, deleteHabit, editHabit, navigate) => {
+const changeHabits = (habits, deleteHabit, navigate) => {
   Habits = habits;
   let formattedHabits = {};
   let formattedHabitComponents = {};
@@ -15,7 +15,6 @@ const changeHabits = (habits, deleteHabit, editHabit, navigate) => {
       <HabitManager
         id={habit._id}
         deleteHabit={deleteHabit}
-        editHabit={editHabit}
         title={habit.title}
         key={habit.title}
         description={habit.description}

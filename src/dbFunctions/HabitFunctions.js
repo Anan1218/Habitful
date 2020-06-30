@@ -74,6 +74,7 @@ export const addSkipped = (id, newDates) => {
 };
 
 export const addCompleted = (id, newDates) => {
+  console.log("in addCompleted");
   db.update(
     { _id: id, type: "habit" },
     { $addToSet: { completedDays: { $each: newDates } } },

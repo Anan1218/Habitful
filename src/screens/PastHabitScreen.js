@@ -49,22 +49,24 @@ export default class PastHabitScreen extends React.Component {
     console.log(this.props.route.params.day);
   };
   updateDate = (active) => {
-    console.log("updating Date" +active);
+    console.log("updating Date " +active+ " " + this.props.route.params.day);
     const numMillisecondsInDay = 24 * 60 * 60 * 1000;
     if (active) {
       // The day object passed by  react-native-calendars is not a Date. The timestamp actually represents the previous day
       // so you have to add numMillisecondsInDay so the timestamp represents the correct date
       let day = new Date (this.props.route.params.day.timestamp + numMillisecondsInDay);
+      day.setHours(0, 0, 0, 0, 0);
       removeSkipped(this.props.route.params.habitID, day);
       addCompleted(this.props.route.params.habitID, [day]);
     } else {
       let day = new Date (this.props.route.params.day.timestamp + numMillisecondsInDay);
+      day.setHours(0, 0, 0, 0, 0);
       removeCompleted(this.props.route.params.habitID, day);
       addSkipped(this.props.route.params.habitID, [day]);
     }
   }
   // this.props.route.params.day is not a Date, it is just an object
-  // the Habit object is purposefully not given a habitID so it does not change anything on its own
+  // the PastHabit object is purposefully not given a habitID so it does not change anything on its own
   render() {
     return (
       <View style={Grid.root}>
@@ -74,6 +76,7 @@ export default class PastHabitScreen extends React.Component {
           </Text>
           <PastHabit updateDate = {this.updateDate} title={this.props.route.params.title} description = {this.props.route.params.description} completed={this.props.route.params.completed}/>
         </View>
+        
       </View>
     );
   }

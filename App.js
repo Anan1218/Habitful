@@ -13,6 +13,9 @@ import { Icon, Button } from "galio-framework";
 import HabitManagerScreen from "./src/screens/HabitManagerScreen";
 import HabitStatsScreen from "./src/screens/HabitStatsScreen";
 
+import {
+    getLastDateOpened,
+  } from "./src/dbFunctions/StatsFunctions";
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -26,26 +29,12 @@ export default function App() {
                 }}
             >
                 <Tab.Screen
-                    // options={{
-                    //   tabBarIcon: (focused, color, size) => {
-                    //     return (<Button
-                    //       onlyIcon
-                    //       icon="edit"
-                    //       iconFamily="antdesign"
-                    //       // iconSize={20}
-                    //       // color="warning"
-
-                    //       title={""}
-                    //     ></Button>);
-                    //   }
-                    // }}
                     name="Today"
                     component={HomeScreen}
                 />
                 <Tab.Screen name="Habits" component={HabitManagerStackScreen} />
 
                 <Tab.Screen name="Stats" component={StatsScreen} />
-                {/* <Tab.Screen name="Home2" component={HomeStackScreen} /> */}
             </Tab.Navigator>
         </NavigationContainer>
     );

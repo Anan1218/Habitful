@@ -359,11 +359,11 @@ export default class HomeScreen extends React.Component {
                                     zIndex={5000}
                                     items={[
                                         { label: "Red", value: "Red" },
+                                        { label: "Orange", value: "Orange" },
+                                        { label: "Yellow", value: "Yellow" },
+                                        { label: "Green", value: "Green" },
                                         { label: "Blue", value: "Blue" },
-                                        { label: "Red", value: "Red" },
-                                        { label: "Blue", value: "Blue" },
-                                        { label: "Red", value: "Red" },
-                                        { label: "Blue", value: "Blue" },
+                                        { label: "Purple", value: "Purple" },
                                     ]}
                                     defaultValue={this.state.color}
                                     containerStyle={{ height: 40 }}
@@ -383,11 +383,11 @@ export default class HomeScreen extends React.Component {
                                     zIndex={4000}
                                     items={[
                                         { label: "Red", value: "Red" },
+                                        { label: "Orange", value: "Orange" },
+                                        { label: "Yellow", value: "Yellow" },
+                                        { label: "Green", value: "Green" },
                                         { label: "Blue", value: "Blue" },
-                                        { label: "Red", value: "Red" },
-                                        { label: "Blue", value: "Blue" },
-                                        { label: "Red", value: "Red" },
-                                        { label: "Blue", value: "Blue" },
+                                        { label: "Purple", value: "Purple" },
                                     ]}
                                     defaultValue={this.state.color}
                                     containerStyle={{ height: 40 }}

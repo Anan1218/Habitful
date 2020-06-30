@@ -12,7 +12,7 @@ import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 
 import { Icon, Block, Text, Button, Input } from "galio-framework";
-import { removeGoal, updateGoal } from "../dbFunctions/GoalFunctions";
+
 import { updateHabit, getHabits } from "../dbFunctions/HabitFunctions";
 import { changeHabits, HabitManagers } from "../state/Habits";
 
