@@ -8,6 +8,7 @@ import {
     TouchableHighlight,
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
+    Picker,
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
@@ -17,30 +18,31 @@ import { Input, Block, Text, Button } from "galio-framework";
 import Week from "../classes/Week";
 import Habit from "../classes/Habit";
 import Node from "../classes/Node";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import {
-  addDatesDoc,
-  addLastDateOpenedDoc,
-  destroyEverything,
-  getLastDateOpened,
-  addDate,
-  addPartialDay,
-  addPerfectDay,
-  addSkippedDay,
-  setLastDateOpened,
-  removeSkippedDay
+    addDatesDoc,
+    addLastDateOpenedDoc,
+    destroyEverything,
+    getLastDateOpened,
+    addDate,
+    addPartialDay,
+    addPerfectDay,
+    addSkippedDay,
+    setLastDateOpened,
+    removeSkippedDay,
 } from "../dbFunctions/StatsFunctions";
 
 import {
-  addHabit,
-  getHabits,
-  removeHabit,
-  deleteAllHabits,
-  updateHabit,
-  addSkipped,
-  addCompleted,
-  removeCompleted,
-  removeSkipped
+    addHabit,
+    getHabits,
+    removeHabit,
+    deleteAllHabits,
+    updateHabit,
+    addSkipped,
+    addCompleted,
+    removeCompleted,
+    removeSkipped,
 } from "../dbFunctions/HabitFunctions.js";
 import { HabitComponents, changeHabits } from "../state/Habits";
 
@@ -167,80 +169,80 @@ export default class HomeScreen extends React.Component {
                     addSkippedDay(skippedDates);
                 }
 
-        for (let i = daysPast; i > 0; i--) {
+                for (let i = daysPast; i > 0; i--) {
+                    skippedDates.push(
+                        new Date(
+                            currentDate.getFullYear(),
+                            currentDate.getMonth(),
+                            currentDate.getDate() - i
+                        )
+                    );
+                }
+                // let completedDate;
+                completedArray = [];
+                for (let habitKey of Object.keys(this.state.habits)) {
+                    if (this.state.habits[habitKey]["props"]["completed"]) {
+                        completedArray.push(true);
+                        completedDate = skippedDates.splice(0, 1);
+                        addSkipped(
+                            this.state.habits[habitKey]["props"]["id"],
+                            skippedDates
+                        );
+                        addCompleted(
+                            this.state.habits[habitKey]["props"]["id"],
+                            completedDate
+                        );
+                        updateHabit(
+                            this.state.habits[habitKey]["props"]["id"],
+                            { completed: false },
+                            {}
+                        );
+                        skippedDates.splice(0, 0, completedDate[0]);
+                    } else {
+                        completedArray.push(false);
+                        addSkipped(
+                            this.state.habits[habitKey]["props"]["id"],
+                            skippedDates
+                        );
+                    }
+                }
+                if (
+                    completedArray.includes(false) &
+                    !completedArray.includes(true)
+                ) {
+                    addSkippedDay(skippedDates);
+                } else if (
+                    completedArray.includes(true) &
+                    !completedArray.includes(false)
+                ) {
+                    completedDate = skippedDates.splice(0, 1);
+                    addPerfectDay(completedDate);
+                    addSkippedDay(skippedDates);
+                } else if (completedArray.length > 0) {
+                    completedDate = skippedDates.splice(0, 1);
+                    addPartialDay(completedDate);
+                    addSkippedDay(skippedDates);
+                }
+            }
 
-          skippedDates.push(
-            new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              currentDate.getDate() - i
-            )
-          );
+            currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0, 0);
+            setLastDateOpened(currentDate);
+            getHabits(this.showHabits);
+        } else {
+            console.log("Nothing exists, first start");
+            destroyEverything();
+            addLastDateOpenedDoc();
+            addDatesDoc();
         }
-        // let completedDate;
-        completedArray = [];
-        for (let habitKey of Object.keys(this.state.habits)) {
-          if (this.state.habits[habitKey]["props"]["completed"]) {
-            completedArray.push(true);
-            completedDate = skippedDates.splice(0, 1);
-            addSkipped(
-              this.state.habits[habitKey]["props"]["id"],
-              skippedDates
-            );
-            addCompleted(
-              this.state.habits[habitKey]["props"]["id"],
-              completedDate
-            );
-            updateHabit(
-              this.state.habits[habitKey]["props"]["id"],
-              { completed: false },
-              {}
-            );
-            skippedDates.splice(0, 0, completedDate[0]);
-          } else {
-            completedArray.push(false);
-            addSkipped(
-              this.state.habits[habitKey]["props"]["id"],
-              skippedDates
-            );
-          }
-        }
-        if (completedArray.includes(false) & !completedArray.includes(true)) {
-          addSkippedDay(skippedDates);
-        } else if (
-          completedArray.includes(true) & !completedArray.includes(false)
-        ) {
-          completedDate = skippedDates.splice(0, 1);
-          addPerfectDay(completedDate);
-          addSkippedDay(skippedDates);
-        } else if (completedArray.length > 0) {
-          completedDate = skippedDates.splice(0, 1);
-          addPartialDay(completedDate);
-          addSkippedDay(skippedDates);
-        }
+    };
+    startupCheck = () => {
+        getLastDateOpened(this.setup);
+    };
 
-        
-      }
-
-      currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0, 0);
-      setLastDateOpened(currentDate);
-      getHabits(this.showHabits);
-    } else {
-      console.log("Nothing exists, first start");
-      destroyEverything();
-      addLastDateOpenedDoc();
-      addDatesDoc();
-    }
-  };
-  startupCheck = () => {
-    getLastDateOpened(this.setup);
-  };
-
-  componentDidMount = () => {
-    // destroyEverything();
-    getHabits(this.setHabits, true);
-    
+    componentDidMount = () => {
+        // destroyEverything();
+        getHabits(this.setHabits, true);
 
         const update = this.props.navigation.addListener("focus", () => {
             this.setState({ habits: HabitComponents });
@@ -287,73 +289,120 @@ export default class HomeScreen extends React.Component {
                             this.setState({ modalVisible: false });
                         }}
                     >
-                        <TouchableWithoutFeedback
-                            onPress={() => {
-                                this.setState({ modalVisible: false });
-                            }}
-                        >
-                            <View
-                                style={[
-                                    Grid.row,
-                                    Grid.justifyCenter,
-                                    { flex: 1 },
-                                ]}
-                            >
-                                <View
+                        <View style={[styles.modalView, Grid.alignStretch]}>
+                            <View backgroundColor="orange">
+                                <Text
                                     style={[
-                                        Grid.col,
-                                        Grid.justifyCenter,
-                                        styles.modalView,
-                                        Grid.alignStretch,
+                                        styles.headerText,
+                                        { paddingTop: 50 },
                                     ]}
+                                    h5
                                 >
-                                    <View
-                                        style={[
-                                            Grid.col,
-                                            Grid.justifyCenter,
-                                            Grid.alignStretch,
-                                        ]}
-                                    >
-                                        <Input
-                                            placeholder="e.g. Run"
-                                            onChangeText={(text) =>
-                                                this.setState({
-                                                    newHabitTitle: text,
-                                                })
-                                            }
-                                        />
-                                        <Input
-                                            placeholder="e.g. Jog for 30 minutes around block"
-                                            onChangeText={(text) =>
-                                                this.setState({
-                                                    newHabitDescription: text,
-                                                })
-                                            }
-                                        />
-                                    </View>
-                                    <View
-                                        style={[Grid.row, Grid.justifyCenter]}
-                                    >
-                                        <Button
-                                            size="small"
-                                            onPress={() => {
-                                                this.saveNewHabit(
-                                                    this.state.newHabitTitle,
-                                                    this.state
-                                                        .newHabitDescription
-                                                );
-                                                getHabits(this.displayHabits);
-                                                this.setState({
-                                                    modalVisible: false,
-                                                });
-                                            }}
-                                        >
-                                            <Text>Add goal</Text>
-                                        </Button>
-                                    </View>
+                                    New Habit
+                                </Text>
+                                <Button
+                                    onPress={() => {
+                                        this.setState({
+                                            modalVisible: false,
+                                        });
+                                    }}
+                                    style={styles.closeModal}
+                                >
+                                    <Text style={styles.topButtons}>
+                                        Cancel
+                                    </Text>
+                                </Button>
+
+                                <Button
+                                    size="small"
+                                    style={styles.addHabitButton}
+                                    onPress={() => {
+                                        this.saveNewHabit(
+                                            this.state.newHabitTitle,
+                                            this.state.newHabitDescription
+                                        );
+                                        getHabits(this.displayHabits);
+                                        this.setState({
+                                            modalVisible: false,
+                                        });
+                                    }}
+                                >
+                                    <Text style={styles.topButtons}>Save</Text>
+                                </Button>
+
+                                <View style={styles.name}>
+                                    <Text>NAME</Text>
+                                    <Input
+                                        placeholder="e.g. Run"
+                                        onChangeText={(text) =>
+                                            this.setState({
+                                                newHabitTitle: text,
+                                            })
+                                        }
+                                    />
                                 </View>
                             </View>
-                        </TouchableWithoutFeedback>
+
+                            <View style={styles.details}>
+                                <Text>Description</Text>
+                                <Input
+                                    placeholder="e.g. Jog for 30 minutes around block"
+                                    onChangeText={(text) =>
+                                        this.setState({
+                                            newHabitDescription: text,
+                                        })
+                                    }
+                                />
+
+                                <Text>Color</Text>
+                                <DropDownPicker
+                                    zIndex={5000}
+                                    items={[
+                                        { label: "Red", value: "Red" },
+                                        { label: "Blue", value: "Blue" },
+                                        { label: "Red", value: "Red" },
+                                        { label: "Blue", value: "Blue" },
+                                        { label: "Red", value: "Red" },
+                                        { label: "Blue", value: "Blue" },
+                                    ]}
+                                    defaultValue={this.state.color}
+                                    containerStyle={{ height: 40 }}
+                                    style={{ backgroundColor: "#fafafa" }}
+                                    dropDownStyle={{
+                                        backgroundColor: "#fafafa",
+                                    }}
+                                    onChangeItem={(item) =>
+                                        this.setState({
+                                            country: item.value,
+                                        })
+                                    }
+                                />
+
+                                <Text style={styles.icon}>Icon</Text>
+                                <DropDownPicker
+                                    zIndex={4000}
+                                    items={[
+                                        { label: "Red", value: "Red" },
+                                        { label: "Blue", value: "Blue" },
+                                        { label: "Red", value: "Red" },
+                                        { label: "Blue", value: "Blue" },
+                                        { label: "Red", value: "Red" },
+                                        { label: "Blue", value: "Blue" },
+                                    ]}
+                                    defaultValue={this.state.color}
+                                    containerStyle={{ height: 40 }}
+                                    style={{ backgroundColor: "#fafafa" }}
+                                    dropDownStyle={{
+                                        backgroundColor: "#fafafa",
+                                    }}
+                                    onChangeItem={(item) =>
+                                        this.setState({
+                                            country: item.value,
+                                        })
+                                    }
+                                />
+                            </View>
+                        </View>
                     </Modal>
                 </View>
             </View>
@@ -367,19 +416,55 @@ let styles = StyleSheet.create({
         fontWeight: "500",
         paddingTop: 20,
     },
+
     modalView: {
-        margin: 20,
+        height: "100%",
+        width: "100%",
+        margin: 0,
         backgroundColor: "white",
-        borderRadius: 20,
-        padding: 15,
+        padding: 0,
         alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+    },
+
+    topButtons: {
+        fontSize: 18,
+    },
+
+    addHabitButton: {
+        position: "absolute",
+        right: "2%",
+        top: 30,
+        width: 70,
+        height: 40,
+        marginTop: 15,
+        backgroundColor: "transparent",
+    },
+
+    closeModal: {
+        position: "absolute",
+        left: "2%",
+        top: 30,
+        width: 70,
+        height: 40,
+        marginTop: 15,
+        backgroundColor: "transparent",
+    },
+
+    temp: {
+        height: "100%",
+    },
+
+    name: {
+        paddingTop: 30,
+        paddingLeft: "4%",
+        paddingRight: "4%",
+    },
+
+    details: {
+        padding: "4%",
+    },
+
+    icon: {
+        paddingTop: "4%",
     },
 });
