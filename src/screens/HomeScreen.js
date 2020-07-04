@@ -18,8 +18,6 @@ import Week from "../classes/Week";
 import Habit from "../classes/Habit";
 import Node from "../classes/Node";
 
-
-
 import {
   addDatesDoc,
   addLastDateOpenedDoc,
@@ -44,8 +42,10 @@ import {
   removeCompleted,
   removeSkipped
 } from "../dbFunctions/HabitFunctions.js";
-import { HabitComponents, changeHabits } from "../state/Habits";
-import { FirstStart, setFirstStart } from "../state/FirstStart";
+import { Habits, HabitComponents, changeHabits, numCompleted, numSkipped } from "../state/Habits";
+
+
+import { AnimatedCircularProgress } from "react-native-circular-progress";
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -60,8 +60,10 @@ export default class HomeScreen extends React.Component {
       modalVisible: false,
       habits: HabitComponents,
       displayedHabits: {},
-      toolTip1: true,
-      toolTip2: true,
+      
+      numCompleted: 0,
+      // Needs to be 1 to avoid extremely tricky divide by zero bug
+      numSkipped: 1
     };
   }
   deleteHabit = habitID => {
@@ -78,20 +80,37 @@ export default class HomeScreen extends React.Component {
   saveNewHabit = (title, description) => {
     addHabit(title, description);
   };
+  setCircle = (numC, numS) => {
+    console.log("set Circle");
+    console.log(numC + " " + numS);
+    console.log(100 * numC / (numC + numS));
+    // this.setState({ habits: HabitComponents });
+    this.setState({numCompleted: numC, numSkipped: numS});
+    // this.circularProgress.animate(100 * numC / (numC + numS), 2000);
+    // changeHabits(habits, this.deleteHabit, this.navigate, this.setCircle);
+    this.forceUpdate();
+  }
   setHabits = (habits, withCheck) => {
+    
     let formattedHabits = {};
-    changeHabits(habits);
-
+    changeHabits(habits, this.deleteHabit, this.navigate, this.setCircle);
+    // this.setState({habitDocs: habits});
+    // console.log("setHabits");
+    //  console.log(habits);
+    //  console.log(this.state.habitDocs);
     this.setState({ habits: HabitComponents });
+    this.forceUpdate();
+   
     if (withCheck) {
       this.startupCheck();
     }
-    this.forceUpdate();
+    
   };
   showHabits = habits => {
-    changeHabits(habits, this.deleteHabit, this.navigate);
+    changeHabits(habits, this.deleteHabit, this.navigate, this.setCircle);
     this.setState({ displayedHabits: HabitComponents });
     this.setState({ habits: HabitComponents });
+    // this.setState({habitDocs: habits});
   };
 
   setup = lastDateOpenedDoc => {
@@ -148,19 +167,6 @@ export default class HomeScreen extends React.Component {
             );
           }
         }
-        // if (completedArray.includes(false) & !completedArray.includes(true)) {
-        //   addSkippedDay(skippedDates);
-        // } else if (
-        //   completedArray.includes(true) & !completedArray.includes(false)
-        // ) {
-        //   completedDate = skippedDates.splice(0, 1);
-        //   addPerfectDay(completedDate);
-        //   addSkippedDay(skippedDates);
-        // } else if (completedArray.length > 0) {
-        //   completedDate = skippedDates.splice(0, 1);
-        //   addPartialDay(completedDate);
-        //   addSkippedDay(skippedDates);
-        // }
       }
 
       currentDate = new Date();
@@ -180,12 +186,13 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    // destroyEverything();
+    // destroyEverything()
     getHabits(this.setHabits, true);
 
     const update = this.props.navigation.addListener("focus", () => {
       this.setState({ habits: HabitComponents });
       this.setState({ displayedHabits: HabitComponents });
+      
       this.forceUpdate();
     });
   };
@@ -197,27 +204,38 @@ export default class HomeScreen extends React.Component {
           <Text style={styles.headerText} h5>
             Today
           </Text>
-          <Week />
           
+          <Week navigation={this.props.navigation} habitDocs={Habits}/>
+          <View style={[Grid.row, Grid.justifyCenter, styles.circle]}>
+            <AnimatedCircularProgress
+              size={120}
+              width={15}
+              fill={100 * (this.state.numCompleted / (this.state.numCompleted + this.state.numSkipped))}
+              tintColor="#00e0ff"
+              onAnimationComplete={() => console.log("onAnimationComplete: " + this.state.numCompleted + " " +this.state.numSkipped)}
+              backgroundColor="#3d5875"
+              ref={(ref) => this.circularProgress = ref}
+            />
+          </View>
+
           {Object.values(this.state.displayedHabits)}
 
-          
-            <View style={[Grid.row, Grid.justifyCenter]}>
-              <Button
-                onlyIcon
-                icon="plus"
-                iconFamily="antdesign"
-                iconSize={30}
-                color="warning"
-                iconColor="#fff"
-                style={{ width: 40, height: 40, marginTop: 15 }}
-                onPress={() => {
-                  this.setState({ modalVisible: true });
-                }}
-              >
-                warning
-              </Button>
-            </View>
+          <View style={[Grid.row, Grid.justifyCenter]}>
+            <Button
+              onlyIcon
+              icon="plus"
+              iconFamily="antdesign"
+              iconSize={30}
+              color="warning"
+              iconColor="#fff"
+              style={{ width: 40, height: 40, marginTop: 15 }}
+              onPress={() => {
+                this.setState({ modalVisible: true });
+              }}
+            >
+              warning
+            </Button>
+          </View>
 
           <Modal
             animationType="slide"
@@ -288,8 +306,13 @@ export default class HomeScreen extends React.Component {
   }
 }
 let styles = StyleSheet.create({
+  circle: {
+    padding: 20
+  },
   headerText: {
     margin: 0,
+    marginBottom: 0,
+    paddingBottom: 15,
     textAlign: "center",
     fontWeight: "500",
     paddingTop: 20

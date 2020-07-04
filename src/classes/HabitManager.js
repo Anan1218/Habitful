@@ -14,7 +14,7 @@ import Grid from "../styles/Grid";
 import { Icon, Block, Text, Button, Input } from "galio-framework";
 
 import { updateHabit, getHabits } from "../dbFunctions/HabitFunctions";
-import { changeHabits, HabitManagers } from "../state/Habits";
+import { changeHabits, HabitManagers, simpleUpdate } from "../state/Habits";
 
 export default class HabitManager extends React.Component {
   constructor(props) {
@@ -27,6 +27,9 @@ export default class HabitManager extends React.Component {
       newHabitDescription: this.props.description,
       id: this.props.id
     };
+  }
+  componentDidMount = () => {
+    // getHabits(simpleUpdate);
   }
 
   render() {
@@ -136,7 +139,8 @@ export default class HabitManager extends React.Component {
                         title: this.state.newHabitTitle,
                         description: this.state.newHabitDescription
                       });
-                      getHabits(changeHabits);
+                      // probably a problem TODO fix
+                      getHabits(changeHabits, false);
                       this.setState({ modalVisible: false });
                     }}
                     

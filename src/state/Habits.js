@@ -5,11 +5,29 @@ import Habit from "../classes/Habit";
 let Habits = {};
 let HabitManagers = {};
 let HabitComponents = {};
-
-const changeHabits = (habits, deleteHabit, navigate) => {
+let numCompleted = 0;
+let numSkipped = 0;
+let updateCompletedFunction = () => {};
+const simpleUpdate = (habits) => {
+  numCompleted = 0;
+  numSkipped = 0;
+  for (const habit of habits) {
+    if (habit.completed) {
+      numCompleted = numCompleted + 1;
+    } else {
+      numSkipped = numSkipped + 1;
+    }
+  }
+  
+  updateCompletedFunction(numCompleted, numSkipped);
+}
+const changeHabits = (habits, deleteHabit, navigate, updateCompleted) => {
   Habits = habits;
   let formattedHabits = {};
   let formattedHabitComponents = {};
+  console.log("in changeHabits");
+  numCompleted = 0;
+  numSkipped = 0;
   for (const habit of habits) {
     formattedHabits[habit._id] = (
       <HabitManager
@@ -22,10 +40,42 @@ const changeHabits = (habits, deleteHabit, navigate) => {
         completed={habit.completed}
       />
     );
-    formattedHabitComponents[habit._id] = <Habit id = {habit._id} title={habit.title} description={habit.description} completed={habit.completed}/>
+    formattedHabitComponents[habit._id] = (
+      <Habit
+        id={habit._id}
+        title={habit.title}
+        description={habit.description}
+        completed={habit.completed}
+      />
+    );
+
+    if (habit.completed) {
+      numCompleted = numCompleted + 1;
+    } else {
+      numSkipped = numSkipped + 1;
+    }
   }
+  console.log(numCompleted);
+  console.log(numSkipped);
+  if (numCompleted === 0 && numSkipped === 0) {
+    numCompleted = 0;
+    numSkipped = 1;
+  }
+  
+  if (updateCompleted) {
+    updateCompletedFunction = updateCompleted;
+  }
+  console.log(updateCompletedFunction);
+  updateCompletedFunction(numCompleted, numSkipped);
   HabitManagers = formattedHabits;
   HabitComponents = formattedHabitComponents;
 };
-export { Habits, changeHabits, HabitManagers, HabitComponents };
-
+export {
+  Habits,
+  changeHabits,
+  HabitManagers,
+  HabitComponents,
+  numCompleted,
+  numSkipped,
+  simpleUpdate
+};

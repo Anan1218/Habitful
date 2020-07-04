@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import Grid from "../styles/Grid";
 import Swipeable from "react-native-swipeable";
-import { updateHabit } from "../dbFunctions/HabitFunctions";
-
+import { updateHabit, getHabits } from "../dbFunctions/HabitFunctions";
+import {changeHabits, simpleUpdate} from "../state/Habits";
 export class Habit extends Component {
     state = {
         name: "",
@@ -21,7 +21,9 @@ export class Habit extends Component {
 
     componentDidMount() {
         this.setState({ active: this.props.completed });
+        getHabits(simpleUpdate)
     }
+
 
     render() {
         return (
@@ -37,6 +39,8 @@ export class Habit extends Component {
                             { completed: !this.state.active },
                             {}
                         );
+                        getHabits(simpleUpdate);
+                        
                     }}
                 >
                     <Text>{this.props.title}</Text>

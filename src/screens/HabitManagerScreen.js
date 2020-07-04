@@ -30,10 +30,10 @@ import {
 } from "../dbFunctions/StatsFunctions";
 
 import HabitManager from "../classes/HabitManager";
-import { changeHabits, HabitManagers } from "../state/Habits";
+import { changeHabits, HabitManagers, simpleUpdate } from "../state/Habits";
 
-import Tooltip from "react-native-walkthrough-tooltip";
-import { FirstStart } from "../state/FirstStart";
+
+
 
 export default class HabitManagerScreen extends React.Component {
   constructor(props) {
@@ -44,15 +44,12 @@ export default class HabitManagerScreen extends React.Component {
       newHabitTitle: "A new habit",
       newHabitDescription: "default description",
       habitList: {},
-      toolTip1: true
     };
   }
-  saveNewHabit = (title, description) => {
-    addHabit(title, description);
-  };
+
   deleteHabit = habitID => {
     removeHabit(habitID);
-    getHabits(this.displayHabits);
+    getHabits(this.displayHabits, false);
   };
   navigate = (habitID, title, description) => {
     this.props.navigation.navigate("HabitStatsScreen", {
@@ -63,39 +60,32 @@ export default class HabitManagerScreen extends React.Component {
   };
   displayHabits = habits => {
     let formattedHabits = {};
+    console.log("habitmanagerscreen display habits");
 
     if (habits != {}) {
-      changeHabits(habits, this.deleteHabit, this.editHabit, this.navigate);
+      console.log("chanign habits");
+      changeHabits(habits, this.deleteHabit, this.navigate);
       this.setState({ habitList: HabitManagers });
     }
   };
   saveNewHabit = (title, description) => {
     addHabit(title, description);
+    console.log("HMS saveNewHabit");
+    getHabits(this.displayHabits, false);
   };
   deleteHabit = habitID => {
     removeHabit(habitID);
-    getHabits(this.displayHabits);
-  };
-  displayHabits = habits => {
-    console.log(habits);
-    let formattedHabits = {};
-
-    if (habits != {}) {
-      changeHabits(habits, this.deleteHabit, this.navigate);
-      this.setState({ habitList: HabitManagers });
-    }
+    getHabits(this.displayHabits, false);
   };
 
   componentDidMount = () => {
     // this.startupCheck();
-    getHabits(this.displayHabits);
+    getHabits(this.displayHabits, false);
     const update = this.props.navigation.addListener("focus", () => {
       this.setState({ habitList: HabitManagers });
       this.forceUpdate();
     });
-    if (FirstStart) {
-      this.setState({ toolTip1: true });
-    }
+    
   };
 
   render() {
@@ -106,23 +96,9 @@ export default class HabitManagerScreen extends React.Component {
             Habits
           </Text>
 
-          <Tooltip
-            isVisible={this.state.toolTip1}
-            content={
-              <Text>Tap on a habit to view its individual statistics</Text>
-            }
-            placement="top"
-            onClose={() => this.setState({ toolTip1: false })}
-            // The function the library uses to measure the height of the component
-            // is slightly off on Android. Without this top adjustment, the copy of the
-            // element is rendered slightly above where it should be
-            topAdjustment={
-              Platform.OS === "android" ? -StatusBar.currentHeight : 0
-            }
-            showChildInTooltip={false}
-          >
+          
             {Object.values(this.state.habitList)}
-          </Tooltip>
+        
           <View style={[Grid.row, Grid.justifyCenter]}>
             <Button
               onlyIcon
@@ -190,10 +166,11 @@ export default class HabitManagerScreen extends React.Component {
                           this.state.newHabitTitle,
                           this.state.newHabitDescription
                         );
-                        getHabits(this.displayHabits);
+                        
                         this.setState({
                           modalVisible: false
                         });
+                        console.log("button pressed");
                       }}
                     >
                       <Text>Add goal</Text>

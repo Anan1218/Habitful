@@ -120,17 +120,7 @@ export default class HabitStatsScreen extends React.Component {
               {"Completion Percentage: " + this.state.completionPercent + "%"}
             </Text>
           </View>
-          <Tooltip
-            isVisible={this.state.toolTip1}
-            content={<Text>Hold a day to update the habit on that day</Text>}
-            placement="top"
-            onClose={() => this.setState({ toolTip1: false })}
-            // The function the library uses to measure the height of the component
-            // is slightly off on Android. Without this top adjustment, the copy of the 
-            // element is rendered slightly above where it should be
-            topAdjustment={Platform.OS === 'android' ? -StatusBar.currentHeight : 0}
-           showChildInTooltip={false}
-          >
+         
           <Calendar
             onDayLongPress={day => {
               console.log("selected day", day);
@@ -167,7 +157,7 @@ export default class HabitStatsScreen extends React.Component {
             // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
             markingType={"period"}
           />
-          </Tooltip>
+     
         </View>
        
       </View>
