@@ -43,8 +43,27 @@ export class Habit extends Component {
                         
                     }}
                 >
-                    <Text>{this.props.title}</Text>
-                    <Text>{this.props.description}</Text>
+                    <View style={styles.container}>
+                        <View style={styles.column1}>
+                            <Button
+                                onlyIcon
+                                icon="heartbeat"
+                                iconFamily="antdesign"
+                                iconSize={30}
+                                iconColor="black"
+                                style={{
+                                    width: "50%",
+                                    height: "50%",
+                                    backgroundColor: "transparent",
+                                    alignSelf: "center",
+                                    alignContent: "center",
+                                }}
+                            ></Button>
+                        </View>
+                        <View style={styles.column2}>
+                            <Text style={styles.title}>{this.props.title}</Text>
+                        </View>
+                    </View>
                 </Swipeable>
             </View>
         );
@@ -55,7 +74,7 @@ const styles = StyleSheet.create({
     active: {
         width: "95%",
         backgroundColor: "orange",
-        height: 50,
+        height: 65,
         margin: "2.5%",
         borderRadius: 5,
         opacity: 1,
@@ -64,9 +83,37 @@ const styles = StyleSheet.create({
     inactive: {
         width: "95%",
         backgroundColor: "rgba(52,52,52, 0.3)",
-        height: 50,
+        height: 65,
         margin: "2.5%",
         borderRadius: 5,
+    },
+
+    title: {
+        paddingLeft: 0,
+        fontSize: 20,
+    },
+
+    description: {
+        paddingLeft: 0,
+    },
+
+    container: {
+        flex: 1,
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center", // if you want to fill rows left to right
+        alignContent: "center",
+        margin: "-2.5%",
+    },
+
+    column1: {
+        width: "20%",
+        paddingLeft: 0,
+    },
+
+    column2: {
+        width: "80%",
+        marginLeft: "-2.5%",
     },
 });
 
