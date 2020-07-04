@@ -8,10 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./src/screens/HomeScreen";
 import StatsScreen from "./src/screens/StatsScreen";
 import HabitManagerStackScreen from "./src/navigators/HabitManagerStackScreen";
-import { Icon, Button } from "galio-framework";
-
-import HabitManagerScreen from "./src/screens/HabitManagerScreen";
-import HabitStatsScreen from "./src/screens/HabitStatsScreen";
+import { AntDesign } from '@expo/vector-icons';
 
 import {
     getLastDateOpened,
@@ -23,6 +20,21 @@ export default function App() {
         <NavigationContainer>
             <Tab.Navigator
                 initialRouteName="Today"
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                      let iconName;
+          
+                      if (route.name === 'Today') {
+                        iconName = 'home';
+                      } else if (route.name === 'Stats') {
+                        iconName = 'barschart';
+                      }  else if (route.name === 'Habits') {
+                          iconName = 'bars';
+                      }
+
+                      return <AntDesign name={iconName} size={size} color={color} />;
+                    },
+                  })}
                 tabBarOptions={{
                     activeTintColor: "orange",
                     inactiveTintColor: "gray",

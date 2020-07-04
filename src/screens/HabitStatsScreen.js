@@ -91,7 +91,8 @@ export default class HabitStatsScreen extends React.Component {
     return (
       <View style={Grid.root}>
         <View style={Grid.col}>
-          <Button
+        <View style={styles.backButton}>
+        {Platform.OS !== 'android' && <Button
             onlyIcon
             icon="left"
             iconFamily="antdesign"
@@ -104,7 +105,9 @@ export default class HabitStatsScreen extends React.Component {
                 screen: "HabitManagerScreen"
               });
             }}
-          ></Button>
+          />}
+          
+          </View>
           <View style={[Grid.col, Grid.alignCenter]}>
             <Text style={[styles.headerText, styles.lStreak]} h5>
               {"Longest Streak:" + this.state.streak}
@@ -176,5 +179,10 @@ let styles = StyleSheet.create({
   },
   skipped: {
     color: "#e44e4e"
+  },
+  backButton: {
+    padding: 20,
+    paddingBottom: 0,
+    marginBottom: 0
   }
 });
