@@ -34,6 +34,7 @@ export default class StatsScreen extends React.Component {
   
   calcStats = habitDocs => {
     let stats = calcStats(habitDocs, this.state.markedDates);
+    stats.markedDates[formatDateString(new Date())] = {"color" : "#ffa500"}
     this.setState({
       streak: stats.streak,
       markedDates: stats.markedDates,
@@ -86,6 +87,7 @@ export default class StatsScreen extends React.Component {
               markedDates={this.state.markedDates}
               // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
               markingType={"period"}
+              maxDate={formatDateString(new Date())}
             />
           </ScrollView>
         </View>

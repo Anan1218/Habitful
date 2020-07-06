@@ -45,14 +45,17 @@ export class Week extends Component {
     today.setDate(today.getDate() - 6);
     fullToday.setDate(fullToday.getDate() - 6);
     for (let i = 0; i < 6; i++) {
-      fullToday.setDate(today.getDate() + i);
+      
+      console.log(fullToday);
       for (let markedDate in stats.markedDates) {
-        console.log(formatDateString(fullToday));
-        console.log(markedDate);
+        
         if (formatDateString(fullToday) === markedDate) {
+          // console.log(formatDateString(fullToday));
           if (stats.markedDates[markedDate]["color"] === "#4ee44e") {
+            // console.log("perfect");
             completionArray[i] = "perfect";
           } else if (stats.markedDates[markedDate]["color"] === "#4e99e4") {
+            // console.log("partial");
             completionArray[i] = "partial";
           }
         }
@@ -63,6 +66,7 @@ export class Week extends Component {
       // automatically wraps that date to the next month if necessary, checking for the number of days in the month,
       // leap years, etc.
       nodes.push([(new Date(today.getFullYear(), today.getMonth(), today.getDate() + i)).getDate()]);
+      fullToday.setDate(fullToday.getDate() + 1);
     }
 
     let temp = nodes.slice(nodes.length - 6);

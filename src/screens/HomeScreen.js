@@ -178,7 +178,6 @@ export default class HomeScreen extends React.Component {
       destroyEverything();
       addLastDateOpenedDoc();
       addDatesDoc();
-      setFirstStart(true);
     }
   };
   startupCheck = () => {
@@ -186,7 +185,7 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount = () => {
-    // destroyEverything()
+    // destroyEverything();
     getHabits(this.setHabits, true);
 
     const update = this.props.navigation.addListener("focus", () => {

@@ -19,7 +19,11 @@ import {
   removeHabit,
   deleteAllHabits,
   updateHabit,
-  getHabit
+  getHabit,
+  addSkipped,
+  addCompleted,
+  removeCompleted,
+  removeSkipped
 } from "../dbFunctions/HabitFunctions.js";
 
 import { Calendar } from "react-native-calendars";
@@ -62,6 +66,7 @@ export default class HabitStatsScreen extends React.Component {
       newMarkedDates,
       "#e44e4e"
     );
+    newMarkedDates[formatDateString(new Date())] = {"color" : "#ffa500"}
     this.setState({ markedDates: newMarkedDates });
     this.setState({
       completedCount: habitDoc[0]["completedDays"].length,
@@ -87,26 +92,44 @@ export default class HabitStatsScreen extends React.Component {
     });
   };
 
+  updateDate = (isCompleted, previousDay, habitID) => {
+    const numMillisecondsInDay = 24 * 60 * 60 * 1000;
+    if (! isCompleted) {
+      // The day object passed by  react-native-calendars is not a Date. The timestamp actually represents the previous day
+      // so you have to add numMillisecondsInDay so the timestamp represents the correct date
+      let day = new Date(previousDay.timestamp + numMillisecondsInDay);
+      day.setHours(0, 0, 0, 0, 0);
+      removeSkipped(habitID, day);
+      addCompleted(habitID, [day]);
+    } else {
+      let day = new Date(previousDay.timestamp + numMillisecondsInDay);
+      day.setHours(0, 0, 0, 0, 0);
+      removeCompleted(habitID, day);
+      addSkipped(habitID, [day]);
+    }
+  };
+
   render() {
     return (
       <View style={Grid.root}>
         <View style={Grid.col}>
-        <View style={styles.backButton}>
-        {Platform.OS !== 'android' && <Button
-            onlyIcon
-            icon="left"
-            iconFamily="antdesign"
-            iconSize={30}
-            color="warning"
-            iconColor="#fff"
-            style={{ width: 40, height: 40 }}
-            onPress={() => {
-              this.props.navigation.navigate("Habits", {
-                screen: "HabitManagerScreen"
-              });
-            }}
-          />}
-          
+          <View style={styles.backButton}>
+            {Platform.OS !== "android" && (
+              <Button
+                onlyIcon
+                icon="left"
+                iconFamily="antdesign"
+                iconSize={30}
+                color="warning"
+                iconColor="#fff"
+                style={{ width: 40, height: 40 }}
+                onPress={() => {
+                  this.props.navigation.navigate("Habits", {
+                    screen: "HabitManagerScreen"
+                  });
+                }}
+              />
+            )}
           </View>
           <View style={[Grid.col, Grid.alignCenter]}>
             <Text style={[styles.headerText, styles.lStreak]} h5>
@@ -123,9 +146,9 @@ export default class HabitStatsScreen extends React.Component {
               {"Completion Percentage: " + this.state.completionPercent + "%"}
             </Text>
           </View>
-         
+
           <Calendar
-            onDayLongPress={day => {
+            onDayPress={day => {
               console.log("selected day", day);
 
               let isCompleted = false;
@@ -138,14 +161,20 @@ export default class HabitStatsScreen extends React.Component {
                 isCompleted = true;
                 console.log("isCompleted");
               }
+              this.updateDate(
+                isCompleted,
+                day,
+                this.props.route.params.habitID
+              );
+              getHabit(this.props.route.params.habitID, this.displayDates);
 
-              this.props.navigation.navigate("PastHabitScreen", {
-                day: day,
-                habitID: this.props.route.params.habitID,
-                completed: isCompleted,
-                title: this.props.route.params.title,
-                description: this.props.route.params.description
-              });
+              // this.props.navigation.navigate("PastHabitScreen", {
+              //   day: day,
+              //   habitID: this.props.route.params.habitID,
+              //   completed: isCompleted,
+              //   title: this.props.route.params.title,
+              //   description: this.props.route.params.description
+              // });
             }}
             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
             monthFormat={"MMMM yyyy"}
@@ -159,10 +188,10 @@ export default class HabitStatsScreen extends React.Component {
             markedDates={this.state.markedDates}
             // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
             markingType={"period"}
+
+            maxDate={formatDateString(new Date())}
           />
-     
         </View>
-       
       </View>
     );
   }
