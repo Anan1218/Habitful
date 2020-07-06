@@ -1,211 +1,123 @@
 import React from "react";
 import {
-  StyleSheet,
-  View,
-  TextInput,
-  Alert,
-  Modal,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  StatusBar
+    StyleSheet,
+    View,
+    TextInput,
+    Alert,
+    Modal,
+    TouchableHighlight,
+    TouchableWithoutFeedback,
+    StatusBar,
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
 import { Input, Block, Text, Button } from "galio-framework";
 
-
 import {
-  addHabit,
-  getHabits,
-  removeHabit,
-  deleteAllHabits,
-  updateHabit
+    addHabit,
+    getHabits,
+    removeHabit,
+    deleteAllHabits,
+    updateHabit,
 } from "../dbFunctions/HabitFunctions.js";
 import {
-  addDatesDoc,
-  addLastDateOpenedDoc,
-  destroyEverything,
-  getLastDateOpened,
-  addDate
+    addDatesDoc,
+    addLastDateOpenedDoc,
+    destroyEverything,
+    getLastDateOpened,
+    addDate,
 } from "../dbFunctions/StatsFunctions";
 
 import HabitManager from "../classes/HabitManager";
 import { changeHabits, HabitManagers, simpleUpdate } from "../state/Habits";
 
-
-
-
 export default class HabitManagerScreen extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      modalVisible: false,
-      newHabitTitle: "A new habit",
-      newHabitDescription: "default description",
-      habitList: {},
-    };
-  }
-
-  deleteHabit = habitID => {
-    removeHabit(habitID);
-    getHabits(this.displayHabits, false);
-  };
-  navigate = (habitID, title, description) => {
-    this.props.navigation.navigate("HabitStatsScreen", {
-      habitID: habitID,
-      title: title,
-      description: description
-    });
-  };
-  displayHabits = habits => {
-    let formattedHabits = {};
-    console.log("habitmanagerscreen display habits");
-
-    if (habits != {}) {
-      console.log("chanign habits");
-      changeHabits(habits, this.deleteHabit, this.navigate);
-      this.setState({ habitList: HabitManagers });
+        this.state = {
+            modalVisible: false,
+            newHabitTitle: "A new habit",
+            newHabitDescription: "default description",
+            habitList: {},
+        };
     }
-  };
-  saveNewHabit = (title, description) => {
-    addHabit(title, description);
-    console.log("HMS saveNewHabit");
-    getHabits(this.displayHabits, false);
-  };
-  deleteHabit = habitID => {
-    removeHabit(habitID);
-    getHabits(this.displayHabits, false);
-  };
 
-  componentDidMount = () => {
-    // this.startupCheck();
-    getHabits(this.displayHabits, false);
-    const update = this.props.navigation.addListener("focus", () => {
-      this.setState({ habitList: HabitManagers });
-      this.forceUpdate();
-    });
-    
-  };
+    deleteHabit = (habitID) => {
+        removeHabit(habitID);
+        getHabits(this.displayHabits, false);
+    };
+    navigate = (habitID, title, description) => {
+        this.props.navigation.navigate("HabitStatsScreen", {
+            habitID: habitID,
+            title: title,
+            description: description,
+        });
+    };
+    displayHabits = (habits) => {
+        let formattedHabits = {};
+        console.log("habitmanagerscreen display habits");
 
-  render() {
-    return (
-      <View style={Grid.root}>
-        <View style={Grid.col}>
-          <Text style={styles.headerText} h5>
-            Habits
-          </Text>
+        if (habits != {}) {
+            console.log("chanign habits");
+            changeHabits(habits, this.deleteHabit, this.navigate);
+            this.setState({ habitList: HabitManagers });
+        }
+    };
+    saveNewHabit = (title, description) => {
+        addHabit(title, description);
+        console.log("HMS saveNewHabit");
+        getHabits(this.displayHabits, false);
+    };
+    deleteHabit = (habitID) => {
+        removeHabit(habitID);
+        getHabits(this.displayHabits, false);
+    };
 
-          
-            {Object.values(this.state.habitList)}
-        
-          <View style={[Grid.row, Grid.justifyCenter]}>
-            <Button
-              onlyIcon
-              icon="plus"
-              iconFamily="antdesign"
-              iconSize={30}
-              color="warning"
-              iconColor="#fff"
-              style={{ width: 40, height: 40 }}
-              onPress={() => {
-                this.setState({ modalVisible: true });
-              }}
-            >
-              warning
-            </Button>
-          </View>
+    componentDidMount = () => {
+        // this.startupCheck();
+        getHabits(this.displayHabits, false);
+        const update = this.props.navigation.addListener("focus", () => {
+            this.setState({ habitList: HabitManagers });
+            this.forceUpdate();
+        });
+    };
 
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={() => {
-              this.setState({ modalVisible: false });
-            }}
-          >
-            <TouchableWithoutFeedback
-              onPress={() => {
-                this.setState({ modalVisible: false });
-              }}
-            >
-              <View style={[Grid.row, Grid.justifyCenter, { flex: 1 }]}>
-                <View
-                  style={[
-                    Grid.col,
-                    Grid.justifyCenter,
-                    styles.modalView,
-                    Grid.alignStretch
-                  ]}
-                >
-                  <View
-                    style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}
-                  >
-                    <Input
-                      placeholder="e.g. Run"
-                      onChangeText={text =>
-                        this.setState({
-                          newHabitTitle: text
-                        })
-                      }
-                    />
-                    <Input
-                      placeholder="e.g. Jog for 30 minutes around block"
-                      onChangeText={text =>
-                        this.setState({
-                          newHabitDescription: text
-                        })
-                      }
-                    />
-                  </View>
-                  <View style={[Grid.row, Grid.justifyCenter]}>
-                    <Button
-                      size="small"
-                      onPress={() => {
-                        this.saveNewHabit(
-                          this.state.newHabitTitle,
-                          this.state.newHabitDescription
-                        );
-                        
-                        this.setState({
-                          modalVisible: false
-                        });
-                        console.log("button pressed");
-                      }}
-                    >
-                      <Text>Add goal</Text>
-                    </Button>
-                  </View>
+    render() {
+        return (
+            <View style={Grid.root}>
+                <View style={Grid.col}>
+                    <Text style={styles.headerText} h5>
+                        Habits
+                    </Text>
+
+                    {Object.values(this.state.habitList)}
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </Modal>
-        </View>
-      </View>
-    );
-  }
+            </View>
+        );
+    }
 }
 
 let styles = StyleSheet.create({
-  headerText: {
-    margin: 10,
-    textAlign: "center",
-    fontWeight: "500",
-    paddingTop: 20
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 15,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
+    headerText: {
+        margin: 10,
+        textAlign: "center",
+        fontWeight: "500",
+        paddingTop: 20,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
-  }
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 15,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
 });
