@@ -9,6 +9,7 @@ import {
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
     StatusBar,
+    ScrollView
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
@@ -60,8 +61,8 @@ export default class HomeScreen extends React.Component {
             text: "",
             title: "",
 
-            newHabitTitle: "",
-            newHabitDescription: "default description",
+            newHabitTitle: "A new habit",
+            newHabitDescription: "...",
 
             modalVisible: false,
             habits: HabitComponents,
@@ -74,7 +75,7 @@ export default class HomeScreen extends React.Component {
     }
     deleteHabit = (habitID) => {
         removeHabit(habitID);
-        getHabits(this.displayHabits);
+        getHabits(this.showHabits);
     };
     navigate = (habitID, title, description) => {
         this.props.navigation.navigate("HabitStatsScreen", {
@@ -96,6 +97,7 @@ export default class HomeScreen extends React.Component {
         // changeHabits(habits, this.deleteHabit, this.navigate, this.setCircle);
         this.forceUpdate();
     };
+
     setHabits = (habits, withCheck) => {
         let formattedHabits = {};
         changeHabits(habits, this.deleteHabit, this.navigate, this.setCircle);
@@ -205,6 +207,7 @@ export default class HomeScreen extends React.Component {
         return (
             <View style={Grid.root}>
                 <View style={Grid.col}>
+                <ScrollView>
                     <Text style={styles.headerText} h5>
                         Today
                     </Text>
@@ -236,8 +239,9 @@ export default class HomeScreen extends React.Component {
                             ref={(ref) => (this.circularProgress = ref)}
                         />
                     </View>
-
+                    
                     {Object.values(this.state.displayedHabits)}
+                    
 
                     <View style={[Grid.row, Grid.justifyCenter]}>
                         <Button
@@ -255,6 +259,8 @@ export default class HomeScreen extends React.Component {
                             warning
                         </Button>
                     </View>
+                    
+                    
 
                     <Modal
                         animationType="slide"
@@ -296,10 +302,14 @@ export default class HomeScreen extends React.Component {
                                             this.state.newHabitTitle,
                                             this.state.newHabitDescription
                                         );
-                                        getHabits(this.displayHabits);
+                                        getHabits(this.showHabits);
                                         this.setState({
                                             modalVisible: false,
                                         });
+                                        this.setState({
+                                          newHabitTitle: "A new habit",
+                                          newHabitDescription: "..."
+                                      })
                                     }}
                                 >
                                     <Text style={styles.topButtons}>Save</Text>
@@ -379,12 +389,16 @@ export default class HomeScreen extends React.Component {
                             </View>
                         </View>
                     </Modal>
+                    </ScrollView>
                 </View>
             </View>
         );
     }
 }
 let styles = StyleSheet.create({
+  scrollView: {
+    paddingBottom: 90
+  },
     circle: {
         padding: 20,
     },
@@ -393,6 +407,7 @@ let styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "500",
         paddingTop: 20,
+        paddingBottom: 20,
     },
 
     modalView: {
@@ -415,6 +430,8 @@ let styles = StyleSheet.create({
         width: 70,
         height: 40,
         marginTop: 15,
+        marginBottom: 20,
+        paddingBottom: 20,
         backgroundColor: "transparent",
     },
 

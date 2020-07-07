@@ -34,7 +34,7 @@ const changeHabits = (habits, deleteHabit, navigate, updateCompleted) => {
         id={habit._id}
         deleteHabit={deleteHabit}
         title={habit.title}
-        key={habit.title}
+        key={habit._id}
         description={habit.description}
         navigate={navigate}
         completed={habit.completed}
@@ -55,8 +55,7 @@ const changeHabits = (habits, deleteHabit, navigate, updateCompleted) => {
       numSkipped = numSkipped + 1;
     }
   }
-  console.log(numCompleted);
-  console.log(numSkipped);
+  
   if (numCompleted === 0 && numSkipped === 0) {
     numCompleted = 0;
     numSkipped = 1;
@@ -65,10 +64,11 @@ const changeHabits = (habits, deleteHabit, navigate, updateCompleted) => {
   if (updateCompleted) {
     updateCompletedFunction = updateCompleted;
   }
-  console.log(updateCompletedFunction);
+  
   updateCompletedFunction(numCompleted, numSkipped);
   HabitManagers = formattedHabits;
   HabitComponents = formattedHabitComponents;
+  console.log(HabitManagers);
 };
 export {
   Habits,

@@ -78,6 +78,7 @@ export default class HabitManagerScreen extends React.Component {
         // this.startupCheck();
         getHabits(this.displayHabits, false);
         const update = this.props.navigation.addListener("focus", () => {
+            getHabits(this.displayHabits, false);
             this.setState({ habitList: HabitManagers });
             this.forceUpdate();
         });
