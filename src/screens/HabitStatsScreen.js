@@ -43,8 +43,7 @@ export default class HabitStatsScreen extends React.Component {
       streak: 0,
       completedCount: 0,
       skippedCount: 0,
-      completionPercent: 0,
-      toolTip1: true
+      completionPercent: 0
     };
   }
   displayDates = habitDoc => {
@@ -66,7 +65,7 @@ export default class HabitStatsScreen extends React.Component {
       newMarkedDates,
       "#e44e4e"
     );
-    newMarkedDates[formatDateString(new Date())] = {"color" : "#ffa500"}
+    newMarkedDates[formatDateString(new Date())] = { color: "#ffa500" };
     this.setState({ markedDates: newMarkedDates });
     this.setState({
       completedCount: habitDoc[0]["completedDays"].length,
@@ -94,18 +93,28 @@ export default class HabitStatsScreen extends React.Component {
 
   updateDate = (isCompleted, previousDay, habitID) => {
     const numMillisecondsInDay = 24 * 60 * 60 * 1000;
-    if (! isCompleted) {
-      // The day object passed by  react-native-calendars is not a Date. The timestamp actually represents the previous day
+    if (!isCompleted) {
+      // The day object passed by  react-native-calendars is not a JS Date object. The timestamp actually represents the previous day
       // so you have to add numMillisecondsInDay so the timestamp represents the correct date
       let day = new Date(previousDay.timestamp + numMillisecondsInDay);
       day.setHours(0, 0, 0, 0, 0);
-      removeSkipped(habitID, day);
-      addCompleted(habitID, [day]);
+      // Enter: Callback Hell
+      // Note: use async await next time
+      removeSkipped(habitID, day, () => {
+        addCompleted(habitID, [day], () => {
+          getHabit(this.props.route.params.habitID, this.displayDates);
+        });
+      });
+      
     } else {
       let day = new Date(previousDay.timestamp + numMillisecondsInDay);
       day.setHours(0, 0, 0, 0, 0);
-      removeCompleted(habitID, day);
-      addSkipped(habitID, [day]);
+      removeCompleted(habitID, day, () => {
+        addSkipped(habitID, [day], () => {
+          getHabit(this.props.route.params.habitID, this.displayDates);
+        });
+      });
+      
     }
   };
 
@@ -150,23 +159,25 @@ export default class HabitStatsScreen extends React.Component {
           <Calendar
             onDayPress={day => {
               console.log("selected day", day);
-
-              let isCompleted = false;
-              let formattedDay = day.dateString;
-              console.log(this.state.markedDates[formattedDay]);
-              if (
-                this.state.markedDates[formattedDay] !== undefined &&
-                this.state.markedDates[formattedDay]["color"] === "#4ee44e"
-              ) {
-                isCompleted = true;
-                console.log("isCompleted");
+              if (day.dateString !== formatDateString(new Date())) {
+                let isCompleted;
+                let formattedDay = day.dateString;
+                // console.log(this.state.markedDates[formattedDay]);
+                if (
+                  this.state.markedDates[formattedDay] !== undefined &&
+                  this.state.markedDates[formattedDay]["color"] === "#4ee44e"
+                ) {
+                  isCompleted = true;
+                } else {
+                  isCompleted = false;
+                }
+                console.log(isCompleted);
+                this.updateDate(
+                  isCompleted,
+                  day,
+                  this.props.route.params.habitID
+                );
               }
-              this.updateDate(
-                isCompleted,
-                day,
-                this.props.route.params.habitID
-              );
-              getHabit(this.props.route.params.habitID, this.displayDates);
 
               // this.props.navigation.navigate("PastHabitScreen", {
               //   day: day,
@@ -188,7 +199,6 @@ export default class HabitStatsScreen extends React.Component {
             markedDates={this.state.markedDates}
             // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
             markingType={"period"}
-
             maxDate={formatDateString(new Date())}
           />
         </View>

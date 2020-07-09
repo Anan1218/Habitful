@@ -60,7 +60,7 @@ export const updateHabit = (id, newFields, newDates) => {
   );
 };
 
-export const addSkipped = (id, newDates) => {
+export const addSkipped = (id, newDates, callbackFunction) => {
   db.update(
     { _id: id, type: "habit" },
     { $addToSet: { skippedDays: { $each: newDates } } },
@@ -69,11 +69,15 @@ export const addSkipped = (id, newDates) => {
       if (err) {
         console.error(err);
       }
+      if (callbackFunction) {
+        callbackFunction();
+      }
+      
     }
   );
 };
 
-export const addCompleted = (id, newDates) => {
+export const addCompleted = (id, newDates, callbackFunction) => {
   console.log("in addCompleted");
   db.update(
     { _id: id, type: "habit" },
@@ -83,6 +87,10 @@ export const addCompleted = (id, newDates) => {
       if (err) {
         console.error(err);
       }
+      if (callbackFunction) {
+        callbackFunction();
+      }
+      
     }
   );
 };
@@ -95,8 +103,8 @@ export const deleteAllHabits = () => {
   });
 };
 
-export const removeSkipped = (id, date) => {
-  console.log("in removeSkipped");
+export const removeSkipped = (id, date, callbackFunction) => {
+  
   db.find({type: 'habit', _id: id}, function(err, docs) {
     if (err) {
       console.error(err);
@@ -108,13 +116,18 @@ export const removeSkipped = (id, date) => {
       }
     }
     db.update({type: 'habit', _id: id}, {$set:  {skippedDays: newDates}}, function(err, numReplaced) {
+      console.log("in removeSkipped: "+numReplaced);
       if (err) {
         console.error(err);
       }
+      if (callbackFunction) {
+        callbackFunction();
+      }
+      
     })
   })
 }
-export const removeCompleted = (id, date) => {
+export const removeCompleted = (id, date, callbackFunction) => {
   db.find({type: 'habit', _id: id}, function(err, docs) {
     if (err) {
       console.error(err);
@@ -126,9 +139,14 @@ export const removeCompleted = (id, date) => {
       }
     }
     db.update({type: 'habit', _id: id}, {$set: {completedDays: newDates}}, function(err, numReplaced) {
+      console.log("in removeCompleted: "+numReplaced);
       if (err) {
         console.error(err);
       }
+      if (callbackFunction) {
+        callbackFunction();
+      }
+      
     })
   })
 }
