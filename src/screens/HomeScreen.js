@@ -9,7 +9,7 @@ import {
     TouchableNativeFeedback,
     TouchableWithoutFeedback,
     StatusBar,
-    ScrollView
+    ScrollView,
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
@@ -207,188 +207,211 @@ export default class HomeScreen extends React.Component {
         return (
             <View style={Grid.root}>
                 <View style={Grid.col}>
-                <ScrollView>
-                    <Text style={styles.headerText} h5>
-                        Today
-                    </Text>
+                    <ScrollView
+                        contentContainerStyle={{
+                            flex: 1,
+                        }}
+                        style={styles.scrollView}
+                    >
+                        <Text style={styles.headerText} h5>
+                            Today
+                        </Text>
 
-                    <Week
-                        navigation={this.props.navigation}
-                        habitDocs={Habits}
-                    />
-                    <View style={[Grid.row, Grid.justifyCenter, styles.circle]}>
-                        <AnimatedCircularProgress
-                            size={120}
-                            width={15}
-                            fill={
-                                100 *
-                                (this.state.numCompleted /
-                                    (this.state.numCompleted +
-                                        this.state.numSkipped))
-                            }
-                            tintColor="#00e0ff"
-                            onAnimationComplete={() =>
-                                console.log(
-                                    "onAnimationComplete: " +
-                                        this.state.numCompleted +
-                                        " " +
-                                        this.state.numSkipped
-                                )
-                            }
-                            backgroundColor="#3d5875"
-                            ref={(ref) => (this.circularProgress = ref)}
+                        <Week
+                            navigation={this.props.navigation}
+                            habitDocs={Habits}
                         />
-                    </View>
-                    
-                    {Object.values(this.state.displayedHabits)}
-                    
+                        <View style={[Grid.row]}>
+                            <AnimatedCircularProgress
+                                style={styles.circle}
+                                size={40}
+                                width={2}
+                                fill={
+                                    100 *
+                                    (this.state.numCompleted /
+                                        (this.state.numCompleted +
+                                            this.state.numSkipped))
+                                }
+                                tintColor="#7838F2"
+                                onAnimationComplete={() =>
+                                    console.log(
+                                        "onAnimationComplete: " +
+                                            this.state.numCompleted +
+                                            " " +
+                                            this.state.numSkipped
+                                    )
+                                }
+                                backgroundColor="#3d5875"
+                                ref={(ref) => (this.circularProgress = ref)}
+                            />
+                        </View>
 
-                    <View style={[Grid.row, Grid.justifyCenter]}>
-                        <Button
-                            onlyIcon
-                            icon="plus"
-                            iconFamily="antdesign"
-                            iconSize={30}
-                            color="warning"
-                            iconColor="#fff"
-                            style={{ width: 40, height: 40, marginTop: 15 }}
-                            onPress={() => {
-                                this.setState({ modalVisible: true });
+                        {Object.values(this.state.displayedHabits)}
+
+                        <View style={[Grid.row, Grid.justifyCenter]}>
+                            <Button
+                                onlyIcon
+                                icon="plus"
+                                iconFamily="antdesign"
+                                iconSize={30}
+                                color="warning"
+                                iconColor="#fff"
+                                style={{ width: 40, height: 40, marginTop: 15 }}
+                                onPress={() => {
+                                    this.setState({ modalVisible: true });
+                                }}
+                            >
+                                warning
+                            </Button>
+                        </View>
+
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={this.state.modalVisible}
+                            onRequestClose={() => {
+                                this.setState({ modalVisible: false });
                             }}
                         >
-                            warning
-                        </Button>
-                    </View>
-                    
-                    
-
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            this.setState({ modalVisible: false });
-                        }}
-                    >
-                        <View style={[styles.modalView, Grid.alignStretch]}>
-                            <View backgroundColor="orange">
-                                <Text
-                                    style={[
-                                        styles.headerText,
-                                        { paddingTop: 50 },
-                                    ]}
-                                    h5
-                                >
-                                    New Habit
-                                </Text>
-                                <Button
-                                    onPress={() => {
-                                        this.setState({
-                                            modalVisible: false,
-                                        });
-                                    }}
-                                    style={styles.closeModal}
-                                >
-                                    <Text style={styles.topButtons}>
-                                        Cancel
+                            <View style={[styles.modalView, Grid.alignStretch]}>
+                                <View backgroundColor="orange">
+                                    <Text
+                                        style={[
+                                            styles.headerText,
+                                            { paddingTop: 50 },
+                                        ]}
+                                        h5
+                                    >
+                                        New Habit
                                     </Text>
-                                </Button>
+                                    <Button
+                                        onPress={() => {
+                                            this.setState({
+                                                modalVisible: false,
+                                            });
+                                        }}
+                                        style={styles.closeModal}
+                                    >
+                                        <Text style={styles.topButtons}>
+                                            Cancel
+                                        </Text>
+                                    </Button>
 
-                                <Button
-                                    size="small"
-                                    style={styles.addHabitButton}
-                                    onPress={() => {
-                                        this.saveNewHabit(
-                                            this.state.newHabitTitle,
-                                            this.state.newHabitDescription
-                                        );
-                                        getHabits(this.showHabits);
-                                        this.setState({
-                                            modalVisible: false,
-                                        });
-                                        this.setState({
-                                          newHabitTitle: "A new habit",
-                                          newHabitDescription: "..."
-                                      })
-                                    }}
-                                >
-                                    <Text style={styles.topButtons}>Save</Text>
-                                </Button>
+                                    <Button
+                                        size="small"
+                                        style={styles.addHabitButton}
+                                        onPress={() => {
+                                            this.saveNewHabit(
+                                                this.state.newHabitTitle,
+                                                this.state.newHabitDescription
+                                            );
+                                            getHabits(this.showHabits);
+                                            this.setState({
+                                                modalVisible: false,
+                                            });
+                                            this.setState({
+                                                newHabitTitle: "A new habit",
+                                                newHabitDescription: "...",
+                                            });
+                                        }}
+                                    >
+                                        <Text style={styles.topButtons}>
+                                            Save
+                                        </Text>
+                                    </Button>
 
-                                <View style={styles.name}>
-                                    <Text>NAME</Text>
+                                    <View style={styles.name}>
+                                        <Text>NAME</Text>
+                                        <Input
+                                            placeholder="e.g. Run"
+                                            onChangeText={(text) =>
+                                                this.setState({
+                                                    newHabitTitle: text,
+                                                })
+                                            }
+                                        />
+                                    </View>
+                                </View>
+
+                                <View style={styles.details}>
+                                    <Text>Description</Text>
                                     <Input
-                                        placeholder="e.g. Run"
+                                        placeholder="e.g. Jog for 30 minutes around block"
                                         onChangeText={(text) =>
                                             this.setState({
-                                                newHabitTitle: text,
+                                                newHabitDescription: text,
+                                            })
+                                        }
+                                    />
+
+                                    <Text>Color</Text>
+                                    <DropDownPicker
+                                        zIndex={5000}
+                                        items={[
+                                            { label: "Red", value: "Red" },
+                                            {
+                                                label: "Orange",
+                                                value: "Orange",
+                                            },
+                                            {
+                                                label: "Yellow",
+                                                value: "Yellow",
+                                            },
+                                            { label: "Green", value: "Green" },
+                                            { label: "Blue", value: "Blue" },
+                                            {
+                                                label: "Purple",
+                                                value: "Purple",
+                                            },
+                                        ]}
+                                        defaultValue={this.state.color}
+                                        containerStyle={{ height: 40 }}
+                                        style={{ backgroundColor: "#fafafa" }}
+                                        dropDownStyle={{
+                                            backgroundColor: "#fafafa",
+                                        }}
+                                        onChangeItem={(item) =>
+                                            this.setState({
+                                                country: item.value,
+                                            })
+                                        }
+                                    />
+
+                                    <Text style={styles.icon}>Icon</Text>
+                                    <DropDownPicker
+                                        zIndex={4000}
+                                        items={[
+                                            { label: "Red", value: "Red" },
+                                            {
+                                                label: "Orange",
+                                                value: "Orange",
+                                            },
+                                            {
+                                                label: "Yellow",
+                                                value: "Yellow",
+                                            },
+                                            { label: "Green", value: "Green" },
+                                            { label: "Blue", value: "Blue" },
+                                            {
+                                                label: "Purple",
+                                                value: "Purple",
+                                            },
+                                        ]}
+                                        defaultValue={this.state.color}
+                                        containerStyle={{ height: 40 }}
+                                        style={{ backgroundColor: "#fafafa" }}
+                                        dropDownStyle={{
+                                            backgroundColor: "#fafafa",
+                                        }}
+                                        onChangeItem={(item) =>
+                                            this.setState({
+                                                country: item.value,
                                             })
                                         }
                                     />
                                 </View>
                             </View>
-
-                            <View style={styles.details}>
-                                <Text>Description</Text>
-                                <Input
-                                    placeholder="e.g. Jog for 30 minutes around block"
-                                    onChangeText={(text) =>
-                                        this.setState({
-                                            newHabitDescription: text,
-                                        })
-                                    }
-                                />
-
-                                <Text>Color</Text>
-                                <DropDownPicker
-                                    zIndex={5000}
-                                    items={[
-                                        { label: "Red", value: "Red" },
-                                        { label: "Orange", value: "Orange" },
-                                        { label: "Yellow", value: "Yellow" },
-                                        { label: "Green", value: "Green" },
-                                        { label: "Blue", value: "Blue" },
-                                        { label: "Purple", value: "Purple" },
-                                    ]}
-                                    defaultValue={this.state.color}
-                                    containerStyle={{ height: 40 }}
-                                    style={{ backgroundColor: "#fafafa" }}
-                                    dropDownStyle={{
-                                        backgroundColor: "#fafafa",
-                                    }}
-                                    onChangeItem={(item) =>
-                                        this.setState({
-                                            country: item.value,
-                                        })
-                                    }
-                                />
-
-                                <Text style={styles.icon}>Icon</Text>
-                                <DropDownPicker
-                                    zIndex={4000}
-                                    items={[
-                                        { label: "Red", value: "Red" },
-                                        { label: "Orange", value: "Orange" },
-                                        { label: "Yellow", value: "Yellow" },
-                                        { label: "Green", value: "Green" },
-                                        { label: "Blue", value: "Blue" },
-                                        { label: "Purple", value: "Purple" },
-                                    ]}
-                                    defaultValue={this.state.color}
-                                    containerStyle={{ height: 40 }}
-                                    style={{ backgroundColor: "#fafafa" }}
-                                    dropDownStyle={{
-                                        backgroundColor: "#fafafa",
-                                    }}
-                                    onChangeItem={(item) =>
-                                        this.setState({
-                                            country: item.value,
-                                        })
-                                    }
-                                />
-                            </View>
-                        </View>
-                    </Modal>
+                        </Modal>
                     </ScrollView>
                 </View>
             </View>
@@ -396,12 +419,15 @@ export default class HomeScreen extends React.Component {
     }
 }
 let styles = StyleSheet.create({
-  scrollView: {
-    paddingBottom: 90
-  },
-    circle: {
-        padding: 20,
+    scrollView: {
+        height: "100%",
     },
+    circle: {
+        position: "absolute",
+        right: "2.12%",
+        top: -48.5,
+    },
+
     headerText: {
         margin: 0,
         textAlign: "center",
