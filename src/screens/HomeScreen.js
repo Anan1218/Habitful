@@ -65,6 +65,7 @@ export default class HomeScreen extends React.Component {
             newHabitDescription: "...",
 
             modalVisible: false,
+            questionModalVisible: false,
             habits: HabitComponents,
             displayedHabits: {},
 
@@ -217,6 +218,19 @@ export default class HomeScreen extends React.Component {
                             Today
                         </Text>
 
+                        <Button
+                            onlyIcon
+                            icon="question"
+                            iconFamily="antdesign"
+                            iconSize={16}
+                            color="warning"
+                            iconColor="#fff"
+                            style={styles.questionButton}
+                            onPress={() => {
+                                this.setState({ questionModalVisible: true });
+                            }}
+                        ></Button>
+
                         <Week
                             navigation={this.props.navigation}
                             habitDocs={Habits}
@@ -268,6 +282,36 @@ export default class HomeScreen extends React.Component {
                         <Modal
                             animationType="slide"
                             transparent={true}
+                            visible={this.state.questionModalVisible}
+                            onRequestClose={() => {
+                                this.setState({ questionModalVisible: false });
+                            }}
+                        >
+                            <TouchableWithoutFeedback
+                                onPress={() => {
+                                    this.setState({
+                                        questionModalVisible: false,
+                                    });
+                                }}
+                            >
+                                <View
+                                    style={[
+                                        Grid.row,
+                                        Grid.justifyCenter,
+                                        { flex: 1 },
+                                    ]}
+                                >
+                                    <Text>
+                                        Swipe right to complete habits. Swipe
+                                        again to undo it.
+                                    </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </Modal>
+
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
                             visible={this.state.modalVisible}
                             onRequestClose={() => {
                                 this.setState({ modalVisible: false });
@@ -292,7 +336,7 @@ export default class HomeScreen extends React.Component {
                                         }}
                                         style={styles.closeModal}
                                     >
-                                        <Text style={styles.topButtons}>
+                                        <Text p style={styles.topButtons}>
                                             Cancel
                                         </Text>
                                     </Button>
@@ -315,9 +359,7 @@ export default class HomeScreen extends React.Component {
                                             });
                                         }}
                                     >
-                                        <Text style={styles.topButtons}>
-                                            Save
-                                        </Text>
+                                        <Text style={styles.save}>Save</Text>
                                     </Button>
 
                                     <View style={styles.name}>
@@ -471,6 +513,13 @@ let styles = StyleSheet.create({
         backgroundColor: "transparent",
     },
 
+    save: {
+        position: "absolute",
+        right: 7,
+        top: 8,
+        fontSize: 18,
+    },
+
     temp: {
         height: "100%",
     },
@@ -487,5 +536,13 @@ let styles = StyleSheet.create({
 
     icon: {
         paddingTop: "4%",
+    },
+
+    questionButton: {
+        width: 20,
+        height: 20,
+        position: "absolute",
+        right: 12.5,
+        top: 25,
     },
 });
