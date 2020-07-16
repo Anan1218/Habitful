@@ -262,6 +262,7 @@ export default class HomeScreen extends React.Component {
                             {new Date().getDate()}
                         </Text>
                     </View>
+
                     <ScrollView
                         contentContainerStyle={{
                             flex: 1,
@@ -269,23 +270,6 @@ export default class HomeScreen extends React.Component {
                         style={styles.scrollView}
                     >
                         {Object.values(this.state.displayedHabits)}
-
-                        <View style={[Grid.row, Grid.justifyCenter]}>
-                            <Button
-                                onlyIcon
-                                icon="plus"
-                                iconFamily="antdesign"
-                                iconSize={30}
-                                color="warning"
-                                iconColor="#fff"
-                                style={{ width: 40, height: 40, marginTop: 15 }}
-                                onPress={() => {
-                                    this.setState({ modalVisible: true });
-                                }}
-                            >
-                                warning
-                            </Button>
-                        </View>
 
                         <Modal
                             animationType="slide"
@@ -463,12 +447,36 @@ export default class HomeScreen extends React.Component {
                             </View>
                         </Modal>
                     </ScrollView>
+
+                    <View style={[Grid.row, Grid.justifyCenter]}>
+                        <Button
+                            onlyIcon
+                            icon="plus"
+                            iconFamily="antdesign"
+                            iconSize={30}
+                            color="warning"
+                            iconColor="#fff"
+                            style={styles.plusButton}
+                            onPress={() => {
+                                this.setState({ modalVisible: true });
+                            }}
+                        >
+                            warning
+                        </Button>
+                    </View>
                 </View>
             </View>
         );
     }
 }
 let styles = StyleSheet.create({
+    plusButton: {
+        top: -180,
+        width: 40,
+        height: 40,
+        marginTop: 15,
+    },
+
     scrollView: {
         height: "100%",
     },

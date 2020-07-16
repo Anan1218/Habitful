@@ -189,7 +189,7 @@ export default class StatsScreen extends React.Component {
 
                                 <View style={styles.contentBox}>
                                     <MaterialCommunityIcons
-                                        name="chart-pie"
+                                        name="calendar"
                                         size={45}
                                         style={styles.icon}
                                     ></MaterialCommunityIcons>
@@ -197,7 +197,7 @@ export default class StatsScreen extends React.Component {
                                         <Text style={styles.number}>
                                             {this.state.partialCount}
                                         </Text>
-                                        <Text style={styles.days}>%</Text>
+                                        <Text style={styles.days}>Days</Text>
                                     </View>
                                     <Text style={styles.description}>
                                         Partial Days
@@ -222,15 +222,6 @@ let styles = StyleSheet.create({
     },
     lStreak: {
         color: "#4e4ee4",
-    },
-    perfect: {
-        color: "#4ee44e",
-    },
-    partial: {
-        color: "#4e99e4",
-    },
-    skipped: {
-        color: "#e44e4e",
     },
 
     questionButton: {

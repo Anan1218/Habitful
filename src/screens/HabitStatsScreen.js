@@ -344,12 +344,7 @@ let styles = StyleSheet.create({
     lStreak: {
         color: "#4e4ee4",
     },
-    completed: {
-        color: "#4ee44e",
-    },
-    skipped: {
-        color: "#e44e4e",
-    },
+
     backButton: {
         left: -15,
         top: -2,
