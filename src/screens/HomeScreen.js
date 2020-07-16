@@ -239,7 +239,7 @@ export default class HomeScreen extends React.Component {
                             <AnimatedCircularProgress
                                 style={styles.circle}
                                 size={40}
-                                width={2}
+                                width={3}
                                 fill={
                                     100 *
                                     (this.state.numCompleted /
@@ -255,9 +255,18 @@ export default class HomeScreen extends React.Component {
                                             this.state.numSkipped
                                     )
                                 }
-                                backgroundColor="#3d5875"
+                                backgroundColor="#e3e3e3"
                                 ref={(ref) => (this.circularProgress = ref)}
                             />
+                            <Text
+                                style={{
+                                    position: "absolute",
+                                    right: "5.6%",
+                                    top: -37,
+                                }}
+                            >
+                                {new Date().getDate()}
+                            </Text>
                         </View>
 
                         {Object.values(this.state.displayedHabits)}
