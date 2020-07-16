@@ -208,67 +208,66 @@ export default class HomeScreen extends React.Component {
         return (
             <View style={Grid.root}>
                 <View style={Grid.col}>
+                    <Text style={styles.headerText} h5>
+                        Today
+                    </Text>
+
+                    <Button
+                        onlyIcon
+                        icon="question"
+                        iconFamily="antdesign"
+                        iconSize={16}
+                        color="warning"
+                        iconColor="#fff"
+                        style={styles.questionButton}
+                        onPress={() => {
+                            this.setState({ questionModalVisible: true });
+                        }}
+                    ></Button>
+
+                    <Week
+                        navigation={this.props.navigation}
+                        habitDocs={Habits}
+                    />
+                    <View style={[Grid.row]}>
+                        <AnimatedCircularProgress
+                            style={styles.circle}
+                            size={40}
+                            width={3}
+                            fill={
+                                100 *
+                                (this.state.numCompleted /
+                                    (this.state.numCompleted +
+                                        this.state.numSkipped))
+                            }
+                            tintColor="#7838F2"
+                            onAnimationComplete={() =>
+                                console.log(
+                                    "onAnimationComplete: " +
+                                        this.state.numCompleted +
+                                        " " +
+                                        this.state.numSkipped
+                                )
+                            }
+                            backgroundColor="#e3e3e3"
+                            ref={(ref) => (this.circularProgress = ref)}
+                        />
+                        <Text
+                            style={{
+                                position: "absolute",
+                                right: "5.6%",
+                                top: -37,
+                            }}
+                        >
+                            {new Date().getDate()}
+                        </Text>
+                    </View>
                     <ScrollView
                         contentContainerStyle={{
                             flex: 1,
                         }}
                         style={styles.scrollView}
                     >
-                        <Text style={styles.headerText} h5>
-                            Today
-                        </Text>
-
-                        <Button
-                            onlyIcon
-                            icon="question"
-                            iconFamily="antdesign"
-                            iconSize={16}
-                            color="warning"
-                            iconColor="#fff"
-                            style={styles.questionButton}
-                            onPress={() => {
-                                this.setState({ questionModalVisible: true });
-                            }}
-                        ></Button>
-
-                        <Week
-                            navigation={this.props.navigation}
-                            habitDocs={Habits}
-                        />
-                        <View style={[Grid.row]}>
-                            <AnimatedCircularProgress
-                                style={styles.circle}
-                                size={40}
-                                width={3}
-                                fill={
-                                    100 *
-                                    (this.state.numCompleted /
-                                        (this.state.numCompleted +
-                                            this.state.numSkipped))
-                                }
-                                tintColor="#7838F2"
-                                onAnimationComplete={() =>
-                                    console.log(
-                                        "onAnimationComplete: " +
-                                            this.state.numCompleted +
-                                            " " +
-                                            this.state.numSkipped
-                                    )
-                                }
-                                backgroundColor="#e3e3e3"
-                                ref={(ref) => (this.circularProgress = ref)}
-                            />
-                            <Text
-                                style={{
-                                    position: "absolute",
-                                    right: "5.6%",
-                                    top: -37,
-                                }}
-                            >
-                                {new Date().getDate()}
-                            </Text>
-                        </View>
-
                         {Object.values(this.state.displayedHabits)}
 
                         <View style={[Grid.row, Grid.justifyCenter]}>
