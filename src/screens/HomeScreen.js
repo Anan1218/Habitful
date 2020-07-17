@@ -14,14 +14,14 @@ import {
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
-import { Input, Text, Button, Icon } from "galio-framework";
+import { Input, Text, Button, Icon, Radio } from "galio-framework";
 
 import Week from "../classes/Week";
 import Habit from "../classes/Habit";
 import Node from "../classes/Node";
 import DropDownPicker from "react-native-dropdown-picker";
 import { AntDesign } from "@expo/vector-icons";
-
+import IconRadio from "../classes/IconRadio";
 
 import {
   addDatesDoc,
@@ -56,6 +56,7 @@ import {
 } from "../state/Habits";
 
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import IconSelector from "../classes/IconSelector";
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -74,7 +75,9 @@ export default class HomeScreen extends React.Component {
       numCompleted: 0,
       // Needs to be 1 to avoid extremely tricky divide by zero bug
       numSkipped: 1,
-      icon: ""
+      iconName: "back",
+      changeFunction: "",
+      iconColor: "#000000"
     };
   }
   deleteHabit = habitID => {
@@ -205,6 +208,13 @@ export default class HomeScreen extends React.Component {
       this.forceUpdate();
     });
   };
+  changeCurrentIcon = (iconName, changeFunction) => {
+    this.setState({ iconName });
+    if (this.state.changeFunction !== "") {
+      this.state.changeFunction();
+    }
+    this.setState({ changeFunction });
+  };
 
   render() {
     return (
@@ -331,12 +341,12 @@ export default class HomeScreen extends React.Component {
                   <DropDownPicker
                     zIndex={5000}
                     items={[
-                      { label: "Red", value: "Red" },
-                      { label: "Orange", value: "Orange" },
-                      { label: "Yellow", value: "Yellow" },
-                      { label: "Green", value: "Green" },
-                      { label: "Blue", value: "Blue" },
-                      { label: "Purple", value: "Purple" }
+                      { label: "Red", value: "#ff0000" },
+                      { label: "Orange", value: "#ff0000" },
+                      { label: "Yellow", value: "#ff0000" },
+                      { label: "Green", value: "#00ff00" },
+                      { label: "Blue", value: "#0000ff" },
+                      { label: "Purple", value: "#ff00ff" }
                     ]}
                     defaultValue={this.state.color}
                     containerStyle={{ height: 40 }}
@@ -346,52 +356,47 @@ export default class HomeScreen extends React.Component {
                     }}
                     onChangeItem={item =>
                       this.setState({
-                        country: item.value
+                        iconColor: item.value
                       })
                     }
                   />
 
                   <Text style={styles.icon}>Icon</Text>
-                  <Icon name="pin-3" family="Galio" color={rgb(100,120,40)} size={10} />
-                  {/* <Picker
-                    selectedValue={this.state.icon}
-                    style={{ height: 50, width: 150 }}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.setState({icon: itemValue})
-                    }
-                  >
-                    <Picker.Item label="Java" value="java" />
-                    <Picker.Item label="JavaScript" value="js" />
-                  </Picker> */}
-                  <DropDownPicker
-                    // zIndex={4000}
-                    items={[
-                      {
-                        // label: "UK",
-                        value: "uk",
-                        icon: () => <Icon name="pin-3" family="Galio" color={rgb(100,120,40)} size={10} />
-                      },
-                      { label: "Orange", value: "Orange" },
-                      { label: "Yellow", value: "Yellow" },
-                      { label: "Green", value: "Green" },
-                      { label: "Blue", value: "Blue" },
-                      { label: "Purple", value: "Purple" }
-                    ]}
-                    // defaultValue={this.state.color}
-                    containerStyle={{ height: 40 }}
-                    // style={{ backgroundColor: "#fafafa" }}
-                    // dropDownStyle={{
-                    //     backgroundColor: "#fafafa",
-                    // }}
-                    onChangeItem={item =>
-                      this.setState({
-                        icon: item.value
-                      })
-                    }
-                    itemStyle={{
-                      justifyContent: "flex-start"
-                    }}
-                  />
+                  <IconSelector iconColor={this.state.iconColor} changeCurrentIcon = {this.changeCurrentIcon}/>
+                  {/* <ScrollView horizontal={true} style={styles.iconScrollView}>
+                    <View style={Grid.col}>
+                      <IconRadio
+                        changeCurrentIcon={this.changeCurrentIcon}
+                        active={false}
+                        iconName="back"
+                        color={this.state.iconColor}
+                      />
+                      <IconRadio
+                        changeCurrentIcon={this.changeCurrentIcon}
+                        active={false}
+                        iconName="back"
+                        color={this.state.iconColor}
+                      />
+                      <IconRadio
+                        changeCurrentIcon={this.changeCurrentIcon}
+                        active={false}
+                        iconName="back"
+                        color={this.state.iconColor}
+                      />
+                      <IconRadio
+                        changeCurrentIcon={this.changeCurrentIcon}
+                        active={false}
+                        iconName="back"
+                        color={this.state.iconColor}
+                      />
+                      <IconRadio
+                        changeCurrentIcon={this.changeCurrentIcon}
+                        active={false}
+                        iconName="back"
+                        color={this.state.iconColor}
+                      />
+                    </View>
+                  </ScrollView> */}
                 </View>
               </View>
             </Modal>
@@ -404,6 +409,9 @@ export default class HomeScreen extends React.Component {
 let styles = StyleSheet.create({
   scrollView: {
     paddingBottom: 90
+  },
+  iconScrollView: {
+    height: 500
   },
   circle: {
     padding: 20

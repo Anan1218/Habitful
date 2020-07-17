@@ -40,6 +40,7 @@ export default class HabitManagerScreen extends React.Component {
             newHabitTitle: "A new habit",
             newHabitDescription: "default description",
             habitList: {},
+            questionModalVisible: false,
         };
     }
 
@@ -92,6 +93,49 @@ export default class HabitManagerScreen extends React.Component {
                         Habits
                     </Text>
 
+                    <Button
+                        onlyIcon
+                        icon="question"
+                        iconFamily="antdesign"
+                        iconSize={16}
+                        color="warning"
+                        iconColor="#fff"
+                        style={styles.questionButton}
+                        onPress={() => {
+                            this.setState({ questionModalVisible: true });
+                        }}
+                    ></Button>
+
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.state.questionModalVisible}
+                        onRequestClose={() => {
+                            this.setState({ questionModalVisible: false });
+                        }}
+                    >
+                        <TouchableWithoutFeedback
+                            onPress={() => {
+                                this.setState({
+                                    questionModalVisible: false,
+                                });
+                            }}
+                        >
+                            <View
+                                style={[
+                                    Grid.row,
+                                    Grid.justifyCenter,
+                                    { flex: 1 },
+                                ]}
+                            >
+                                <Text>
+                                    Tap on a habit to check stats for individual
+                                    habits.
+                                </Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </Modal>
+
                     {Object.values(this.state.habitList)}
                 </View>
             </View>
@@ -101,10 +145,11 @@ export default class HabitManagerScreen extends React.Component {
 
 let styles = StyleSheet.create({
     headerText: {
-        margin: 10,
+        margin: 0,
         textAlign: "center",
         fontWeight: "500",
         paddingTop: 20,
+        paddingBottom: 20,
     },
     modalView: {
         margin: 20,
@@ -120,5 +165,12 @@ let styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+    },
+    questionButton: {
+        width: 20,
+        height: 20,
+        position: "absolute",
+        right: 12.5,
+        top: 25,
     },
 });
