@@ -220,53 +220,87 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={Grid.root}>
         <View style={Grid.col}>
-          <ScrollView>
-            <Text style={styles.headerText} h5>
-              Today
+          <Text style={styles.headerText} h5>
+            Today
+          </Text>
+
+          <Button
+            onlyIcon
+            icon="question"
+            iconFamily="antdesign"
+            iconSize={16}
+            color="warning"
+            iconColor="#fff"
+            style={styles.questionButton}
+            onPress={() => {
+              this.setState({ questionModalVisible: true });
+            }}
+          ></Button>
+
+          <Week navigation={this.props.navigation} habitDocs={Habits} />
+          <View style={[Grid.row]}>
+            <AnimatedCircularProgress
+              style={styles.circle}
+              size={40}
+              width={3}
+              fill={
+                100 *
+                (this.state.numCompleted /
+                  (this.state.numCompleted + this.state.numSkipped))
+              }
+              tintColor="#7838F2"
+              onAnimationComplete={() =>
+                console.log(
+                  "onAnimationComplete: " +
+                    this.state.numCompleted +
+                    " " +
+                    this.state.numSkipped
+                )
+              }
+              backgroundColor="#e3e3e3"
+              ref={ref => (this.circularProgress = ref)}
+            />
+            <Text
+              style={{
+                position: "absolute",
+                right: "5.6%",
+                top: -37
+              }}
+            >
+              {new Date().getDate()}
             </Text>
+          </View>
 
-            <Week navigation={this.props.navigation} habitDocs={Habits} />
-            <View style={[Grid.row, Grid.justifyCenter, styles.circle]}>
-              <AnimatedCircularProgress
-                size={120}
-                width={15}
-                fill={
-                  100 *
-                  (this.state.numCompleted /
-                    (this.state.numCompleted + this.state.numSkipped))
-                }
-                tintColor="#00e0ff"
-                onAnimationComplete={() =>
-                  console.log(
-                    "onAnimationComplete: " +
-                      this.state.numCompleted +
-                      " " +
-                      this.state.numSkipped
-                  )
-                }
-                backgroundColor="#3d5875"
-                ref={ref => (this.circularProgress = ref)}
-              />
-            </View>
-
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1
+            }}
+            style={styles.scrollView}
+          >
             {Object.values(this.state.displayedHabits)}
 
-            <View style={[Grid.row, Grid.justifyCenter]}>
-              <Button
-                onlyIcon
-                icon="plus"
-                iconFamily="antdesign"
-                iconSize={30}
-                color="warning"
-                iconColor="#fff"
-                style={{ width: 40, height: 40, marginTop: 15 }}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.questionModalVisible}
+              onRequestClose={() => {
+                this.setState({ questionModalVisible: false });
+              }}
+            >
+              <TouchableWithoutFeedback
                 onPress={() => {
-                  this.setState({ modalVisible: true });
+                  this.setState({
+                    questionModalVisible: false
+                  });
                 }}
               >
-                warning
-              </Button>
-            </View>
+                <View style={[Grid.row, Grid.justifyCenter, { flex: 1 }]}>
+                  <Text>
+                    Swipe right to complete habits. Swipe again to undo it.
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
 
             <Modal
               animationType="slide"
@@ -289,7 +323,9 @@ export default class HomeScreen extends React.Component {
                     }}
                     style={styles.closeModal}
                   >
-                    <Text style={styles.topButtons}>Cancel</Text>
+                    <Text p style={styles.topButtons}>
+                      Cancel
+                    </Text>
                   </Button>
 
                   <Button
@@ -310,7 +346,7 @@ export default class HomeScreen extends React.Component {
                       });
                     }}
                   >
-                    <Text style={styles.topButtons}>Save</Text>
+                    <Text style={styles.save}>Save</Text>
                   </Button>
 
                   <View style={styles.name}>
@@ -362,45 +398,31 @@ export default class HomeScreen extends React.Component {
                   />
 
                   <Text style={styles.icon}>Icon</Text>
-                  <IconSelector iconColor={this.state.iconColor} changeCurrentIcon = {this.changeCurrentIcon}/>
-                  {/* <ScrollView horizontal={true} style={styles.iconScrollView}>
-                    <View style={Grid.col}>
-                      <IconRadio
-                        changeCurrentIcon={this.changeCurrentIcon}
-                        active={false}
-                        iconName="back"
-                        color={this.state.iconColor}
-                      />
-                      <IconRadio
-                        changeCurrentIcon={this.changeCurrentIcon}
-                        active={false}
-                        iconName="back"
-                        color={this.state.iconColor}
-                      />
-                      <IconRadio
-                        changeCurrentIcon={this.changeCurrentIcon}
-                        active={false}
-                        iconName="back"
-                        color={this.state.iconColor}
-                      />
-                      <IconRadio
-                        changeCurrentIcon={this.changeCurrentIcon}
-                        active={false}
-                        iconName="back"
-                        color={this.state.iconColor}
-                      />
-                      <IconRadio
-                        changeCurrentIcon={this.changeCurrentIcon}
-                        active={false}
-                        iconName="back"
-                        color={this.state.iconColor}
-                      />
-                    </View>
-                  </ScrollView> */}
+                  <IconSelector
+                    iconColor={this.state.iconColor}
+                    changeCurrentIcon={this.changeCurrentIcon}
+                  />
                 </View>
               </View>
             </Modal>
           </ScrollView>
+
+          <View style={[Grid.row, Grid.justifyCenter]}>
+            <Button
+              onlyIcon
+              icon="plus"
+              iconFamily="antdesign"
+              iconSize={30}
+              color="warning"
+              iconColor="#fff"
+              style={styles.plusButton}
+              onPress={() => {
+                this.setState({ modalVisible: true });
+              }}
+            >
+              warning
+            </Button>
+          </View>
         </View>
       </View>
     );
@@ -410,12 +432,22 @@ let styles = StyleSheet.create({
   scrollView: {
     paddingBottom: 90
   },
-  iconScrollView: {
-    height: 500
+  plusButton: {
+    top: -180,
+    width: 40,
+    height: 40,
+    marginTop: 15
+  },
+
+  scrollView: {
+    height: "100%"
   },
   circle: {
-    padding: 20
+    position: "absolute",
+    right: "2.12%",
+    top: -48.5
   },
+
   headerText: {
     margin: 0,
     textAlign: "center",
@@ -459,6 +491,13 @@ let styles = StyleSheet.create({
     backgroundColor: "transparent"
   },
 
+  save: {
+    position: "absolute",
+    right: 7,
+    top: 8,
+    fontSize: 18
+  },
+
   temp: {
     height: "100%"
   },
@@ -475,5 +514,13 @@ let styles = StyleSheet.create({
 
   icon: {
     paddingTop: "4%"
+  },
+
+  questionButton: {
+    width: 20,
+    height: 20,
+    position: "absolute",
+    right: 12.5,
+    top: 25
   }
 });

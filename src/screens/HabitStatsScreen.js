@@ -31,8 +31,7 @@ import { Calendar } from "react-native-calendars";
 import formatDateString from "../dateFunctions/formatDateString";
 import calculateLongestStreak from "../dateFunctions/calculateLongestStreak";
 import createMarkedDates from "../dateFunctions/createMarkedDates";
-
-import Tooltip from "react-native-walkthrough-tooltip";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default class HabitStatsScreen extends React.Component {
     constructor(props) {
@@ -177,8 +176,8 @@ export default class HabitStatsScreen extends React.Component {
                                     icon="left"
                                     iconFamily="antdesign"
                                     iconSize={30}
-                                    color="warning"
-                                    iconColor="#fff"
+                                    color="transparent"
+                                    iconColor="black"
                                     style={{ width: 40, height: 40 }}
                                     onPress={() => {
                                         this.props.navigation.navigate(
@@ -191,75 +190,147 @@ export default class HabitStatsScreen extends React.Component {
                                 />
                             )}
                         </View>
-                        <Text>{this.props.route.params.habitID}</Text>
+                        <Text p style={styles.habitName}>
+                            {this.props.route.params.title}
+                        </Text>
                     </View>
 
-                    <Calendar
-                        onDayPress={(day) => {
-                            console.log("selected day", day);
-                            if (
-                                day.dateString !== formatDateString(new Date())
-                            ) {
-                                let isCompleted;
-                                let formattedDay = day.dateString;
-                                // console.log(this.state.markedDates[formattedDay]);
+                    <View style={{ width: "92.5%", alignSelf: "center" }}>
+                        <Calendar
+                            onDayPress={(day) => {
+                                console.log("selected day", day);
                                 if (
-                                    this.state.markedDates[formattedDay] !==
-                                        undefined &&
-                                    this.state.markedDates[formattedDay][
-                                        "color"
-                                    ] === "#4ee44e"
+                                    day.dateString !==
+                                    formatDateString(new Date())
                                 ) {
-                                    isCompleted = true;
-                                } else {
-                                    isCompleted = false;
+                                    let isCompleted;
+                                    let formattedDay = day.dateString;
+                                    // console.log(this.state.markedDates[formattedDay]);
+                                    if (
+                                        this.state.markedDates[formattedDay] !==
+                                            undefined &&
+                                        this.state.markedDates[formattedDay][
+                                            "color"
+                                        ] === "#4ee44e"
+                                    ) {
+                                        isCompleted = true;
+                                    } else {
+                                        isCompleted = false;
+                                    }
+                                    console.log(isCompleted);
+                                    this.updateDate(
+                                        isCompleted,
+                                        day,
+                                        this.props.route.params.habitID
+                                    );
                                 }
-                                console.log(isCompleted);
-                                this.updateDate(
-                                    isCompleted,
-                                    day,
-                                    this.props.route.params.habitID
-                                );
-                            }
 
-                            // this.props.navigation.navigate("PastHabitScreen", {
-                            //   day: day,
-                            //   habitID: this.props.route.params.habitID,
-                            //   completed: isCompleted,
-                            //   title: this.props.route.params.title,
-                            //   description: this.props.route.params.description
-                            // });
-                        }}
-                        // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-                        monthFormat={"MMMM yyyy"}
-                        // Do not show days of other months in month page. Default = false
-                        hideExtraDays={true}
-                        // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
-                        // day from another month that is visible in calendar page. Default = false
-                        disableMonthChange={true}
-                        // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-                        firstDay={1}
-                        markedDates={this.state.markedDates}
-                        // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
-                        markingType={"period"}
-                        maxDate={formatDateString(new Date())}
-                    />
-                    <View style={[Grid.col, Grid.alignCenter]}>
-                        <Text style={[styles.headerText, styles.lStreak]} h5>
-                            {"Longest Streak:" + this.state.streak}
-                        </Text>
-                        <Text style={[styles.headerText, styles.completed]} h5>
-                            {"Completed Days: " + this.state.completedCount}
-                        </Text>
+                                // this.props.navigation.navigate("PastHabitScreen", {
+                                //   day: day,
+                                //   habitID: this.props.route.params.habitID,
+                                //   completed: isCompleted,
+                                //   title: this.props.route.params.title,
+                                //   description: this.props.route.params.description
+                                // });
+                            }}
+                            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+                            monthFormat={"MMMM yyyy"}
+                            // Do not show days of other months in month page. Default = false
+                            hideExtraDays={true}
+                            // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
+                            // day from another month that is visible in calendar page. Default = false
+                            disableMonthChange={true}
+                            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+                            firstDay={1}
+                            markedDates={this.state.markedDates}
+                            // // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+                            markingType={"period"}
+                            maxDate={formatDateString(new Date())}
+                        />
+                    </View>
 
-                        <Text style={[styles.headerText, styles.skipped]} h5>
-                            {"Skipped Days: " + this.state.skippedCount}
+                    <View>
+                        <Text
+                            p
+                            style={{
+                                paddingLeft: "3.5%",
+                                paddingBottom: 10,
+                                paddingTop: 10,
+                            }}
+                        >
+                            Overview
                         </Text>
-                        <Text style={[styles.headerText, styles.skipped]} h5>
-                            {"Completion Percentage: " +
-                                this.state.completionPercent +
-                                "%"}
-                        </Text>
+                        <View style={styles.overviewContainer}>
+                            <View style={styles.contentBox}>
+                                <MaterialCommunityIcons
+                                    name="crown"
+                                    size={45}
+                                    style={styles.icon}
+                                ></MaterialCommunityIcons>
+                                <View style={styles.info}>
+                                    <Text style={styles.number}>
+                                        {this.state.streak}
+                                    </Text>
+                                    <Text style={styles.days}>Days</Text>
+                                </View>
+
+                                <Text style={styles.description}>
+                                    Longest Streak
+                                </Text>
+                            </View>
+
+                            <View style={styles.contentBox}>
+                                <MaterialCommunityIcons
+                                    name="check"
+                                    size={45}
+                                    style={styles.icon}
+                                ></MaterialCommunityIcons>
+                                <View style={styles.info}>
+                                    <Text style={styles.number}>
+                                        {this.state.completedCount}
+                                    </Text>
+                                    <Text style={styles.days}>Days</Text>
+                                </View>
+
+                                <Text style={styles.description}>
+                                    Completed Days
+                                </Text>
+                            </View>
+
+                            <View style={styles.contentBox}>
+                                <MaterialCommunityIcons
+                                    name="skip-next"
+                                    size={45}
+                                    style={styles.icon}
+                                ></MaterialCommunityIcons>
+                                <View style={styles.info}>
+                                    <Text style={styles.number}>
+                                        {this.state.skippedCount}
+                                    </Text>
+                                    <Text style={styles.days}>Days</Text>
+                                </View>
+                                <Text style={styles.description}>
+                                    Skipped Days
+                                </Text>
+                            </View>
+
+                            <View style={styles.contentBox}>
+                                <MaterialCommunityIcons
+                                    name="chart-pie"
+                                    size={45}
+                                    style={styles.icon}
+                                ></MaterialCommunityIcons>
+                                <View style={styles.info}>
+                                    <Text style={styles.number}>
+                                        {this.state.completionPercent}
+                                    </Text>
+                                    <Text style={styles.days}>%</Text>
+                                </View>
+                                <Text style={styles.description}>
+                                    Completion Percent
+                                </Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -273,13 +344,10 @@ let styles = StyleSheet.create({
     lStreak: {
         color: "#4e4ee4",
     },
-    completed: {
-        color: "#4ee44e",
-    },
-    skipped: {
-        color: "#e44e4e",
-    },
+
     backButton: {
+        left: -15,
+        top: -2,
         padding: 20,
         paddingBottom: 0,
         marginBottom: 0,
@@ -291,5 +359,49 @@ let styles = StyleSheet.create({
         position: "absolute",
         right: 12.5,
         top: 25,
+    },
+
+    habitName: {
+        position: "absolute",
+        top: 23,
+        left: 40,
+    },
+    overviewContainer: {
+        alignSelf: "center",
+        width: "95%",
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
+    contentBox: {
+        margin: "1%",
+        width: "48%",
+        backgroundColor: "rgba(26, 0, 0, 0.025)",
+        height: 120,
+        borderRadius: 5,
+        alignItems: "center",
+    },
+
+    info: {
+        flexDirection: "row",
+        alignSelf: "center",
+    },
+
+    icon: {
+        paddingTop: 10,
+    },
+
+    number: {
+        textAlign: "center",
+        fontSize: 30,
+        fontWeight: "bold",
+    },
+
+    days: {
+        top: 15,
+        color: "rgba(26, 0, 0, 0.5)",
+    },
+
+    description: {
+        textAlign: "center",
     },
 });
