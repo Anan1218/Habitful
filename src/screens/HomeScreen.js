@@ -403,6 +403,7 @@ export default class HomeScreen extends React.Component {
                   <IconSelector
                     iconColor={this.state.iconColor}
                     changeCurrentIcon={this.changeCurrentIcon}
+                    style={styles.iconSelector}
                   />
                 </View>
               </View>
@@ -431,6 +432,9 @@ export default class HomeScreen extends React.Component {
   }
 }
 let styles = StyleSheet.create({
+  iconSelector: {
+    height: 500
+  },
   scrollView: {
     paddingBottom: 90
   },

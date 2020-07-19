@@ -15,6 +15,8 @@ import { Icon, Block, Text, Button, Input } from "galio-framework";
 
 import { updateHabit, getHabits } from "../dbFunctions/HabitFunctions";
 import { changeHabits, HabitManagers, simpleUpdate } from "../state/Habits";
+import DropDownPicker from "react-native-dropdown-picker";
+import IconSelector from "../classes/IconSelector";
 
 export default class HabitManager extends React.Component {
   constructor(props) {
@@ -25,12 +27,22 @@ export default class HabitManager extends React.Component {
       description: this.props.description,
       newHabitTitle: this.props.title,
       newHabitDescription: this.props.description,
-      id: this.props.id
+      id: this.props.id,
+      iconColor: "black",
+      iconName: "back",
+      changeFunction: ""
     };
   }
   componentDidMount = () => {
     // getHabits(simpleUpdate);
   }
+  changeCurrentIcon = (iconName, changeFunction) => {
+    this.setState({ iconName });
+    if (this.state.changeFunction !== "") {
+      this.state.changeFunction();
+    }
+    this.setState({ changeFunction });
+  };
 
   render() {
     return (
@@ -122,6 +134,35 @@ export default class HabitManager extends React.Component {
                     }
                     value={this.state.newHabitDescription}
                   />
+                  <Text>Color</Text>
+                  <DropDownPicker
+                    zIndex={5000}
+                    items={[
+                      { label: "Red", value: "#ff0000" },
+                      { label: "Orange", value: "#ff0000" },
+                      { label: "Yellow", value: "#ff0000" },
+                      { label: "Green", value: "#00ff00" },
+                      { label: "Blue", value: "#0000ff" },
+                      { label: "Purple", value: "#ff00ff" }
+                    ]}
+                    defaultValue={this.state.color}
+                    containerStyle={{ height: 40 }}
+                    style={{ backgroundColor: "#fafafa" }}
+                    dropDownStyle={{
+                      backgroundColor: "#fafafa"
+                    }}
+                    onChangeItem={item =>
+                      this.setState({
+                        iconColor: item.value
+                      })
+                    }
+                  />
+
+                  <Text style={styles.icon}>Icon</Text>
+                  <IconSelector
+                    iconColor={this.state.iconColor}
+                    changeCurrentIcon={this.changeCurrentIcon}
+                  />
                 </View>
                 <View style={[Grid.row, Grid.justifyCenter]}>
                   <Button
@@ -131,7 +172,9 @@ export default class HabitManager extends React.Component {
                         this.props.id,
                         {
                           title: this.state.newHabitTitle,
-                          description: this.state.newHabitDescription
+                          description: this.state.newHabitDescription,
+                          iconName: this.state.iconName,
+                          color: this.state.iconColor
                         },
                         {}
                       );
