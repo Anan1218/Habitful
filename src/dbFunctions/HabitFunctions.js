@@ -1,13 +1,15 @@
 import db from "./db.js";
 
-export const addHabit = (title, description) => {
+export const addHabit = (title, description, iconName, color) => {
   const newHabit = {
     type: "habit",
     title: title,
     description: description,
     completedDays: [],
     skippedDays: [],
-    completed: false
+    completed: false,
+    iconName: iconName,
+    color: color
   };
   db.insert(newHabit, function(err, newDocs) {
     if (err) {

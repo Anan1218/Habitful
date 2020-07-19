@@ -91,8 +91,8 @@ export default class HomeScreen extends React.Component {
       description: description
     });
   };
-  saveNewHabit = (title, description) => {
-    addHabit(title, description);
+  saveNewHabit = (title, description, iconName, color) => {
+    addHabit(title, description, iconName, color);
   };
   setCircle = (numC, numS) => {
     console.log("set Circle");
@@ -334,7 +334,9 @@ export default class HomeScreen extends React.Component {
                     onPress={() => {
                       this.saveNewHabit(
                         this.state.newHabitTitle,
-                        this.state.newHabitDescription
+                        this.state.newHabitDescription,
+                        this.state.iconName,
+                        this.state.iconColor
                       );
                       getHabits(this.showHabits);
                       this.setState({

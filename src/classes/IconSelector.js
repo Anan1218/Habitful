@@ -44,38 +44,6 @@ export default class IconSelector extends React.Component {
     console.log(iconList);
     return (
       <ScrollView horizontal={true} style={styles.iconScrollView}>
-        {/* <View style={Grid.col}>
-          <IconRadio
-            changeCurrentIcon={this.props.changeCurrentIcon}
-            active={false}
-            iconName="back"
-            color={this.props.iconColor}
-          />
-          <IconRadio
-            changeCurrentIcon={this.props.changeCurrentIcon}
-            active={false}
-            iconName="back"
-            color={this.props.iconColor}
-          />
-          <IconRadio
-            changeCurrentIcon={this.props.changeCurrentIcon}
-            active={false}
-            iconName="back"
-            color={this.props.iconColor}
-          />
-          <IconRadio
-            changeCurrentIcon={this.props.changeCurrentIcon}
-            active={false}
-            iconName="back"
-            color={this.props.iconColor}
-          />
-          <IconRadio
-            changeCurrentIcon={this.props.changeCurrentIcon}
-            active={false}
-            iconName="back"
-            color={this.props.iconColor}
-          />
-        </View> */}
         <FlatList numColumns={2} data={iconList} renderItem={this.renderItem} />
       </ScrollView>
     );

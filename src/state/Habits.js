@@ -38,6 +38,8 @@ const changeHabits = (habits, deleteHabit, navigate, updateCompleted) => {
         description={habit.description}
         navigate={navigate}
         completed={habit.completed}
+        color={habit.color}
+        iconName={habit.iconName}
       />
     );
     formattedHabitComponents[habit._id] = (
@@ -46,6 +48,8 @@ const changeHabits = (habits, deleteHabit, navigate, updateCompleted) => {
         title={habit.title}
         description={habit.description}
         completed={habit.completed}
+        color={habit.color}
+        iconName={habit.iconName}
       />
     );
 
