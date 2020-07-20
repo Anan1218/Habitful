@@ -21,7 +21,7 @@ import Habit from "../classes/Habit";
 import Node from "../classes/Node";
 import DropDownPicker from "react-native-dropdown-picker";
 import { AntDesign } from "@expo/vector-icons";
-import IconRadio from "../classes/IconRadio";
+
 
 import {
   addDatesDoc,
@@ -310,27 +310,25 @@ export default class HomeScreen extends React.Component {
                 this.setState({ modalVisible: false });
               }}
             >
-              <View style={[styles.modalView, Grid.alignStretch]}>
-                <View backgroundColor="orange">
-                  <Text style={[styles.headerText, { paddingTop: 50 }]} h5>
-                    New Habit
-                  </Text>
-                  <Button
+              <View style={[styles.modalView]}>
+                <View style={[Grid.row, Grid.justifyContentSpaceBetween, Grid.alignCenter]}>
+                  
+                  <TouchableHighlight
                     onPress={() => {
                       this.setState({
                         modalVisible: false
                       });
                     }}
-                    style={styles.closeModal}
+                    style={[styles.closeModal]}
                   >
-                    <Text p style={styles.topButtons}>
-                      Cancel
-                    </Text>
-                  </Button>
+                    <AntDesign name="closecircle" color="red" size={36}/>
+                  </TouchableHighlight>
+                  <Text h5>
+                    New Habit
+                  </Text>
 
-                  <Button
-                    size="small"
-                    style={styles.addHabitButton}
+                  <TouchableHighlight
+                    
                     onPress={() => {
                       this.saveNewHabit(
                         this.state.newHabitTitle,
@@ -346,22 +344,24 @@ export default class HomeScreen extends React.Component {
                         newHabitTitle: "A new habit",
                         newHabitDescription: "..."
                       });
+                      
                     }}
+                    style={[styles.addHabitButton]}
                   >
-                    <Text style={styles.save}>Save</Text>
-                  </Button>
+                    <Text p style={{color: "blue"}}>Save</Text>
+                  </TouchableHighlight>
+                </View>
 
-                  <View style={styles.name}>
-                    <Text>NAME</Text>
-                    <Input
-                      placeholder="e.g. Run"
-                      onChangeText={text =>
-                        this.setState({
-                          newHabitTitle: text
-                        })
-                      }
-                    />
-                  </View>
+                <View style={styles.name}>
+                  <Text>Name</Text>
+                  <Input
+                    placeholder="e.g. Run"
+                    onChangeText={text =>
+                      this.setState({
+                        newHabitTitle: text
+                      })
+                    }
+                  />
                 </View>
 
                 <View style={styles.details}>
@@ -468,7 +468,7 @@ let styles = StyleSheet.create({
     margin: 0,
     backgroundColor: "white",
     padding: 0,
-    alignItems: "center"
+    // alignItems: "center"
   },
 
   topButtons: {
@@ -476,25 +476,11 @@ let styles = StyleSheet.create({
   },
 
   addHabitButton: {
-    position: "absolute",
-    right: "2%",
-    top: 30,
-    width: 70,
-    height: 40,
-    marginTop: 15,
-    marginBottom: 20,
-    paddingBottom: 20,
-    backgroundColor: "transparent"
+    margin: 20
   },
 
   closeModal: {
-    position: "absolute",
-    left: "2%",
-    top: 30,
-    width: 70,
-    height: 40,
-    marginTop: 15,
-    backgroundColor: "transparent"
+    margin: 20
   },
 
   save: {
@@ -509,17 +495,15 @@ let styles = StyleSheet.create({
   },
 
   name: {
-    paddingTop: 30,
-    paddingLeft: "4%",
-    paddingRight: "4%"
+    padding: 10
   },
 
   details: {
-    padding: "4%"
+    padding: 10
   },
 
   icon: {
-    paddingTop: "4%"
+    padding: 0
   },
 
   questionButton: {
