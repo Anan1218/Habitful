@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Habit Tracker 1.0.4",
-    "slug": "habit-tracker-four",
+    "name": "Habitful",
+    "slug": "habitful",
     "privacy": "public",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -24,11 +24,12 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anamark.appname",
-      "buildNumber": "1.0.4"
+      "bundleIdentifier": "com.anamark.habitful",
+      "buildNumber": "1.0.5"
     },
     "android": {
-      "package": "com.anamark.appname"
+      "package": "com.anamark.habitful",
+      "icon": "./assets/logo.png"
     },
     "web": {
       "build": {

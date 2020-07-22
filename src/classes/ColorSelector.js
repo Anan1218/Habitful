@@ -57,7 +57,7 @@ export default class IconSelector extends React.Component {
         return (
             <FlatList
                 style={{}}
-                scrollEnabled={"false"}
+                scrollEnabled={false}
                 numColumns={8}
                 data={list}
                 renderItem={({ item }) => (
@@ -70,7 +70,7 @@ export default class IconSelector extends React.Component {
                             padding: 3,
                             margin: 5,
                         }}
-                        shadowless={"true"}
+                        shadowless={true}
                         onPress={() => {
                             this.props.colorChange(item.circleColor);
                         }}

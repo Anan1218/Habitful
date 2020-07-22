@@ -30,7 +30,7 @@ export default class HabitManager extends React.Component {
             newHabitTitle: this.props.title,
             newHabitDescription: this.props.description,
             id: this.props.id,
-            iconColor: "orange",
+            iconColor: this.props.color,
             iconName: "back",
             changeFunction: "",
         };
@@ -93,116 +93,7 @@ export default class HabitManager extends React.Component {
                         </View>
                     </View>
                 </TouchableHighlight>
-                {/* <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            this.setState({ modalVisible: false });
-          }}
-        >
-          <TouchableWithoutFeedback
-            onPress={() => {
-              this.setState({ modalVisible: false });
-            }}
-          >
-            <View style={[Grid.row, Grid.justifyCenter, { flex: 1 }]}>
-              <View
-                style={[
-                  Grid.col,
-                  Grid.justifyCenter,
-                  styles.modalView,
-                  Grid.alignStretch
-                ]}
-              >
-                <View style={[Grid.col, Grid.justifyCenter, Grid.alignStretch]}>
-                  <Button
-                    onlyIcon
-                    icon="delete"
-                    iconFamily="antdesign"
-                    iconSize={20}
-                    color="red"
-                    iconColor="#fff"
-                    style={{ width: 35, height: 35 }}
-                    onPress={() => {
-                      this.props.deleteHabit(this.props.id);
-                    }}
-                  ></Button>
-                  <Input
-                    placeholder=""
-                    onChangeText={text =>
-                      this.setState({ newHabitTitle: text })
-                    }
-                    value={this.state.newHabitTitle}
-                  />
-                  <Input
-                    placeholder=""
-                    onChangeText={text =>
-                      this.setState({ newHabitDescription: text })
-                    }
-                    value={this.state.newHabitDescription}
-                  />
-                  <Text>Color</Text>
-                  <DropDownPicker
-                    zIndex={5000}
-                    items={[
-                      { label: "Red", value: "#ff0000" },
-                      { label: "Orange", value: "#ff0000" },
-                      { label: "Yellow", value: "#ff0000" },
-                      { label: "Green", value: "#00ff00" },
-                      { label: "Blue", value: "#0000ff" },
-                      { label: "Purple", value: "#ff00ff" }
-                    ]}
-                    defaultValue={this.state.color}
-                    containerStyle={{ height: 40 }}
-                    style={{ backgroundColor: "#fafafa" }}
-                    dropDownStyle={{
-                      backgroundColor: "#fafafa"
-                    }}
-                    onChangeItem={item =>
-                      this.setState({
-                        iconColor: item.value
-                      })
-                    }
-                  />
-
-                  <Text style={styles.icon}>Icon</Text>
-                  <IconSelector
-                    iconColor={this.state.iconColor}
-                    changeCurrentIcon={this.changeCurrentIcon}
-                  />
-                </View>
-                <View style={[Grid.row, Grid.justifyCenter]}>
-                  <Button
-                    size="small"
-                    onPress={() => {
-                      updateHabit(
-                        this.props.id,
-                        {
-                          title: this.state.newHabitTitle,
-                          description: this.state.newHabitDescription,
-                          iconName: this.state.iconName,
-                          color: this.state.iconColor
-                        },
-                        {}
-                      );
-                      this.setState({
-                        title: this.state.newHabitTitle,
-                        description: this.state.newHabitDescription
-                      });
-                      // probably a problem TODO fix
-                      getHabits(changeHabits, false);
-                      this.setState({ modalVisible: false });
-                    }}
-                    
-                  >
-                    <Text>Change title</Text>
-                  </Button>
-                </View>
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal> */}
+                
 
                 <Modal
                     animationType="slide"
@@ -220,7 +111,7 @@ export default class HabitManager extends React.Component {
                             >
                                 Edit Habit
                             </Text>
-                            <Button
+                            <TouchableHighlight
                                 onPress={() => {
                                     this.setState({
                                         modalVisible: false,
@@ -231,7 +122,7 @@ export default class HabitManager extends React.Component {
                                 <Text p style={styles.topButtons}>
                                     Cancel
                                 </Text>
-                            </Button>
+                            </TouchableHighlight>
 
                             <TouchableHighlight
                                 onPress={() => {
@@ -262,7 +153,9 @@ export default class HabitManager extends React.Component {
                                 </Text>
                             </TouchableHighlight>
 
-                            <View style={styles.name}>
+                           
+                        </View>
+                        <View style={styles.name}>
                                 <Text>Name</Text>
                                 <Input
                                     placeholder="e.g. Run"
@@ -272,8 +165,6 @@ export default class HabitManager extends React.Component {
                                     value={this.state.newHabitTitle}
                                 />
                             </View>
-                        </View>
-
                         <View style={styles.details}>
                             <Text>Description</Text>
                             <Input
@@ -304,7 +195,7 @@ export default class HabitManager extends React.Component {
                             iconSize={20}
                             color="red"
                             iconColor="#fff"
-                            style={{ width: 35, height: 35 }}
+                            style={{ width: 35, height: 35, margin: 10 }}
                             onPress={() => {
                                 this.props.deleteHabit(this.props.id);
                             }}

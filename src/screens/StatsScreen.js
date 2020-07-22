@@ -56,7 +56,7 @@ export default class StatsScreen extends React.Component {
     render() {
         return (
             <View style={Grid.root}>
-                <View style={Grid.col}>
+                <View style={[Grid.col, styles.page]}>
                     <Text style={styles.headerText} h5>
                         Statistics
                     </Text>
@@ -144,7 +144,7 @@ export default class StatsScreen extends React.Component {
                                         <Text style={styles.number}>
                                             {this.state.streak}
                                         </Text>
-                                        <Text style={styles.days}>Days</Text>
+                                        {/* <Text style={styles.days}>Days</Text> */}
                                     </View>
 
                                     <Text style={styles.description}>
@@ -162,7 +162,7 @@ export default class StatsScreen extends React.Component {
                                         <Text style={styles.number}>
                                             {this.state.perfectCount}
                                         </Text>
-                                        <Text style={styles.days}>Days</Text>
+                                        {/* <Text style={styles.days}>Days</Text> */}
                                     </View>
 
                                     <Text style={styles.description}>
@@ -180,7 +180,7 @@ export default class StatsScreen extends React.Component {
                                         <Text style={styles.number}>
                                             {this.state.skippedCount}
                                         </Text>
-                                        <Text style={styles.days}>Days</Text>
+                                        {/* <Text style={styles.days}>Days</Text> */}
                                     </View>
                                     <Text style={styles.description}>
                                         Skipped Days
@@ -197,7 +197,7 @@ export default class StatsScreen extends React.Component {
                                         <Text style={styles.number}>
                                             {this.state.partialCount}
                                         </Text>
-                                        <Text style={styles.days}>Days</Text>
+                                        {/* <Text style={styles.days}>Days</Text> */}
                                     </View>
                                     <Text style={styles.description}>
                                         Partial Days
@@ -212,8 +212,11 @@ export default class StatsScreen extends React.Component {
     }
 }
 let styles = StyleSheet.create({
+    page: {
+        flex: 1
+    },
     scrollView: {
-        marginBottom: 90,
+        // marginBottom: 90,
     },
     headerText: {
         textAlign: "center",

@@ -8,6 +8,7 @@ import {
     TouchableHighlight,
     TouchableWithoutFeedback,
     StatusBar,
+    ScrollView
 } from "react-native";
 import "react-native-gesture-handler";
 import Grid from "../styles/Grid";
@@ -125,7 +126,7 @@ export default class HabitStatsScreen extends React.Component {
     render() {
         return (
             <View style={Grid.root}>
-                <View style={Grid.col}>
+                <View style={[Grid.col, styles.page]}>
                     <Button
                         onlyIcon
                         icon="question"
@@ -194,7 +195,7 @@ export default class HabitStatsScreen extends React.Component {
                             {this.props.route.params.title}
                         </Text>
                     </View>
-
+                    <ScrollView style={styles.scrollView}>
                     <View style={{ width: "92.5%", alignSelf: "center" }}>
                         <Calendar
                             onDayPress={(day) => {
@@ -271,7 +272,7 @@ export default class HabitStatsScreen extends React.Component {
                                     <Text style={styles.number}>
                                         {this.state.streak}
                                     </Text>
-                                    <Text style={styles.days}>Days</Text>
+                                    {/* <Text style={styles.days}>Days</Text> */}
                                 </View>
 
                                 <Text style={styles.description}>
@@ -289,7 +290,7 @@ export default class HabitStatsScreen extends React.Component {
                                     <Text style={styles.number}>
                                         {this.state.completedCount}
                                     </Text>
-                                    <Text style={styles.days}>Days</Text>
+                                    {/* <Text style={styles.days}>Days</Text> */}
                                 </View>
 
                                 <Text style={styles.description}>
@@ -307,7 +308,7 @@ export default class HabitStatsScreen extends React.Component {
                                     <Text style={styles.number}>
                                         {this.state.skippedCount}
                                     </Text>
-                                    <Text style={styles.days}>Days</Text>
+                                    {/* <Text style={styles.days}>Days</Text> */}
                                 </View>
                                 <Text style={styles.description}>
                                     Skipped Days
@@ -322,7 +323,7 @@ export default class HabitStatsScreen extends React.Component {
                                 ></MaterialCommunityIcons>
                                 <View style={styles.info}>
                                     <Text style={styles.number}>
-                                        {this.state.completionPercent}
+                                        {" "}{this.state.completionPercent}
                                     </Text>
                                     <Text style={styles.days}>%</Text>
                                 </View>
@@ -332,12 +333,21 @@ export default class HabitStatsScreen extends React.Component {
                             </View>
                         </View>
                     </View>
+                    </ScrollView>
                 </View>
             </View>
         );
     }
 }
 let styles = StyleSheet.create({
+    page: {
+        // height: 
+        flex: 1
+    },
+    scrollView: {
+        // marginBottom: 30,
+        // height: 700
+    },
     headerText: {
         margin: 10,
     },
