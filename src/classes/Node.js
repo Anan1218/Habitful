@@ -56,9 +56,9 @@ const styles = StyleSheet.create({
     btn: {
         width: 40,
         height: 40,
-        backgroundColor: "#7838F2",
+        backgroundColor: "#FF5888",
         borderRadius: 50,
-        borderColor: "#7838F2",
+        borderColor: "#FF5888",
         borderWidth: 2,
     },
 
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: "white",
         borderRadius: 50,
-        borderColor: "#7838F2",
+        borderColor: "#FF5888",
         borderWidth: 2,
     },
 
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: "lightgrey",
         borderRadius: 50,
-        borderColor: "#7838F2",
+        borderColor: "#FF5888",
         borderWidth: 1,
     },
 

@@ -49,11 +49,11 @@ export class Week extends Component {
             for (let markedDate in stats.markedDates) {
                 if (formatDateString(fullToday) === markedDate) {
                     // console.log(formatDateString(fullToday));
-                    if (stats.markedDates[markedDate]["color"] === "#4ee44e") {
+                    if (stats.markedDates[markedDate]["color"] === "#FF5888") {
                         // console.log("perfect");
                         completionArray[i] = "perfect";
                     } else if (
-                        stats.markedDates[markedDate]["color"] === "#4e99e4"
+                        stats.markedDates[markedDate]["color"] === "#FF5888"
                     ) {
                         // console.log("partial");
                         completionArray[i] = "partial";
