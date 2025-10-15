@@ -21,7 +21,7 @@
     "@react-navigation/bottom-tabs": "^5.2.5",
     "@react-navigation/native": "^5.1.7",
     "@react-navigation/stack": "^5.5.1",
-    "expo": "^37.0.12",
+    "expo": "^48.0.0",
     "galio-framework": "^0.6.3",
     "natural": "^2.1.5",
     "node-nlp-rn": "^3.5.2",
