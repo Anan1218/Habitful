@@ -47,7 +47,7 @@
     "@babel/core": "^7.10.2",
     "babel-preset-expo": "^8.2.1",
     "browserify": "^16.5.1",
-    "jest-expo": "^37.0.0",
+    "jest-expo": "^54.0.16",
     "react-test-renderer": "^16.13.1",
     "shortid": "^2.2.15",
     "terser": "^4.7.0"
